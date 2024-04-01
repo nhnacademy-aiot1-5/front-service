@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("register")
+@RequestMapping("/register")
 public class RegisterController {
 
     UserAdaptor userAdaptor;
