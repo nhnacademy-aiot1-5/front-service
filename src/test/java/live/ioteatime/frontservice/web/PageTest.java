@@ -40,5 +40,4 @@ class PageTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("authentication-register"));
     }
-
 }
