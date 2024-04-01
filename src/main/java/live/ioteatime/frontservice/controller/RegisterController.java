@@ -2,6 +2,7 @@ package live.ioteatime.frontservice.controller;
 
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.RegisterRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,9 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/register")
+@RequiredArgsConstructor
 public class RegisterController {
 
-    UserAdaptor userAdaptor;
+    private final UserAdaptor userAdaptor;
 
     @PostMapping
     public String register(@RequestBody RegisterRequest registerRequest){
