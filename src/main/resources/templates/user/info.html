@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IOTEATIME 프로필</title>
+  <link rel="shortcut icon" type="image/png" href="/images/logos/favicon.png" />
+  <link rel="stylesheet" href="/css/styles.min.css" />
+</head>
+
+<body>
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+    <div class="container-fluid">
+      <div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
+        <div class="card-body px-4 py-3">
+          <div class="row align-items-center">
+            <div class="col-9">
+              <h4 class="fw-semibold mb-8">User Info</h4>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item">
+                    <a class="text-muted text-decoration-none" href="../main/index.html">Home</a>
+                  </li>
+                  <li class="breadcrumb-item" aria-current="page">User Info</li>
+                </ol>
+              </nav>
+            </div>
+            <div class="col-3">
+              <div class="text-center mb-n5">
+                <img src="../assets/images/breadcrumb/ChatBc.png" alt="" class="img-fluid mb-n4">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <!-- start Form with view only -->
+          <div class="card">
+            <form class="form-horizontal">
+              <div class="form-body">
+
+                <div class="card-body">
+                  <h5 class="card-title mb-0">프로필 정보</h5>
+                </div>
+
+                <hr class="m-0">
+
+                <div class="card-body">
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="form-label text-end col-md-3">아이디</label>
+                      <div class="col-md-9">
+                        <p class="form-control-static" th:text="${user.id}"></p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="form-label text-end col-md-3">이름</label>
+                      <div class="col-md-9">
+                        <p class="form-control-static" th:text="${user.name}"></p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="form-label text-end col-md-3">가입일</label>
+                      <div class="col-md-9">
+                        <p class="form-control-static" th:text="${user.createdAt}"></p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="form-label text-end col-md-3">권한</label>
+                      <div class="col-md-9">
+                        <p class="form-control-static" th:text="${user.role}"></p>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="form-actions border-top">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="row">
+                          <div class="col-md-offset-3 col-md-9">
+                            <button type="submit" class="btn btn-primary">
+                              <i class="ti ti-edit fs-5"></i>
+                              수정
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- start Form with view only -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/libs/jquery/dist/jquery.min.js"></script>
+  <script src="/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
