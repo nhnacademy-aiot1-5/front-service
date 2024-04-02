@@ -21,7 +21,7 @@ public class LoginController {
     private final UserAdaptor userAdaptor;
 
     @PostMapping
-    public String login(@ModelAttribute LoginRequest loginRequest, HttpServletResponse response ){
+    public String login(@ModelAttribute LoginRequest loginRequest, HttpServletResponse response){
         LoginResponse loginResponse = userAdaptor.login(loginRequest).getBody();
 
         log.info("loginResponse: {} {}", loginResponse.getType(), loginResponse.getToken());
@@ -31,6 +31,11 @@ public class LoginController {
         response.addCookie(cookie);
 
         return "index";
+    }
+
+    @GetMapping
+    public String login(){
+        return "authentication/login";
     }
 
 }
