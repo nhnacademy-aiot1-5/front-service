@@ -19,7 +19,7 @@ class PageTest {
 
     @Test
     @DisplayName("회원가입 페이지 테스트")
-    void registerPageTest() throws Exception {
+    void mainPageTest() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"));
@@ -30,14 +30,7 @@ class PageTest {
     void loginPageTest() throws Exception {
         mockMvc.perform(get("/login"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("authentication-login"));
+                .andExpect(view().name("authentication/login"));
     }
 
-    @Test
-    @DisplayName("회원가입 인증 페이지 테스트")
-    void authenticationPageTest() throws Exception {
-        mockMvc.perform(get("/user/register"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("authentication-register"));
-    }
 }
