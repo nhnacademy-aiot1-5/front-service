@@ -26,11 +26,11 @@ public class LoginController {
 
         log.info("loginResponse: {} {}", loginResponse.getType(), loginResponse.getToken());
 
-        Cookie cookie = new Cookie(HttpHeaders.AUTHORIZATION, loginResponse.getType() + " " + loginResponse.getToken());
+        Cookie cookie = new Cookie(HttpHeaders.AUTHORIZATION, loginResponse.getType() + "-" + loginResponse.getToken());
         cookie.setMaxAge(3600);
         response.addCookie(cookie);
 
-        return "index";
+        return "redirect:/";
     }
 
     @GetMapping
