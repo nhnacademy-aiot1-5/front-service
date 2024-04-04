@@ -33,7 +33,7 @@ public class LoginController {
         log.info("loginResponse: {} {}", loginResponse.getType(), loginResponse.getToken());
 
         Cookie cookie = new Cookie(ACCESS_TOKEN_KEY, loginResponse.getToken());
-        cookie.setMaxAge(0);
+        cookie.setMaxAge(3600);
         response.addCookie(cookie);
 
         return "redirect:/";
