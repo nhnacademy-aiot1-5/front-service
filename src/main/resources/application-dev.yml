@@ -1,4 +1,8 @@
+eureka:
+  client:
+    enabled: false
 discovery:
   id: test
   password: test
   ip: localhost
+
