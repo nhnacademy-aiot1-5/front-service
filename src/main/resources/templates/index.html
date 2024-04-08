@@ -228,6 +228,44 @@
       </div>
     </div>
   </div>
+
+
+  <div class="modal fade" id="settingPriceModal" tabindex="-1" aria-labelledby="settingPriceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">현재 설정 요금</h5>
+              <h4 class="fw-semibold mb-3">1,258,000원</h4>
+            </div>
+          </div>
+          <p>
+          <br>
+          <form id="resetTargetAmountForm">
+            <div class="mb-3">
+              <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>
+              <div class="input-group">
+                <input type="number" class="form-control" id="targetAmount" aria-describedby="amountAddon">
+                <span class="input-group-text" id="amountAddon">원</span>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+          <button type="submit" class="btn btn-primary" form="resetTargetAmountForm">저장</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
   <script src="/libs/jquery/dist/jquery.min.js"></script>
   <script src="/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/js/sidebarmenu.js"></script>
@@ -235,6 +273,22 @@
   <script src="/libs/apexcharts/dist/apexcharts.min.js"></script>
   <script src="/libs/simplebar/dist/simplebar.js"></script>
   <script src="/js/dashboard.js"></script>
+  <script>
+
+    var userRole = "ADMIN"; // todo : 실제 사용자 권한 가져오도록 로직 변경해야 함
+
+    $(document).ready(function() {
+      if (userRole === "ADMIN") {
+        $('.card.overflow-hidden').on('click', function() {
+          var myModal = new bootstrap.Modal(document.getElementById('settingPriceModal'), {
+            keyboard: false
+          });
+          myModal.show();
+        });
+      }
+    });
+  </script>
+
 </body>
 
 </html>
