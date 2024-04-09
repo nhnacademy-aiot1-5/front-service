@@ -44,13 +44,16 @@
                 <div class="john-img">
                     <img src="/images/profile/guest_image.png" class="rounded-circle" width="40" height="40" alt="modernize-img">
                 </div>
-                <div class="john-title">
-                    <h6 class="mb-0 fs-4 fw-semibold">User,님</h6>
-                    <span class="fs-2">Guest</span>
+                `<div class="john-title"  th:if="${loggedIn}">
+                <h6 class="mb-0 fs-4 fw-semibold">User,님</h6>
+                <span class="fs-2">Guest</span></div><div class="john-title"  th:unless="${loggedIn}">
+                <h6 class="mb-0 fs-4 fw-semibold">로그인 하세요</h6>
+                <span class="fs-2">empty</span>
                 </div>
-                <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
-                    <i class="ti ti-power fs-6"></i>
-                </button>
+                <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top"  th:if="${loggedIn}" data-bs-title="logout" onclick="location.href='/logout'">
+                    <i class="ti ti-power fs-6"></i></button>
+                <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button" aria-label="login" data-bs-toggle="tooltip" data-bs-placement="top"  th:unless="${loggedIn}" data-bs-title="login" onclick="location.href='/login'">
+                    <i class="ti ti-power fs-6"></i></button>`
             </div>
         </div>
 
@@ -116,26 +119,7 @@
                     </a>
                 </li>
 
-                <li class="nav-small-cap">
-                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">AUTH</span>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/login" aria-expanded="false">
-                <span>
-                  <i class="ti ti-login"></i>
-                </span>
-                        <span class="hide-menu">Login</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/register" aria-expanded="false">
-                <span>
-                  <i class="ti ti-user-plus"></i>
-                </span>
-                        <span class="hide-menu">Register</span>
-                    </a>
-                </li>
+
 
             </ul>
 
