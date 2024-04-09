@@ -22,6 +22,41 @@
      <th:block th:replace="header :: header"></th:block>
       <!--  Header End -->
       <div class="container-fluid">
+
+            <div class="card bg-primary-subtle overflow-hidden shadow-none">
+              <div class="card-body position-relative">
+                <div class="row">
+                  <div class="col-sm-7">
+                    <div class="d-flex align-items-center mb-7">
+                      <div class="rounded-circle overflow-hidden me-6">
+                        <img src="/images/backgrounds/rocket.png" alt="modernize-img" width="40" height="40">
+                      </div>
+                      <h5 class="fw-semibold mb-0 fs-5">이번 달 총평</h5>
+                    </div>
+                    <div>
+                      <h2 class="mb-1 fw-semibold fs-8 d-flex align-content-center">전기 좀 아껴쓰세요. 🌱</h2>
+                      <p></p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="border-end pe-4 border-muted border-opacity-10">
+                        <p class="mb-0 text-dark">이번 달 전기 사용량 5,200 kWh<i class="ti ti-arrow-up-right fs-5 lh-base text-success"></i></p>
+                      </div>
+                      <div class="ps-4">
+                        <p class="mb-0 text-dark">이번 달 전기료 ₩ 2,340<i class="ti ti-arrow-up-right fs-5 lh-base text-success"></i></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-5">
+                    <div class="welcome-bg-img mb-n7 text-end">
+                      <img src="/images/backgrounds/welcome-bg.svg" alt="modernize-img" class="img-fluid">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <!------->
+
+
         <!--  Row 1 -->
         <div class="row">
           <div class="col-lg-8 d-flex align-items-strech">
@@ -29,19 +64,71 @@
               <div class="card-body">
                 <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                   <div class="mb-3 mb-sm-0">
-                    <h5 class="card-title fw-semibold">Sales Overview</h5>
-                  </div>
-                  <div>
-                    <select class="form-select">
-                      <option value="1">March 2023</option>
-                      <option value="2">April 2023</option>
-                      <option value="3">May 2023</option>
-                      <option value="4">June 2023</option>
-                    </select>
+                    <h5 class="card-title fw-semibold">이번 달 전기 사용 내역</h5>
                   </div>
                 </div>
-                <div id="chart"></div>
-              </div>
+                <!-- 차트 -->
+                  <div id="chart-line-basic" class="mx-n3" style="min-height: 365px;">
+                    <div id="apexchartszlcnd7ax" class="apexcharts-canvas apexchartszlcnd7ax apexcharts-theme-light" style="width: 700px; height: 350px;">
+                      <svg id="SvgjsSvg1006" width="700" height="350" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;">
+                        <foreignObject x="0" y="0" width="700" height="350">
+                          <div class="apexcharts-legend" xmlns="http://www.w3.org/1999/xhtml" style="max-height: 175px;">
+
+                          </div>
+                        </foreignObject>
+                        <rect id="SvgjsRect1011" width="0" height="0" x="0" y="0" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fefefe"></rect>
+                        <g id="SvgjsG1084" class="apexcharts-yaxis" rel="0" transform="translate(15.59375, 0)">
+                          <g id="SvgjsG1085" class="apexcharts-yaxis-texts-g">
+                            <text id="SvgjsText1087" font-family="inherit" x="20" y="31.8" text-anchor="end" dominant-baseline="auto" font-size="11px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-yaxis-label " style="font-family: inherit;">
+                              <tspan id="SvgjsTspan1088">160</tspan>
+                              <title>160</title>
+                            </text>
+                            <text id="SvgjsText1090" font-family="inherit" x="20" y="66.89125" text-anchor="end" dominant-baseline="auto" font-size="11px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-yaxis-label " style="font-family: inherit;">
+                              <tspan id="SvgjsTspan1091">140</tspan>
+                              <title>140</title>
+                            </text>
+                            <text id="SvgjsText1093" font-family="inherit" x="20" y="101.9825" text-anchor="end" dominant-baseline="auto" font-size="11px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-yaxis-label " style="font-family: inherit;">
+                              <tspan id="SvgjsTspan1094">120</tspan>
+                              <title>120</title>
+                            </text>
+                            <text id="SvgjsText1096" font-family="inherit" x="20" y="137.07375000000002" text-anchor="end" dominant-baseline="auto" font-size="11px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-yaxis-label " style="font-family: inherit;">
+                              <tspan id="SvgjsTspan1097">100</tspan>
+                              <title>100</title>
+                            </text>
+                            <text id="SvgjsText1099" font-family="inherit" x="20" y="172.16500000000002" text-anchor="end" dominant-baseline="auto" font-size="11px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-yaxis-label " style="font-family: inherit;"><tspan id="SvgjsTspan1100">80</tspan><title>80</title></text><text id="SvgjsText1102" font-family="inherit" x="20" y="207.25625000000002" text-anchor="end" dominant-baseline="auto" font-size="11px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-yaxis-label " style="font-family: inherit;">
+                            <tspan id="SvgjsTspan1103">60</tspan>
+                            <title>60</title>
+                          </text>
+                            <text id="SvgjsText1105" font-family="inherit" x="20" y="242.34750000000003" text-anchor="end" dominant-baseline="auto" font-size="11px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-yaxis-label " style="font-family: inherit;">
+                              <tspan id="SvgjsTspan1106">40</tspan>
+                              <title>40</title>
+                            </text>
+                            <text id="SvgjsText1108" font-family="inherit" x="20" y="277.43875" text-anchor="end" dominant-baseline="auto" font-size="11px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-yaxis-label " style="font-family: inherit;">
+                              <tspan id="SvgjsTspan1109">20</tspan>
+                              <title>20</title>
+                            </text>
+                            <text id="SvgjsText1111" font-family="inherit" x="20" y="312.53000000000003" text-anchor="end" dominant-baseline="auto" font-size="11px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-yaxis-label " style="font-family: inherit;">
+                              <tspan id="SvgjsTspan1112">0</tspan>
+                              <title>0</title></text>
+                          </g>
+                        </g>
+                        <g id="SvgjsG1008" class="apexcharts-inner apexcharts-graphical" transform="translate(45.59375, 30)">
+                          <defs id="SvgjsDefs1007">
+                            <clipPath id="gridRectMaskzlcnd7ax">
+                              <rect id="SvgjsRect1013" width="896.8359375" height="289.73" x="-4.5" y="-4.5" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><clipPath id="forecastMaskzlcnd7ax">
+
+                          </clipPath>
+                            <clipPath id="nonForecastMaskzlcnd7ax"></clipPath>
+                            <clipPath id="gridRectMarkerMaskzlcnd7ax">
+                              <rect id="SvgjsRect1014" width="891.8359375" height="284.73" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect>
+                            </clipPath>
+                          </defs>
+                          <line id="SvgjsLine1012" x1="887.3359375" y1="0" x2="887.3359375" y2="280.73" stroke="#b6b6b6" stroke-dasharray="3" stroke-linecap="butt" class="apexcharts-xcrosshairs" x="887.3359375" y="0" width="1" height="280.73" fill="#b1b9c4" filter="none" fill-opacity="0.9" stroke-width="1"></line><line id="SvgjsLine1024" x1="0" y1="281.73" x2="0" y2="287.73" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-xaxis-tick"></line><line id="SvgjsLine1025" x1="110.9794921875" y1="281.73" x2="110.9794921875" y2="287.73" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-xaxis-tick"></line><line id="SvgjsLine1026" x1="221.958984375" y1="281.73" x2="221.958984375" y2="287.73" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-xaxis-tick"></line><line id="SvgjsLine1027" x1="332.9384765625" y1="281.73" x2="332.9384765625" y2="287.73" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-xaxis-tick"></line><line id="SvgjsLine1028" x1="443.91796875" y1="281.73" x2="443.91796875" y2="287.73" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-xaxis-tick"></line><line id="SvgjsLine1029" x1="554.8974609375" y1="281.73" x2="554.8974609375" y2="287.73" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-xaxis-tick"></line><line id="SvgjsLine1030" x1="665.876953125" y1="281.73" x2="665.876953125" y2="287.73" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-xaxis-tick"></line><line id="SvgjsLine1031" x1="776.8564453125" y1="281.73" x2="776.8564453125" y2="287.73" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-xaxis-tick"></line><line id="SvgjsLine1032" x1="887.8359375" y1="281.73" x2="887.8359375" y2="287.73" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-xaxis-tick"></line><g id="SvgjsG1020" class="apexcharts-grid"><g id="SvgjsG1021" class="apexcharts-gridlines-horizontal"><line id="SvgjsLine1034" x1="0" y1="35.09125" x2="887.8359375" y2="35.09125" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine1035" x1="0" y1="70.1825" x2="887.8359375" y2="70.1825" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine1036" x1="0" y1="105.27375" x2="887.8359375" y2="105.27375" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine1037" x1="0" y1="140.365" x2="887.8359375" y2="140.365" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine1038" x1="0" y1="175.45625" x2="887.8359375" y2="175.45625" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine1039" x1="0" y1="210.5475" x2="887.8359375" y2="210.5475" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine1040" x1="0" y1="245.63875000000002" x2="887.8359375" y2="245.63875000000002" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line></g><g id="SvgjsG1022" class="apexcharts-gridlines-vertical"></g><rect id="SvgjsRect1042" width="887.8359375" height="35.09125" x="0" y="0" rx="0" ry="0" opacity="0.5" stroke-width="0" stroke="none" stroke-dasharray="0" fill="transparent" clip-path="url(#gridRectMaskzlcnd7ax)" class="apexcharts-grid-row"></rect><rect id="SvgjsRect1043" width="887.8359375" height="35.09125" x="0" y="35.09125" rx="0" ry="0" opacity="0.5" stroke-width="0" stroke="none" stroke-dasharray="0" fill="transparent" clip-path="url(#gridRectMaskzlcnd7ax)" class="apexcharts-grid-row"></rect><rect id="SvgjsRect1044" width="887.8359375" height="35.09125" x="0" y="70.1825" rx="0" ry="0" opacity="0.5" stroke-width="0" stroke="none" stroke-dasharray="0" fill="transparent" clip-path="url(#gridRectMaskzlcnd7ax)" class="apexcharts-grid-row"></rect><rect id="SvgjsRect1045" width="887.8359375" height="35.09125" x="0" y="105.27375" rx="0" ry="0" opacity="0.5" stroke-width="0" stroke="none" stroke-dasharray="0" fill="transparent" clip-path="url(#gridRectMaskzlcnd7ax)" class="apexcharts-grid-row"></rect><rect id="SvgjsRect1046" width="887.8359375" height="35.09125" x="0" y="140.365" rx="0" ry="0" opacity="0.5" stroke-width="0" stroke="none" stroke-dasharray="0" fill="transparent" clip-path="url(#gridRectMaskzlcnd7ax)" class="apexcharts-grid-row"></rect><rect id="SvgjsRect1047" width="887.8359375" height="35.09125" x="0" y="175.45625" rx="0" ry="0" opacity="0.5" stroke-width="0" stroke="none" stroke-dasharray="0" fill="transparent" clip-path="url(#gridRectMaskzlcnd7ax)" class="apexcharts-grid-row"></rect><rect id="SvgjsRect1048" width="887.8359375" height="35.09125" x="0" y="210.5475" rx="0" ry="0" opacity="0.5" stroke-width="0" stroke="none" stroke-dasharray="0" fill="transparent" clip-path="url(#gridRectMaskzlcnd7ax)" class="apexcharts-grid-row"></rect><rect id="SvgjsRect1049" width="887.8359375" height="35.09125" x="0" y="245.63875000000002" rx="0" ry="0" opacity="0.5" stroke-width="0" stroke="none" stroke-dasharray="0" fill="transparent" clip-path="url(#gridRectMaskzlcnd7ax)" class="apexcharts-grid-row"></rect><line id="SvgjsLine1051" x1="0" y1="280.73" x2="887.8359375" y2="280.73" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt"></line><line id="SvgjsLine1050" x1="0" y1="1" x2="0" y2="280.73" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt"></line></g><g id="SvgjsG1023" class="apexcharts-grid-borders"><line id="SvgjsLine1033" x1="0" y1="0" x2="887.8359375" y2="0" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine1041" x1="0" y1="280.73" x2="887.8359375" y2="280.73" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine1083" x1="0" y1="281.73" x2="887.8359375" y2="281.73" stroke="#e0e0e0" stroke-dasharray="0" stroke-width="1" stroke-linecap="butt"></line></g><g id="SvgjsG1015" class="apexcharts-line-series apexcharts-plot-series"><g id="SvgjsG1016" class="apexcharts-series" zIndex="0" seriesName="Desktops" data:longestSeries="true" rel="1" data:realIndex="0"><path id="SvgjsPath1019" d="M0 263.18437500000005L110.9794921875 208.7929375L221.958984375 219.3203125L332.9384765625 191.24731250000002L443.91796875 194.7564375L554.8974609375 171.94712500000003L665.876953125 159.6651875L776.8564453125 121.06481250000002L887.8359375 21.054750000000013C887.8359375 21.054750000000013 887.8359375 21.054750000000013 887.8359375 21.054750000000013 " fill="none" fill-opacity="1" stroke="var(--bs-primary)" stroke-opacity="1" stroke-linecap="butt" stroke-width="5" stroke-dasharray="0" class="apexcharts-line" index="0" clip-path="url(#gridRectMaskzlcnd7ax)" pathTo="M 0 263.18437500000005 L 110.9794921875 208.7929375 L 221.958984375 219.3203125 L 332.9384765625 191.24731250000002 L 443.91796875 194.7564375 L 554.8974609375 171.94712500000003 L 665.876953125 159.6651875 L 776.8564453125 121.06481250000002 L 887.8359375 21.054750000000013" pathFrom="M -1 280.73 L -1 280.73 L 110.9794921875 280.73 L 221.958984375 280.73 L 332.9384765625 280.73 L 443.91796875 280.73 L 554.8974609375 280.73 L 665.876953125 280.73 L 776.8564453125 280.73 L 887.8359375 280.73" fill-rule="evenodd"></path><g id="SvgjsG1017" class="apexcharts-series-markers-wrap apexcharts-hidden-element-shown" data:realIndex="0"><g class="apexcharts-series-markers"><circle id="SvgjsCircle1116" r="0" cx="887.8359375" cy="21.054750000000013" class="apexcharts-marker wot6iw41e no-pointer-events" stroke="#ffffff" fill="var(--bs-primary)" fill-opacity="1" stroke-width="2" stroke-opacity="0.9" default-marker-size="0"></circle></g></g></g><g id="SvgjsG1018" class="apexcharts-datalabels" data:realIndex="0"></g></g><line id="SvgjsLine1052" x1="0" y1="0" x2="887.8359375" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" stroke-linecap="butt" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine1053" x1="0" y1="0" x2="887.8359375" y2="0" stroke-dasharray="0" stroke-width="0" stroke-linecap="butt" class="apexcharts-ycrosshairs-hidden"></line><g id="SvgjsG1054" class="apexcharts-xaxis" transform="translate(0, 0)"><g id="SvgjsG1055" class="apexcharts-xaxis-texts-g" transform="translate(0, -4)"><text id="SvgjsText1057" font-family="inherit" x="0" y="309.73" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-xaxis-label " style="font-family: inherit;"><tspan id="SvgjsTspan1058">Jan</tspan><title>Jan</title></text><text id="SvgjsText1060" font-family="inherit" x="110.9794921875" y="309.73" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-xaxis-label " style="font-family: inherit;"><tspan id="SvgjsTspan1061">Feb</tspan><title>Feb</title></text><text id="SvgjsText1063" font-family="inherit" x="221.958984375" y="309.73" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-xaxis-label " style="font-family: inherit;"><tspan id="SvgjsTspan1064">Mar</tspan><title>Mar</title></text><text id="SvgjsText1066" font-family="inherit" x="332.9384765625" y="309.73" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-xaxis-label " style="font-family: inherit;"><tspan id="SvgjsTspan1067">Apr</tspan><title>Apr</title></text><text id="SvgjsText1069" font-family="inherit" x="443.91796875" y="309.73" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-xaxis-label " style="font-family: inherit;"><tspan id="SvgjsTspan1070">May</tspan><title>May</title></text><text id="SvgjsText1072" font-family="inherit" x="554.8974609375" y="309.73" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-xaxis-label " style="font-family: inherit;"><tspan id="SvgjsTspan1073">Jun</tspan><title>Jun</title></text><text id="SvgjsText1075" font-family="inherit" x="665.876953125" y="309.73" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-xaxis-label " style="font-family: inherit;"><tspan id="SvgjsTspan1076">Jul</tspan><title>Jul</title></text><text id="SvgjsText1078" font-family="inherit" x="776.8564453125" y="309.73" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-xaxis-label " style="font-family: inherit;"><tspan id="SvgjsTspan1079">Aug</tspan><title>Aug</title></text><text id="SvgjsText1081" font-family="inherit" x="887.8359375" y="309.73" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#a1aab2" class="apexcharts-text apexcharts-xaxis-label " style="font-family: inherit;"><tspan id="SvgjsTspan1082">Sep</tspan><title>Sep</title></text></g></g><g id="SvgjsG1113" class="apexcharts-yaxis-annotations apexcharts-hidden-element-shown"></g><g id="SvgjsG1114" class="apexcharts-xaxis-annotations apexcharts-hidden-element-shown"></g><g id="SvgjsG1115" class="apexcharts-point-annotations apexcharts-hidden-element-shown"></g></g></svg><div class="apexcharts-tooltip apexcharts-theme-dark" style="left: 797.57px; top: 24.0547px;"><div class="apexcharts-tooltip-title" style="font-family: inherit; font-size: 12px;">Sep</div><div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 1; display: flex;"><span class="apexcharts-tooltip-marker" style="background-color: var(--bs-primary);"></span><div class="apexcharts-tooltip-text" style="font-family: inherit; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Desktops: </span><span class="apexcharts-tooltip-text-y-value">148</span></div><div class="apexcharts-tooltip-goals-group"><span class="apexcharts-tooltip-text-goals-label"></span><span class="apexcharts-tooltip-text-goals-value"></span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div></div><div class="apexcharts-xaxistooltip apexcharts-xaxistooltip-bottom apexcharts-theme-dark" style="left: 910.359px; top: 312.73px;"><div class="apexcharts-xaxistooltip-text" style="font-family: inherit; font-size: 12px; min-width: 21.2188px;">Sep</div></div><div class="apexcharts-yaxistooltip apexcharts-yaxistooltip-0 apexcharts-yaxistooltip-left apexcharts-theme-dark"><div class="apexcharts-yaxistooltip-text"></div></div></div></div>
+
+                <!-- 차트 끝 -->
+
+                    </div>
+
             </div>
           </div>
           <div class="col-lg-4">
@@ -50,22 +137,22 @@
                 <!-- Yearly Breakup -->
                 <div class="card overflow-hidden">
                   <div class="card-body p-4">
-                    <h5 class="card-title mb-9 fw-semibold">Yearly Breakup</h5>
+                    <h5 class="card-title mb-9 fw-semibold">사용 요금</h5>
                     <div class="row align-items-center">
                       <div class="col-8">
-                        <h4 class="fw-semibold mb-3">$36,358</h4>
+                        <h4 class="fw-semibold mb-3">₩136,358</h4>
                         <div class="d-flex align-items-center mb-3">
                           <span
                             class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
                             <i class="ti ti-arrow-up-left text-success"></i>
                           </span>
                           <p class="text-dark me-1 fs-3 mb-0">+9%</p>
-                          <p class="fs-3 mb-0">last year</p>
+                          <p class="fs-3 mb-0">지난 달</p>
                         </div>
                         <div class="d-flex align-items-center">
                           <div class="me-4">
                             <span class="round-8 bg-primary rounded-circle me-2 d-inline-block"></span>
-                            <span class="fs-2">2023</span>
+                            <span class="fs-2">2024</span>
                           </div>
                           <div>
                             <span class="round-8 bg-light-primary rounded-circle me-2 d-inline-block"></span>
@@ -83,20 +170,41 @@
                 </div>
               </div>
               <div class="col-lg-12">
+                <!-- Yearly Breakup -->
+                <div class="card overflow-hidden">
+                  <div class="card-body p-4">
+                    <h5 class="card-title mb-9 fw-semibold">설정 요금</h5>
+                    <div class="row align-items-center">
+                      <div class="col-8">
+                        <h4 class="fw-semibold mb-3">₩120,000</h4>
+                        <div class="d-flex align-items-center">
+
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="d-flex justify-content-center">
+                          <div id="breakup"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
                 <!-- Monthly Earnings -->
                 <div class="card">
                   <div class="card-body">
                     <div class="row alig n-items-start">
                       <div class="col-8">
-                        <h5 class="card-title mb-9 fw-semibold"> Monthly Earnings </h5>
-                        <h4 class="fw-semibold mb-3">$6,820</h4>
+                        <h5 class="card-title mb-9 fw-semibold"> 차액 </h5>
+                        <h4 class="fw-semibold mb-3">₩16,358</h4>
                         <div class="d-flex align-items-center pb-1">
                           <span
                             class="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
                             <i class="ti ti-arrow-down-right text-danger"></i>
                           </span>
-                          <p class="text-dark me-1 fs-3 mb-0">+9%</p>
-                          <p class="fs-3 mb-0">last year</p>
+                          <p class="text-dark me-1 fs-3 mb-0">-9%</p>
+                          <p class="fs-3 mb-0">지난 달</p>
                         </div>
                       </div>
                       <div class="col-4">
@@ -115,260 +223,49 @@
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-lg-4 d-flex align-items-stretch">
-            <div class="card w-100">
-              <div class="card-body p-4">
-                <div class="mb-4">
-                  <h5 class="card-title fw-semibold">Recent Transactions</h5>
-                </div>
-                <ul class="timeline-widget mb-0 position-relative mb-n5">
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">09:30</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1">Payment received from John Doe of $385.90</div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">10:00 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-info flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New sale recorded <a
-                        href="javascript:void(0)" class="text-primary d-block fw-normal">#ML-3467</a>
-                    </div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">12:00 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1">Payment was made of $64.95 to Michael</div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">09:30 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New sale recorded <a
-                        href="javascript:void(0)" class="text-primary d-block fw-normal">#ML-3467</a>
-                    </div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">09:30 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-danger flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New arrival recorded
-                    </div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">12:00 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1">Payment Done</div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-8 d-flex align-items-stretch">
-            <div class="card w-100">
-              <div class="card-body p-4">
-                <h5 class="card-title fw-semibold mb-4">Recent Transactions</h5>
-                <div class="table-responsive">
-                  <table class="table text-nowrap mb-0 align-middle">
-                    <thead class="text-dark fs-4">
-                      <tr>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Id</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Assigned</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Name</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Priority</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Budget</h6>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td class="border-bottom-0"><h6 class="fw-semibold mb-0">1</h6></td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-1">Sunil Joshi</h6>
-                            <span class="fw-normal">Web Designer</span>
-                        </td>
-                        <td class="border-bottom-0">
-                          <p class="mb-0 fw-normal">Elite Admin</p>
-                        </td>
-                        <td class="border-bottom-0">
-                          <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-primary rounded-3 fw-semibold">Low</span>
-                          </div>
-                        </td>
-                        <td class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0 fs-4">$3.9</h6>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="border-bottom-0"><h6 class="fw-semibold mb-0">2</h6></td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-1">Andrew McDownland</h6>
-                            <span class="fw-normal">Project Manager</span>
-                        </td>
-                        <td class="border-bottom-0">
-                          <p class="mb-0 fw-normal">Real Homes WP Theme</p>
-                        </td>
-                        <td class="border-bottom-0">
-                          <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-secondary rounded-3 fw-semibold">Medium</span>
-                          </div>
-                        </td>
-                        <td class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0 fs-4">$24.5k</h6>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="border-bottom-0"><h6 class="fw-semibold mb-0">3</h6></td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-1">Christopher Jamil</h6>
-                            <span class="fw-normal">Project Manager</span>
-                        </td>
-                        <td class="border-bottom-0">
-                          <p class="mb-0 fw-normal">MedicalPro WP Theme</p>
-                        </td>
-                        <td class="border-bottom-0">
-                          <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-danger rounded-3 fw-semibold">High</span>
-                          </div>
-                        </td>
-                        <td class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0 fs-4">$12.8k</h6>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="border-bottom-0"><h6 class="fw-semibold mb-0">4</h6></td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-1">Nirav Joshi</h6>
-                            <span class="fw-normal">Frontend Engineer</span>
-                        </td>
-                        <td class="border-bottom-0">
-                          <p class="mb-0 fw-normal">Hosting Press HTML</p>
-                        </td>
-                        <td class="border-bottom-0">
-                          <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-success rounded-3 fw-semibold">Critical</span>
-                          </div>
-                        </td>
-                        <td class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0 fs-4">$2.4k</h6>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
+
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="settingPriceModal" tabindex="-1" aria-labelledby="settingPriceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="row">
-          <div class="col-sm-6 col-xl-3">
-            <div class="card overflow-hidden rounded-2">
-              <div class="position-relative">
-                <a href="javascript:void(0)"><img src="/images/products/s4.jpg" class="card-img-top rounded-0" alt="..."></a>
-                <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>                      </div>
-              <div class="card-body pt-3 p-4">
-                <h6 class="fw-semibold fs-4">Boat Headphone</h6>
-                <div class="d-flex align-items-center justify-content-between">
-                  <h6 class="fw-semibold fs-4 mb-0">$50 <span class="ms-2 fw-normal text-muted fs-3"><del>$65</del></span></h6>
-                  <ul class="list-unstyled d-flex align-items-center mb-0">
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                  </ul>
-                </div>
-              </div>
+        <div class="modal-body">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">현재 설정 요금</h5>
+              <h4 class="fw-semibold mb-3">1,258,000원</h4>
             </div>
           </div>
-          <div class="col-sm-6 col-xl-3">
-            <div class="card overflow-hidden rounded-2">
-              <div class="position-relative">
-                <a href="javascript:void(0)"><img src="/images/products/s5.jpg" class="card-img-top rounded-0" alt="..."></a>
-                <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>                      </div>
-              <div class="card-body pt-3 p-4">
-                <h6 class="fw-semibold fs-4">MacBook Air Pro</h6>
-                <div class="d-flex align-items-center justify-content-between">
-                  <h6 class="fw-semibold fs-4 mb-0">$650 <span class="ms-2 fw-normal text-muted fs-3"><del>$900</del></span></h6>
-                  <ul class="list-unstyled d-flex align-items-center mb-0">
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                  </ul>
-                </div>
+          <p>
+          <br>
+          <form id="resetTargetAmountForm">
+            <div class="mb-3">
+              <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>
+              <div class="input-group">
+                <input type="number" class="form-control" id="targetAmount" aria-describedby="amountAddon">
+                <span class="input-group-text" id="amountAddon">원</span>
               </div>
             </div>
-          </div>
-          <div class="col-sm-6 col-xl-3">
-            <div class="card overflow-hidden rounded-2">
-              <div class="position-relative">
-                <a href="javascript:void(0)"><img src="/images/products/s7.jpg" class="card-img-top rounded-0" alt="..."></a>
-                <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>                      </div>
-              <div class="card-body pt-3 p-4">
-                <h6 class="fw-semibold fs-4">Red Valvet Dress</h6>
-                <div class="d-flex align-items-center justify-content-between">
-                  <h6 class="fw-semibold fs-4 mb-0">$150 <span class="ms-2 fw-normal text-muted fs-3"><del>$200</del></span></h6>
-                  <ul class="list-unstyled d-flex align-items-center mb-0">
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-xl-3">
-            <div class="card overflow-hidden rounded-2">
-              <div class="position-relative">
-                <a href="javascript:void(0)"><img src="/images/products/s11.jpg" class="card-img-top rounded-0" alt="..."></a>
-                <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>                      </div>
-              <div class="card-body pt-3 p-4">
-                <h6 class="fw-semibold fs-4">Cute Soft Teddybear</h6>
-                <div class="d-flex align-items-center justify-content-between">
-                  <h6 class="fw-semibold fs-4 mb-0">$285 <span class="ms-2 fw-normal text-muted fs-3"><del>$345</del></span></h6>
-                  <ul class="list-unstyled d-flex align-items-center mb-0">
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+          <button type="submit" class="btn btn-primary" form="resetTargetAmountForm">저장</button>
         </div>
       </div>
     </div>
   </div>
+
+
+
+
   <script src="/libs/jquery/dist/jquery.min.js"></script>
   <script src="/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/js/sidebarmenu.js"></script>
@@ -376,6 +273,22 @@
   <script src="/libs/apexcharts/dist/apexcharts.min.js"></script>
   <script src="/libs/simplebar/dist/simplebar.js"></script>
   <script src="/js/dashboard.js"></script>
+  <script>
+
+    var userRole = "ADMIN"; // todo : 실제 사용자 권한 가져오도록 로직 변경해야 함
+
+    $(document).ready(function() {
+      if (userRole === "ADMIN") {
+        $('.card.overflow-hidden').on('click', function() {
+          var myModal = new bootstrap.Modal(document.getElementById('settingPriceModal'), {
+            keyboard: false
+          });
+          myModal.show();
+        });
+      }
+    });
+  </script>
+
 </body>
 
 </html>
