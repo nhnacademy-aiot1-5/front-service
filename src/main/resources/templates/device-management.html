@@ -7,7 +7,6 @@
         <link rel="stylesheet" href="/css/styles.min.css"/>
         <link href="/DataTables/datatables.min.css" rel="stylesheet"/>
         <script src="/DataTables/datatables.min.js"></script>
-        <!--        <link rel="stylesheet" href="../assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css">-->
     </head>
     <body>
         <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
@@ -105,16 +104,27 @@
                                                 <!-- end row -->
                                             </thead>
                                             <tbody>
+                                                <tr th:each="device, stat : ${devices}"
+                                                    th:classappend="${stat.even} ? 'even' : 'odd'">
+                                                    <td class="sorting_1">
+                                                        <div class="d-flex align-items-center gap-6">
+                                                            <img th:src="@{${device.userImageUrl}}" width="45" class="rounded-circle">
+                                                            <h6 class="mb-0" th:text="${device.userName}">Airi Satou</h6>
+                                                        </div>
+                                                    </td>
+                                                    <td th:text="${device.position}">Accountant</td>
+                                                    <td th:text="${device.location}">Tokyo</td>
+                                                </tr>
                                                 <tr class="odd">
                                                     <td class="sorting_1">
                                                         <div class="d-flex align-items-center gap-6">
-                                                            <img src="../images/profile/user-1.jpg" width="45"
+                                                            <img src="../images/sensor/sensor.png" width="45"
                                                                  class="rounded-circle">
-                                                            <h6 class="mb-0"> Airi Satou</h6>
+                                                            <h6 class="mb-0">EM320-TH-389818</h6>
                                                         </div>
                                                     </td>
-                                                    <td>Accountant</td>
-                                                    <td>Tokyo</td>
+                                                    <td>온도, 습도, 배터리 레벨</td>
+                                                    <td>off</td>
                                                     <!--                                                    <td>33</td>-->
                                                     <!--                                                    <td>2008/11/28</td>-->
                                                     <!--                                                    <td>$162,700</td>-->
@@ -122,13 +132,13 @@
                                                 <tr class="even">
                                                     <td class="sorting_1">
                                                         <div class="d-flex align-items-center gap-6">
-                                                            <img src="../images/profile/user-1.jpg" width="45"
+                                                            <img src="../images/sensor/sensor.png" width="45"
                                                                  class="rounded-circle">
-                                                            <h6 class="mb-0"> Ashton Cox</h6>
+                                                            <h6 class="mb-0">AM107-067999</h6>
                                                         </div>
                                                     </td>
-                                                    <td>Junior Technical Author</td>
-                                                    <td>San Francisco</td>
+                                                    <td>적외선, 이산화탄소, 압력, 밝기, 대기오염물질, 온도, 습도</td>
+                                                    <td>off</td>
                                                     <!--                                                    <td>66</td>-->
                                                     <!--                                                    <td>2009/01/12</td>-->
                                                     <!--                                                    <td>$86,000</td>-->
@@ -251,8 +261,8 @@
                                                 <!-- start row -->
                                                 <tr>
                                                     <th rowspan="1" colspan="1">Name</th>
-                                                    <th rowspan="1" colspan="1">Position</th>
-                                                    <th rowspan="1" colspan="1">Office</th>
+                                                    <th rowspan="1" colspan="1">Support</th>
+                                                    <th rowspan="1" colspan="1">Status</th>
                                                     <!--                                                    <th rowspan="1" colspan="1">Age</th>-->
                                                     <!--                                                    <th rowspan="1" colspan="1">Start date</th>-->
                                                     <!--                                                    <th rowspan="1" colspan="1">Salary</th>-->
@@ -266,7 +276,7 @@
                                         </div>
                                         <br>
                                         <nav aria-label="...">
-                                            <ul class="pagination">
+                                            <ul class="pagination justify-content-end">
                                                 <li class="page-item disabled">
                                                     <a class="page-link" href="javascript:void(0)" tabindex="-1"
                                                        aria-disabled="true">Previous</a>
