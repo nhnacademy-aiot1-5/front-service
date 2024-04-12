@@ -4,7 +4,6 @@ import live.ioteatime.frontservice.dto.GetUserResponse;
 import live.ioteatime.frontservice.dto.LoginRequest;
 import live.ioteatime.frontservice.dto.LoginResponse;
 import live.ioteatime.frontservice.dto.RegisterRequest;
-import live.ioteatime.frontservice.dto.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,7 @@ public interface UserAdaptor {
     ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest);
 
     @GetMapping("/api/users/{userId}")
-    ResponseEntity<GetUserResponse> getUsers(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader, @PathVariable("userId") String userId);
+    ResponseEntity<GetUserResponse> getUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
 
 
 }

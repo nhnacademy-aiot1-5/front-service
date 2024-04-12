@@ -28,10 +28,10 @@
                         <img src="/images/profile/guest_image.png" class="rounded-circle" width="40"
                              height="40" alt="modernize-img">
                     </div>
-                    `
+
                     <div class="john-title" th:if="${userInfo}">
-                        <h6 class="mb-0 fs-4 fw-semibold">User,님</h6>
-                        <span class="fs-2">Guest</span></div>
+                        <h6 class="mb-0 fs-4 fw-semibold" th:text="${userInfo.id}+'님'">유저내용</h6>
+                        <span class="fs-2" th:text="${userInfo.role}">userRole</span></div>
                     <div class="john-title" th:unless="${userInfo}">
                         <h6 class="mb-0 fs-4 fw-semibold">로그인 하세요</h6>
                         <span class="fs-2">empty</span>
@@ -49,7 +49,7 @@
                             onclick="location.href='/login'">
                         <i class="ti ti-power fs-6"></i>
                     </button>
-                    `
+
                 </div>
             </div>
 
@@ -59,7 +59,7 @@
                         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                         <span class="hide-menu">Home</span>
                     </li>
-                    <li class="sidebar-item">
+                    <li class="sidebar-item" th:if="${userInfo.role.name() != 'GUEST'}">
                         <a class="sidebar-link" href="/" aria-expanded="false">
                             <span>
                               <i class="ti ti-layout-dashboard"></i>
@@ -69,7 +69,7 @@
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/" aria-expanded="false">
+                        <a class="sidebar-link" href="/mypage" aria-expanded="false">
                             <span>
                               <i class="ti ti-layout-dashboard"></i>
                             </span>
@@ -77,7 +77,7 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-item">
+                    <li class="sidebar-item" th:if="${userInfo.role.name() == 'ADMIN'}">
                         <a class="sidebar-link" href="/" aria-expanded="false">
                             <span>
                               <i class="ti ti-layout-dashboard"></i>
@@ -86,12 +86,12 @@
                         </a>
                     </li>
 
-                    <li class="nav-small-cap">
+                    <li class="nav-small-cap" th:if="${userInfo.role.name() !='GUEST'}">
                         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                         <span class="hide-menu">보고서</span>
                     </li>
 
-                    <li class="sidebar-item">
+                    <li class="sidebar-item" th:if="${userInfo.role.name() !='GUEST'}">
                         <a class="sidebar-link" href="#" aria-expanded="false">
                             <span>
                               <i class="ti ti-alert-circle"></i>
@@ -99,7 +99,7 @@
                             <span class="hide-menu">일 별 리포트</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
+                    <li class="sidebar-item" th:if="${userInfo.role.name() !='GUEST'}">
                         <a class="sidebar-link" href="#" aria-expanded="false">
                             <span>
                               <i class="ti ti-alert-circle"></i>
@@ -107,7 +107,7 @@
                             <span class="hide-menu">주 별 리포트</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
+                    <li class="sidebar-item" th:if="${userInfo.role.name() !='GUEST'}">
                         <a class="sidebar-link" href="#" aria-expanded="false">
                             <span>
                               <i class="ti ti-cards"></i>
@@ -115,7 +115,7 @@
                             <span class="hide-menu">월 별 리포트</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
+                    <li class="sidebar-item" th:if="${userInfo.role.name() !='GUEST'}">
                         <a class="sidebar-link" href="#" aria-expanded="false">
                             <span>
                               <i class="ti ti-file-description"></i>

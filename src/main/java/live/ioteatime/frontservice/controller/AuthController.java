@@ -12,10 +12,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-@RequestMapping("/login")
+@RequestMapping
 @RequiredArgsConstructor
 @Slf4j
-public class LoginController {
+public class AuthController {
 
     private final UserAdaptor userAdaptor;
     private final String ACCESS_TOKEN_KEY = "iotaot";
@@ -26,7 +26,7 @@ public class LoginController {
      * @param response
      * @return 로그인 성공 시 메인 페이지로 리다이렉트
      */
-    @PostMapping
+    @PostMapping("/login")
     public String login(@ModelAttribute LoginRequest loginRequest, HttpServletResponse response){
         LoginResponse loginResponse = userAdaptor.login(loginRequest).getBody();
 
@@ -39,9 +39,23 @@ public class LoginController {
         return "redirect:/";
     }
 
-    @GetMapping
+    @GetMapping("/login")
     public String login(){
         return "authentication/login";
+    }
+
+    /**
+     * 로그아웃 요청을 처리합니다.
+     * @param response
+     * @return 로그아웃시 메인 페이지로 리다이렉트합니다.
+     */
+    @GetMapping("/logout")
+    public String logout(HttpServletResponse response){
+        Cookie cookie = new Cookie(ACCESS_TOKEN_KEY, null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return "redirect:/";
     }
 
 }

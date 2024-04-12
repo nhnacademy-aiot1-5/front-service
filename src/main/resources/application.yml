@@ -17,3 +17,5 @@ spring:
     active: dev
   application:
     name: front-service
+  thymeleaf:
+    cache: false
