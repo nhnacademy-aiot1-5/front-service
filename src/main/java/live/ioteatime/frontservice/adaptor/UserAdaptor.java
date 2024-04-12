@@ -1,5 +1,6 @@
 package live.ioteatime.frontservice.adaptor;
 
+import live.ioteatime.frontservice.dto.GetUserResponse;
 import live.ioteatime.frontservice.dto.LoginRequest;
 import live.ioteatime.frontservice.dto.LoginResponse;
 import live.ioteatime.frontservice.dto.RegisterRequest;
@@ -21,7 +22,7 @@ public interface UserAdaptor {
     ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest);
 
     @GetMapping("/api/users/{userId}")
-    UserDto getUserInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader, @PathVariable String userId);
+    ResponseEntity<GetUserResponse> getUsers(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader, @PathVariable("userId") String userId);
 
 
 }
