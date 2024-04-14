@@ -23,5 +23,6 @@ public interface UserAdaptor {
     @GetMapping("/api/users")
     ResponseEntity<GetUserResponse> getUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
 
-
+    @PostMapping("/api/users")
+    ResponseEntity<String> requestUpgradeToUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authrizationHeader);
 }
