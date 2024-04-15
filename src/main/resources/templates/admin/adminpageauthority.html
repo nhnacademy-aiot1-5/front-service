@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지</title>
+    <!-- 부트스트랩 CSS 파일 -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
+     data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <th:block th:replace="side-bar :: sidebar"></th:block>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+        <!--  Header Start -->
+        <th:block th:replace="header :: header"></th:block>
+        <div class="container-fluid">
+            <div>
+                <h1>어드민 관리 페이지</h1>
+                <br/>
+            </div>
+            <!--  Header End -->
+            <div class="row">
+                <div class="col-2 mb-4">
+                    <button class="btn btn-primary"
+                            style="font-size: 14px; padding: 10px 20px;"
+                            onclick="changePassword()">
+                        게스트 유저 관리
+                    </button>
+                </div>
+                <div class="col-2 mb-4">
+                    <button class="btn btn-primary"
+                            style="font-size: 14px; padding: 10px 20px;"
+                            onclick="changePassword()">
+                        유저 권한 관리
+                    </button>
+                </div>
+                <div class="col-2 mb-4">
+                    <button class="btn btn-primary"
+                            style="font-size: 14px; padding: 10px 20px;"
+                            onclick="changePassword()">
+                        사용 기기 관리
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 mb-4"> <!-- 멤버 리스트 -->
+                    <div class="rounded-lg border bg-white text-dark shadow-sm" th:if="${userInfo.role.name() == 'ADMIN'}">
+                        <div class="p-4">
+                            <h2 class="text-lg fw-bold">멤버 리스트</h2>
+                            <div style="height: 20px;"></div>
+                            <div class="mb-3" id="memberList">
+                                <div class="row member-item" onclick="showMemberDetail('member1')">
+                                    <div class="col">
+                                        <div class="text-muted text-start">member1</div>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-warning"
+                                                style="font-size: 14px; padding: 6px 12px;">USER
+                                        </button>
+                                    </div>
+                                </div>
+                                <div style="height: 10px;"></div>
+                                <div class="row member-item" onclick="showMemberDetail('member2')">
+                                    <div class="col">
+                                        <div class="text-muted text-start">member2</div>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-primary"
+                                                style="font-size: 14px; padding: 6px 12px;">ADMIN
+                                        </button>
+                                    </div>
+                                </div>
+                                <div style="height: 10px;"></div>
+                                <div class="row member-item" onclick="showMemberDetail('member3')">
+                                    <div class="col">
+                                        <div class="text-muted text-start">member3</div>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-secondary"
+                                                style="font-size: 14px; padding: 6px 12px;">GUEST
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function changePassword() {
+        alert("비밀번호 변경 기능은 아직 구현되지 않았습니다.");
+    }
+
+    function showMemberDetail(memberId) {
+        // 멤버의 상세 정보를 가져오는 비동기 요청을 보낸다고 가정
+        // 이 예시에서는 memberId를 콘솔에 출력
+        alert("회원 수정 기능은 아직 구현되지 않았습니다.");
+        console.log("멤버 ID:", memberId);
+    }
+</script>
+</body>
+</html>

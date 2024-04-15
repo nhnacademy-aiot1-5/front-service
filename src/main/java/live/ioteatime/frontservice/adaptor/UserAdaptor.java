@@ -20,8 +20,7 @@ public interface UserAdaptor {
     @PostMapping("/auth/login")
     ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest);
 
+    //유저정보 출력하는거임
     @GetMapping("/api/users/{userId}")
     ResponseEntity<GetUserResponse> getUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
-
-
 }

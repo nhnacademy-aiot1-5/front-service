@@ -8,22 +8,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
-@Slf4j
 @Controller
 @RequiredArgsConstructor
-public class UserController {
-
+@Slf4j
+public class AdminController {
     private final String ACCESS_TOKEN_KEY = "iotaot";
-
-    private final CookieUtil cookieUtil;
     private final UserAdaptor userAdaptor;
+    private final CookieUtil cookieUtil;
 
-    @GetMapping("/mypage")
-    public String userMypage(HttpServletRequest request, Model model){
+    @GetMapping("/adminpage")
+    public String index(HttpServletRequest request, Model model) {
 
         String accessToken = cookieUtil.getCookieValue(request, ACCESS_TOKEN_KEY);
         log.info("access token: {}", accessToken);
@@ -36,7 +35,7 @@ public class UserController {
         model.addAttribute("userInfo", userInfo);
         log.info("userId={}, userRole={}", userInfo.getId(), userInfo.getRole());
 
-        return "/mypage/mypage";
 
+        return "admin/adminpageauthority";
     }
 }
