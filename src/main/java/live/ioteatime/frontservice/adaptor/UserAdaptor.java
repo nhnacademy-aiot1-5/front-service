@@ -27,5 +27,8 @@ public interface UserAdaptor {
     ResponseEntity<OrganizationResponse> getOrganization(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
 
     @PutMapping("/api/users")
-    ResponseEntity<String> updateUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader, UpdateUserRequest updateUserRequest);
+    ResponseEntity<String> updateUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader, @RequestBody UpdateUserRequest updateUserRequest);
+
+    @PutMapping("/api/users/password")
+    ResponseEntity<String> updateUserPassword(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader, @RequestBody ChangePasswordRequest changePasswordRequest);
 }
