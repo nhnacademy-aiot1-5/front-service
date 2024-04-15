@@ -11,7 +11,7 @@
     <aside class="left-sidebar">
         <div>
             <div class="brand-logo d-flex align-items-center justify-content-between">
-                <a href="#" class="container-fluid d-flex justify-content-center">
+                <a href="/" class="container-fluid d-flex justify-content-center">
                     <img class="img-fluid mx-auto" th:src="@{/images/logos/ioteatime-long.png}"
                          alt="Logo" style="object-fit: cover;">
                 </a>
@@ -78,7 +78,7 @@
                     </li>
 
                     <li class="sidebar-item" th:if="${userInfo.role.name() == 'ADMIN'}">
-                        <a class="sidebar-link" href="/" aria-expanded="false">
+                        <a class="sidebar-link" href="/adminpage" aria-expanded="false">
                             <span>
                               <i class="ti ti-layout-dashboard"></i>
                             </span>
