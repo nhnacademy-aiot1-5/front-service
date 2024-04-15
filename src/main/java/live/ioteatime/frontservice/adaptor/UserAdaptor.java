@@ -14,13 +14,15 @@ public interface UserAdaptor {
 
     //회원가입임
     @PostMapping("/api/users")
-    ResponseEntity<Void> createUser(@RequestBody RegisterRequest registerRequest);
+    ResponseEntity<String> createUser(@RequestBody RegisterRequest registerRequest);
 
     //로그인임
     @PostMapping("/auth/login")
     ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest);
 
-    //유저정보 출력하는거임
-    @GetMapping("/api/users/{userId}")
+    @GetMapping("/api/users")
     ResponseEntity<GetUserResponse> getUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
+
+    @PostMapping("/api/users/upgrade-request")
+    ResponseEntity<String> requestUpgradeToUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
 }
