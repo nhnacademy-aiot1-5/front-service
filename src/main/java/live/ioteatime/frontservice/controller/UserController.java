@@ -1,7 +1,9 @@
 package live.ioteatime.frontservice.controller;
 
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
+import live.ioteatime.frontservice.domain.Role;
 import live.ioteatime.frontservice.dto.GetUserResponse;
+import live.ioteatime.frontservice.dto.OrganizationResponse;
 import live.ioteatime.frontservice.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +25,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final String TOKEN_PREFIX = "Bearer ";
-    private final String ACCESS_TOKEN_KEY = "iotaot";
+    private static final String TOKEN_PREFIX = "Bearer ";
+    private static final String ACCESS_TOKEN_KEY = "iotaot";
 
     private final CookieUtil cookieUtil;
     private final UserAdaptor userAdaptor;
@@ -49,6 +51,14 @@ public class UserController {
         model.addAttribute("userInfo", userInfo);
         log.info("userId={}, userRole={}", userInfo.getId(), userInfo.getRole());
 
+        if(userInfo.getRole().equals(Role.GUEST)){
+            return "/mypage/mypage";
+        }
+
+        OrganizationResponse organizationInfo = userAdaptor.getOrganization(TOKEN_PREFIX + accessToken).getBody();
+        model.addAttribute("organizationInfo", organizationInfo);
+        log.info("organization_name={}, electricity_montly_budget={}",organizationInfo.getName(), organizationInfo.getElectricityBudget());
+
         return "/mypage/mypage";
 
     }
@@ -72,5 +82,6 @@ public class UserController {
         redirectAttributes.addFlashAttribute("message", "변경 요청이 완료되었습니다.");
         return "/mypage/mypage";
     }
+
 
 }

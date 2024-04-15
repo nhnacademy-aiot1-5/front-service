@@ -68,24 +68,18 @@
                 <!-- 조직 정보 -->
                 <div class="col-6 mb-4" th:if="${userInfo.role.name() != 'GUEST'}">
                     <div class="rounded-lg border bg-white text-dark shadow-sm">
-                        <div class="p-4"}>
+                        <div class="p-4" >
                             <h2 class="text-lg fw-bold">조직 정보</h2>
                             <div style="height: 20px;"></div>
                             <div class="mb-3 d-flex align-items-center">
-                                <div class="fw-semibold me-3" style="min-width: 70px;">조직 이름</div>
-                                <div class="text-muted text-start">조직이름</div>
+                                <div class="fw-semibold me-3 col-4" style="min-width: 70px;">조직 이름</div>
+                                <div class="text-muted text-start" th:text="${organizationInfo.name}">조직이름</div>
                             </div>
                             <div class="mb-3 d-flex align-items-center">
-                                <div class="fw-semibold me-3" style="min-width: 70px;" >이번 달 목표 금액</div>
-                                <div class="text-muted text-start">한달예산</div>
+                                <div class="fw-semibold me-3 col-4" style="min-width: 70px;" >이번 달 목표 금액</div>
+                                <div class="text-muted text-start"  th:text="${#numbers.formatInteger(organizationInfo.electricityBudget, 3, 'COMMA')} + ' 원'">한달 예산</div>
+
                             </div>
-                            <div style="height: 20px;"></div>
-                            <button class="btn btn-primary" th:if="${userInfo.role.name() == 'ADMIN'}"
-                                    style="font-size: 14px; padding: 6px 12px;">
-                                <!-- 버튼 필요 없으면 삭제해도 됩니당 -->
-                                회원 관리
-                            </button>
-                        </div>
                     </div>
                 </div>
 
