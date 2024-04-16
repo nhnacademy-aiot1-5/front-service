@@ -5,7 +5,6 @@ import live.ioteatime.frontservice.dto.LoginRequest;
 import live.ioteatime.frontservice.dto.LoginResponse;
 import live.ioteatime.frontservice.dto.RegisterRequest;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +20,8 @@ public interface UserAdaptor {
     ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest);
 
     @GetMapping("/api/users")
-    ResponseEntity<GetUserResponse> getUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
+    ResponseEntity<GetUserResponse> getUser();
 
     @PostMapping("/api/users/upgrade-request")
-    ResponseEntity<String> requestUpgradeToUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
+    ResponseEntity<String> requestUpgradeToUser();
 }
