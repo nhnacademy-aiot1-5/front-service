@@ -1,14 +1,14 @@
 package live.ioteatime.frontservice.adaptor;
 
-import live.ioteatime.frontservice.dto.GetUserResponse;
-import live.ioteatime.frontservice.dto.LoginRequest;
-import live.ioteatime.frontservice.dto.LoginResponse;
-import live.ioteatime.frontservice.dto.RegisterRequest;
+import live.ioteatime.frontservice.dto.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(value = "gateway-service")
+@FeignClient(value = "gateway-service", contextId = "user-adaptor")
 public interface UserAdaptor {
 
     //회원가입임
@@ -19,6 +19,7 @@ public interface UserAdaptor {
     @PostMapping("/auth/login")
     ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest);
 
+    //유저 정보 가져오는거임
     @GetMapping("/api/users")
     ResponseEntity<GetUserResponse> getUser();
 

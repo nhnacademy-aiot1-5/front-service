@@ -30,7 +30,7 @@
                     </div>
 
                     <div class="john-title" th:if="${userInfo}">
-                        <h6 class="mb-0 fs-4 fw-semibold" th:text="${userInfo.id}+'님'">유저내용</h6>
+                        <h6 class="mb-0 fs-4 fw-semibold" th:text="${userInfo.id}+' 님'">유저내용</h6>
                         <span class="fs-2" th:text="${userInfo.role}">userRole</span></div>
                     <div class="john-title" th:unless="${userInfo}">
                         <h6 class="mb-0 fs-4 fw-semibold">로그인 하세요</h6>
@@ -78,7 +78,7 @@
                     </li>
 
                     <li class="sidebar-item" th:if="${userInfo.role.name() == 'ADMIN'}">
-                        <a class="sidebar-link" href="/adminpage" aria-expanded="false">
+                        <a class="sidebar-link" href="/admin" aria-expanded="false">
                             <span>
                               <i class="ti ti-layout-dashboard"></i>
                             </span>

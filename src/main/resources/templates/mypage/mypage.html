@@ -29,25 +29,30 @@
                 <div class="col-6 mb-4">
                     <div class="rounded-lg border bg-white text-dark shadow-sm">
                         <div class="p-4"}>
-                            <h2 class="text-lg fw-bold">유저 정보</h2>
+                            <h2 class="text-lg fw-bold">회원 정보</h2>
                             <div style="height: 20px;"></div>
                             <div class="mb-3 d-flex align-items-center">
                                 <div class="fw-semibold me-3" style="min-width: 70px;">아이디</div>
-                                <div class="text-muted text-start" th:text="${userInfo.id}">userId</div>
+                                <div class="text-muted text-start" th:text="${userInfo.id}" id="user_id">userId</div>
                             </div>
                             <div class="mb-3 d-flex align-items-center">
                                 <div class="fw-semibold me-3" style="min-width: 70px;">이름</div>
-                                <div class="text-muted text-start" th:text="${userInfo.name}">userName</div>
+                                <div class="text-muted text-start" th:text="${userInfo.name}" id="user_name">userName</div>
                             </div>
                             <div class="mb-3 d-flex align-items-center">
                                 <div class="fw-semibold me-3" style="min-width: 70px;" >생성일</div>
-                                <div class="text-muted text-start" th:text="${userInfo.createdAt}">2023-10-01 14:25:00</div>
+                                <div class="text-muted text-start" th:text="${userInfo.createdAt}" id="user_created_at">2023-10-01 14:25:00</div>
                             </div>
                             <div class="mb-3 d-flex align-items-center">
                                 <div class="fw-semibold me-3" style="min-width: 70px;" >권한</div>
-                                <div class="text-muted text-start" th:text="${userInfo.role}">userRole</div>
+                                <div class="text-muted text-start" th:text="${userInfo.role}" id="user_role">userRole</div>
                             </div>
                             <div style="height: 20px;"></div>
+                            <button class="btn btn-primary"
+                                    style="font-size: 14px; padding: 6px 12px;"
+                                    onclick="showModal()">
+                                수정
+                            </button>
                             <button class="btn btn-primary"
                                     style="font-size: 14px; padding: 6px 12px;"
                                     onclick="changePassword()">
@@ -68,24 +73,18 @@
                 <!-- 조직 정보 -->
                 <div class="col-6 mb-4" th:if="${userInfo.role.name() != 'GUEST'}">
                     <div class="rounded-lg border bg-white text-dark shadow-sm">
-                        <div class="p-4"}>
+                        <div class="p-4" >
                             <h2 class="text-lg fw-bold">조직 정보</h2>
                             <div style="height: 20px;"></div>
                             <div class="mb-3 d-flex align-items-center">
-                                <div class="fw-semibold me-3" style="min-width: 70px;">조직 이름</div>
-                                <div class="text-muted text-start">조직이름</div>
+                                <div class="fw-semibold me-3 col-4" style="min-width: 70px;">조직 이름</div>
+                                <div class="text-muted text-start" th:text="${organizationInfo.name}">조직이름</div>
                             </div>
                             <div class="mb-3 d-flex align-items-center">
-                                <div class="fw-semibold me-3" style="min-width: 70px;" >이번 달 목표 금액</div>
-                                <div class="text-muted text-start">한달예산</div>
+                                <div class="fw-semibold me-3 col-4" style="min-width: 70px;" >이번 달 목표 금액</div>
+                                <div class="text-muted text-start"  th:text="${#numbers.formatInteger(organizationInfo.electricityBudget, 3, 'COMMA')} + ' 원'">한달 예산</div>
+
                             </div>
-                            <div style="height: 20px;"></div>
-                            <button class="btn btn-primary" th:if="${userInfo.role.name() == 'ADMIN'}"
-                                    style="font-size: 14px; padding: 6px 12px;">
-                                <!-- 버튼 필요 없으면 삭제해도 됩니당 -->
-                                회원 관리
-                            </button>
-                        </div>
                     </div>
                 </div>
 
@@ -135,17 +134,66 @@
         </div>
     </div>
 </div>
+
+
+    <!-- 회원 정보 수정 모달 -->
+        <div id="editUserModal" class="modal" style="width: 50%; height: 50%;">
+            <div class="modal-content" style="border: none; padding: 0; margin: 0;">
+                <div class="modal-header" style="border-bottom: 1px solid #e9ecef; padding: 10px;">
+                    <h5 class="modal-title">회원 정보 수정</h5>
+                    <button type="button" class="close" onclick="closeEditModal()" aria-label="Close" style="border: none; background: transparent; font-size: 20px; color: #000; padding: 0; margin: 0;">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body" style="padding: 10px;">
+                    <form id="editUserForm" method="post" action="/update-user">
+                        <div class="mb-3 d-flex align-items-center">
+                            <div class="fw-semibold me-3" style="min-width: 70px;">아이디</div>
+                            <input type="text" class="form-control" id="userId" name="id" readonly>
+                        </div>
+                        <div class="mb-3 d-flex align-items-center">
+                            <div class="fw-semibold me-3" style="min-width: 70px;">이름</div>
+                            <input type="text" class="form-control" id="userName" name="name">
+                        </div>
+                        <div class="mb-3 d-flex align-items-center">
+                            <div class="fw-semibold me-3" style="min-width: 70px;">가입일</div>
+                            <input type="text" class="form-control" id="userCreatedAt" name="createdAt" readonly>
+                        </div>
+                        <div class="mb-3 d-flex align-items-center">
+                            <div class="fw-semibold me-3" style="min-width: 70px;">권한</div>
+                            <input type="text" class="form-control" id="userRole" name="role" readonly>
+                        </div>
+                        <input type="hidden" name="organization">
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">저장</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+</div>
+</body>
 <script>
     function changePassword() {
         alert("비밀번호 변경 기능은 아직 구현되지 않았습니다.");
     }
 
-    function showMemberDetail(memberId) {
-        // 멤버의 상세 정보를 가져오는 비동기 요청을 보낸다고 가정
-        // 이 예시에서는 memberId를 콘솔에 출력
-        alert("회원 수정 기능은 아직 구현되지 않았습니다.");
-        console.log("멤버 ID:", memberId);
+    function showModal() {
+
+        var userId = document.getElementById("user_id").textContent;
+        var userName = document.getElementById("user_name").textContent;
+        var userCreatedAt = document.getElementById("user_created_at").textContent;
+        var userRole = document.getElementById("user_role").textContent;
+        document.getElementById('userId').value = userId.trim();
+        document.getElementById('userName').value = userName.trim();
+        document.getElementById('userCreatedAt').value = userCreatedAt.trim();
+        document.getElementById('userRole').value = userRole.trim();
+
+        document.getElementById('editUserModal').style.display = 'block';
     }
+
+    function closeEditModal() {
+        document.getElementById('editUserModal').style.display = 'none';
+    }
+
 </script>
-</body>
+
 </html>
