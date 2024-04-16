@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마이페이지</title>
+    <title>어드민 페이지</title>
     <!-- 부트스트랩 CSS 파일 -->
     <link rel="stylesheet" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css"/>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
 </head>
 <body>
 <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
@@ -48,43 +51,30 @@
             </div>
             <div class="row">
                 <div class="col-12 mb-4"> <!-- 멤버 리스트 -->
-                    <div class="rounded-lg border bg-white text-dark shadow-sm" th:if="${userInfo.role.name() == 'ADMIN'}">
-                        <div class="p-4">
-                            <h2 class="text-lg fw-bold">유저 리스트</h2>
-                            <div style="height: 20px;"></div>
-                            <div class="mb-3" id="memberList">
-                                <div class="row member-item" onclick="showMemberDetail('member1')">
-                                    <div class="col">
-                                        <div class="text-muted text-start">member1</div>
-                                    </div>
-                                    <div class="col">
-                                        <button class="btn btn-warning"
-                                                style="font-size: 14px; padding: 6px 12px;">USER
-                                        </button>
-                                    </div>
-                                </div>
-                                <div style="height: 10px;"></div>
-                                <div class="row member-item" onclick="showMemberDetail('member2')">
-                                    <div class="col">
-                                        <div class="text-muted text-start">member2</div>
-                                    </div>
-                                    <div class="col">
-                                        <button class="btn btn-primary"
-                                                style="font-size: 14px; padding: 6px 12px;">ADMIN
-                                        </button>
-                                    </div>
-                                </div>
-                                <div style="height: 10px;"></div>
-                                <div class="row member-item" onclick="showMemberDetail('member3')">
-                                    <div class="col">
-                                        <div class="text-muted text-start">member3</div>
-                                    </div>
-                                    <div class="col">
-                                        <button class="btn btn-secondary"
-                                                style="font-size: 14px; padding: 6px 12px;">GUEST
-                                        </button>
-                                    </div>
-                                </div>
+                    <div class="rounded-lg border bg-white text-dark shadow-sm">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">게스트 유저 관리</h2>
+                            </div>
+                            <div class="card-body">
+                                <table id="table" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Created At</th>
+                                        <th>Role</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="user : ${userList}">
+                                        <td th:text="${user.id}"></td>
+                                        <td th:text="${user.name}"></td>
+                                        <td th:text="${user.createdAt}"></td>
+                                        <td th:text="${user.role}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -94,16 +84,10 @@
     </div>
 </div>
 <script>
-    function changePassword() {
-        alert("비밀번호 변경 기능은 아직 구현되지 않았습니다.");
-    }
-
-    function showMemberDetail(memberId) {
-        // 멤버의 상세 정보를 가져오는 비동기 요청을 보낸다고 가정
-        // 이 예시에서는 memberId를 콘솔에 출력
-        alert("회원 수정 기능은 아직 구현되지 않았습니다.");
-        console.log("멤버 ID:", memberId);
-    }
+    let table = new DataTable('#table', {
+        responsive: true,
+        pageLength : 5
+    });
 </script>
 </body>
 </html>
