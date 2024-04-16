@@ -4,9 +4,7 @@ import live.ioteatime.frontservice.dto.GetUserResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,7 +13,7 @@ public interface AdminAdaptor {
 
     //GUEST 권한을 가진 유저 정보 리스트를 가져옴
     @GetMapping("/api/admin/guests")
-    ResponseEntity<List<GetUserResponse>> requestGuestUsers(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader, @RequestParam("page") int page);
+    ResponseEntity<List<GetUserResponse>> requestGuestUsers(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
 
     //유저 정보 리스트를 가져옴
     @GetMapping("/api/admin/users")
@@ -24,4 +22,8 @@ public interface AdminAdaptor {
     //센서 정보 리스트를 가져옴
     @GetMapping("/api/admin/sensors")
     ResponseEntity<List<GetUserResponse>> requestSensors(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
+
+    //해당하는 유저의 권한을 GUEST에서 USER로 바꿈
+    @PutMapping("/api/admin/roles")
+    ResponseEntity<GetUserResponse> requestRole(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader, @RequestParam String userId);
 }
