@@ -15,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -91,9 +90,11 @@ public class UserController {
         return "redirect:/mypage";
     }
 
-    @PutMapping("/change-password")
+    @PostMapping("/change-password")
     public String changePassword(HttpServletRequest request, RedirectAttributes redirectAttributes,
                                  @Valid @ModelAttribute ChangePasswordRequest changePasswordRequest, BindingResult bindingResult){
+
+        log.info("기존={}, 새={}, 체크={}", changePasswordRequest.getCurrentPassword(), changePasswordRequest.getNewPassword(), changePasswordRequest.getPasswordCheck());
 
         if(bindingResult.hasFieldErrors()){
             redirectAttributes.addFlashAttribute("message", "모든 항목을 입력해주세요.");
@@ -111,6 +112,7 @@ public class UserController {
             return "redirect:/login";
         }
 
+
         userAdaptor.updateUserPassword(TOKEN_PREFIX+accessToken, changePasswordRequest);
         redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
 
@@ -126,7 +128,7 @@ public class UserController {
             return "redirect:/login";
         }
 
-        return "/mypage/change-password";
+        return "/authentication/change-password";
     }
 
 }
