@@ -2,7 +2,6 @@ package live.ioteatime.frontservice.adaptor;
 
 import live.ioteatime.frontservice.dto.*;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,18 +21,8 @@ public interface UserAdaptor {
 
     //유저 정보 가져오는거임
     @GetMapping("/api/users")
-    ResponseEntity<GetUserResponse> getUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
+    ResponseEntity<GetUserResponse> getUser();
 
     @PostMapping("/api/users/upgrade-request")
-    ResponseEntity<String> requestUpgradeToUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
-
-    @GetMapping("/api/users/organization")
-    ResponseEntity<OrganizationResponse> getOrganization(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
-
-    @PutMapping("/api/users")
-    ResponseEntity<String> updateUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader, @RequestBody UpdateUserRequest updateUserRequest);
-
-    @PutMapping("/api/users/password")
-    ResponseEntity<String> updateUserPassword(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader, @RequestBody ChangePasswordRequest changePasswordRequest);
-
+    ResponseEntity<String> requestUpgradeToUser();
 }
