@@ -2,15 +2,13 @@ package live.ioteatime.frontservice.controller;
 
 import live.ioteatime.frontservice.adaptor.AdminAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
-import live.ioteatime.frontservice.dto.GetUserResponse;
+import live.ioteatime.frontservice.dto.response.GetUserResponse;
+import live.ioteatime.frontservice.dto.response.OrganizationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,7 +27,7 @@ public class AdminController {
      * @return 해당하는 경로의 html 파일을 불러옵니다.
      */
     @GetMapping
-    public String admin(Model model) {
+    public String adminPage(Model model) {
 
         //사이드바 전용
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
@@ -43,18 +41,22 @@ public class AdminController {
     }
 
     /**
-     *
      * GUEST 유저의 리스트를 확인할 수 있는 페이지를 로딩합니다.
      * @param model 결과 페이지에 전달할 파라미터입니다.
      * @return 해당하는 경로의 html 파일을 불러옵니다.
      */
     @GetMapping("/roleup")
-    public String roleUp(Model model) {
-        return admin(model);
+    public String roleUpPage(Model model) {
+        return adminPage(model);
     }
 
+    /**
+     * 현재 조직에 소속된 모든 유저의 리스트를 확인할 수있는 페이지를 로딩합니다.
+     * @param model 결과 페이지에 전달할 파라미터입니다.
+     * @return 해당하는 경로의 html 파일을 불러옵니다.
+     */
     @GetMapping("/users")
-    public String userList(Model model) {
+    public String userListPage(Model model) {
 
         //사이드바
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
@@ -66,6 +68,26 @@ public class AdminController {
         model.addAttribute("userList", userList);
 
         return "/admin/adminuser";
+    }
+
+    /**
+     * 현재 조직의 예산을 설정하는 페이지를 로딩합니다.
+     * @param model 결과 페이지에 전달할 파라미터입니다.
+     * @return 해당하는 경로의 html 파일을 불러옵니다.
+     */
+    @GetMapping("/budget")
+    public String budgetPage(Model model) {
+
+        //사이드바
+        GetUserResponse userInfo = userAdaptor.getUser().getBody();
+        model.addAttribute("userInfo", userInfo);
+        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
+
+        //조직 예산
+        OrganizationResponse budget = adminAdaptor.requestBudget().getBody();
+        model.addAttribute("budget", budget);
+
+        return "/admin/adminbudget";
     }
 
 
@@ -84,5 +106,18 @@ public class AdminController {
         //유저정보 변경
         adminAdaptor.requestRole(userId);
         return "redirect:/admin";
+    }
+
+    @PutMapping("/budget")
+    public String updateBudget(@RequestParam Long budget , Model model) {
+
+        //사이드바
+        GetUserResponse userInfo = userAdaptor.getUser().getBody();
+        model.addAttribute("userInfo", userInfo);
+        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
+
+        //목표금액 변경
+        adminAdaptor.updateBudget(budget);
+        return "redirect:/admin/budget";
     }
 }
