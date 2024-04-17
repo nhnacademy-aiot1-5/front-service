@@ -10,5 +10,5 @@ import java.math.BigInteger;
 public class OrganizationResponse {
     private int id;
     private String name;
-    private BigInteger electricityBudget;
+    private Long electricityBudget;
 }
