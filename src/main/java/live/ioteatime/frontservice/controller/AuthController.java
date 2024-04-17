@@ -1,8 +1,8 @@
 package live.ioteatime.frontservice.controller;
 
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
-import live.ioteatime.frontservice.dto.LoginRequest;
-import live.ioteatime.frontservice.dto.LoginResponse;
+import live.ioteatime.frontservice.dto.request.LoginRequest;
+import live.ioteatime.frontservice.dto.response.LoginResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

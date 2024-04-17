@@ -1,7 +1,7 @@
 package live.ioteatime.frontservice.controller;
 
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
-import live.ioteatime.frontservice.dto.GetUserResponse;
+import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
