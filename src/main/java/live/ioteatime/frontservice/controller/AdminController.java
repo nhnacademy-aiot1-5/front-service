@@ -40,7 +40,7 @@ public class AdminController {
             return "redirect:/login";
         }
         //사이드바 전용
-        GetUserResponse userInfo = userAdaptor.getUser(TOKEN_PREFIX + accessToken).getBody();
+        GetUserResponse userInfo = userAdaptor.getUser().getBody();
         model.addAttribute("userInfo", userInfo);
 
         //Guest 유저 관리
@@ -70,7 +70,7 @@ public class AdminController {
             return "redirect:/login";
         }
 
-        GetUserResponse userInfo = userAdaptor.getUser("Bearer " + accessToken).getBody();
+        GetUserResponse userInfo = userAdaptor.getUser().getBody();
         model.addAttribute("userInfo", userInfo);
         log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
 
