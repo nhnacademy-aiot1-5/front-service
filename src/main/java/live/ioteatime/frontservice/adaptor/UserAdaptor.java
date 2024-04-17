@@ -3,10 +3,7 @@ package live.ioteatime.frontservice.adaptor;
 import live.ioteatime.frontservice.dto.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(value = "gateway-service", contextId = "user-adaptor")
 public interface UserAdaptor {
@@ -25,4 +22,14 @@ public interface UserAdaptor {
 
     @PostMapping("/api/users/upgrade-request")
     ResponseEntity<String> requestUpgradeToUser();
+
+    @GetMapping("/api/users/organization")
+    ResponseEntity<OrganizationResponse> getOrganization();
+
+    @PutMapping("/api/users")
+    ResponseEntity<String> updateUser(@RequestBody UpdateUserRequest updateUserRequest);
+
+    @PutMapping("/api/users/password")
+    ResponseEntity<String> updateUserPassword(@RequestBody ChangePasswordRequest changePasswordRequest);
+
 }

@@ -12,4 +12,5 @@ public class UpdateUserRequest {
     private String name;
     private String createdAt;
     private Role role;
+    private String organizationName;
 }

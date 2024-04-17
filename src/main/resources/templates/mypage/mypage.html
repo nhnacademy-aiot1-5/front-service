@@ -47,17 +47,23 @@
                                 <div class="fw-semibold me-3" style="min-width: 70px;" >권한</div>
                                 <div class="text-muted text-start" th:text="${userInfo.role}" id="user_role">userRole</div>
                             </div>
+                            <div class="mb-3 d-flex align-items-center">
+                                <div class="fw-semibold me-3" style="min-width: 70px;" >소속 조직</div>
+                                <div class="text-muted text-start" th:text="${userInfo.organizationName}" id="user_org">userOrganization</div>
+                            </div>
                             <div style="height: 20px;"></div>
+
                             <button class="btn btn-primary"
                                     style="font-size: 14px; padding: 6px 12px;"
                                     onclick="showModal()">
                                 수정
                             </button>
+                            <form action="change-password" method="get">
                             <button class="btn btn-primary"
-                                    style="font-size: 14px; padding: 6px 12px;"
-                                    onclick="changePassword()">
+                                    style="font-size: 14px; padding: 6px 12px;">
                                 비밀번호 변경
                             </button>
+                            </form>
                             <div style="height: 20px;"></div>
                             <form method="post" action="/upgrade-request" th:if="${userInfo.role.name() == 'GUEST'}">
                                 <button class="btn btn-primary"
@@ -163,7 +169,10 @@
                             <div class="fw-semibold me-3" style="min-width: 70px;">권한</div>
                             <input type="text" class="form-control" id="userRole" name="role" readonly>
                         </div>
-                        <input type="hidden" name="organization">
+                        <div class="mb-3 d-flex align-items-center">
+                            <div class="fw-semibold me-3" style="min-width: 70px;">소속 조직</div>
+                            <input type="text" class="form-control" id="userOrg" name="organizationName" readonly>
+                        </div>
                         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">저장</button>
                     </form>
                 </div>
@@ -172,9 +181,6 @@
 </div>
 </body>
 <script>
-    function changePassword() {
-        alert("비밀번호 변경 기능은 아직 구현되지 않았습니다.");
-    }
 
     function showModal() {
 
@@ -182,10 +188,12 @@
         var userName = document.getElementById("user_name").textContent;
         var userCreatedAt = document.getElementById("user_created_at").textContent;
         var userRole = document.getElementById("user_role").textContent;
+        var userOrg = document.getElementById("user_org").textContent;
         document.getElementById('userId').value = userId.trim();
         document.getElementById('userName').value = userName.trim();
         document.getElementById('userCreatedAt').value = userCreatedAt.trim();
         document.getElementById('userRole').value = userRole.trim();
+        document.getElementById('userOrg').value = userOrg.trim();
 
         document.getElementById('editUserModal').style.display = 'block';
     }

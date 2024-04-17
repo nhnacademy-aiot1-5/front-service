@@ -2,10 +2,11 @@ package live.ioteatime.frontservice.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 public class ChangePasswordRequest {
     @NotBlank String currentPassword;
