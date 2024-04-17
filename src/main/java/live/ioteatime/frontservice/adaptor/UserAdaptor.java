@@ -26,7 +26,7 @@ public interface UserAdaptor {
     @GetMapping("/api/users/organization")
     ResponseEntity<OrganizationResponse> getOrganization();
 
-    @PutMapping("/api/users")
+    @PutMapping("/api/users/update-user")
     ResponseEntity<String> updateUser(@RequestBody UpdateUserRequest updateUserRequest);
 
     @PutMapping("/api/users/password")
