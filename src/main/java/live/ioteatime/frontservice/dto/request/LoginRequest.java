@@ -1,4 +1,4 @@
-package live.ioteatime.frontservice.dto;
+package live.ioteatime.frontservice.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
