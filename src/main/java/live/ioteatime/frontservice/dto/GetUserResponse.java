@@ -11,4 +11,5 @@ public class GetUserResponse {
     private String name;
     private String createdAt;
     private Role role;
+    private String organizationName;
 }
