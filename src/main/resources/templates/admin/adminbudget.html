@@ -6,10 +6,6 @@
     <title>어드민 페이지</title>
     <!-- 부트스트랩 CSS 파일 -->
     <link rel="stylesheet" href="/css/style.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.js"
-            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css"/>
-    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
 </head>
 <body>
 <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
@@ -58,37 +54,30 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12 mb-4"> <!-- 멤버 리스트 -->
-                    <div class="rounded-lg border bg-white text-dark shadow-sm">
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="card-title">게스트 유저 관리</h2>
+                <div class="col-8 mb-4">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">현재 설정 요금</h5>
+                                    <h4 class="fw-semibold mb-3" th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">현재요금</h4>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <table id="table" class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Role</th>
-                                        <th>권한 관리</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="user : ${userList}">
-                                        <td th:text="${user.id}"></td>
-                                        <td th:text="${user.name}"></td>
-                                        <td th:text="${user.role}"></td>
-                                        <td>
-                                            <form th:action="@{/admin/roles/{userId}(userId=${user.id})}"
-                                                  th:method="PUT" onsubmit="return confirmRequest();">
-                                                <button type="submit" class="btn btn-primary">권한 변경</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <p>
+                                <br>
+                            <form th:action="@{/admin/budget}" th:method="PUT" id="resetTargetAmountForm">
+                                <div class="mb-3">
+                                    <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>
+                                    <div class="input-group" style="width: 100%;">
+                                        <input type="number" class="form-control" id="budget" name="budget"
+                                               aria-describedby="amountAddon">
+                                        <span class="input-group-text" id="amountAddon">원</span>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" form="resetTargetAmountForm"
+                                        style="float: right">저장
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -96,16 +85,5 @@
         </div>
     </div>
 </div>
-<script>
-    let table = new DataTable('#table', {
-        responsive: true,
-        pageLength: 5
-    });
-
-    function confirmRequest() {
-        var userResponse = confirm("유저 권한을 정말로 바꾸시겠습니까?")
-        return userResponse;
-    }
-</script>
 </body>
 </html>
