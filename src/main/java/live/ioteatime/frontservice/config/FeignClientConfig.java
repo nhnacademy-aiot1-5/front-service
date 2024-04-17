@@ -19,15 +19,23 @@ public class FeignClientConfig {
     @Bean
     public RequestInterceptor requestTokenBearerInterceptor(CookieUtil cookieUtil) {
         return requestTemplate -> {
+
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            if (!requestTemplate.url().contains("/auth/login") && !(requestTemplate.url().contains("/api/users") && request.getMethod().equals("POST"))) {
-                String accessToken = cookieUtil.getCookieValue(request, "iotaot");
-                if (accessToken == null) {
-                    throw new UnauthorizedAccessException("Access token is missing");
-                }
-                requestTemplate.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-                log.info("AccessToken applied for request: " + accessToken);
+
+            String url = requestTemplate.url();
+            log.error("{} {}", url, request.getMethod());
+            if (url.equals("/auth/login") ||
+                    (request.getMethod().equals("GET") && (url.equals("/users/update-user") || url.equals("/users/change-password")))
+            ) {
+                return;
             }
+            String accessToken = cookieUtil.getCookieValue(request, "iotaot");
+            if (accessToken == null) {
+                throw new UnauthorizedAccessException("Access token is missing");
+            }
+            requestTemplate.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+            log.info("AccessToken applied for request: {}", requestTemplate.headers().get("Authorization"));
+
         };
     }
 }

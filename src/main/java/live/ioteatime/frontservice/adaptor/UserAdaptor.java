@@ -22,4 +22,14 @@ public interface UserAdaptor {
 
     @PostMapping("/api/users/upgrade-request")
     ResponseEntity<String> requestUpgradeToUser();
+
+    @GetMapping("/api/users/organization")
+    ResponseEntity<OrganizationResponse> getOrganization();
+
+    @PutMapping("/api/users")
+    ResponseEntity<String> updateUser(@RequestBody UpdateUserRequest updateUserRequest);
+
+    @PutMapping("/api/users/password")
+    ResponseEntity<String> updateUserPassword(@RequestBody ChangePasswordRequest changePasswordRequest);
+
 }
