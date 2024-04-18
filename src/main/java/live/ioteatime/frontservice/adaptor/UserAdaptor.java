@@ -39,7 +39,8 @@ public interface UserAdaptor {
 
     @GetMapping("/api/monthly/electricity")
     ResponseEntity<String> getMonthlyElectricity(@RequestParam
-                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime localDateTime,
+                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                 LocalDateTime localDateTime,
                                                  @RequestParam int organizationId);
 
     @GetMapping("/api/daily/electricities")
@@ -48,4 +49,9 @@ public interface UserAdaptor {
                                                                     LocalDateTime localDateTime,
                                                                     @RequestParam int organizationId);
 
+    @GetMapping("/api/monthly/electricities")
+    ResponseEntity<List<MonthlyElectricityDto>> getMonthlyElectricities(@RequestParam
+                                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                        LocalDateTime localDateTime,
+                                                                        @RequestParam int organizationId);
 }

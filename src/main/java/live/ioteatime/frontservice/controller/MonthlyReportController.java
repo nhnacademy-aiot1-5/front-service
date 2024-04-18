@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.GetUserResponse;
 import live.ioteatime.frontservice.dto.MonthlyElectricityDto;
+import live.ioteatime.frontservice.dto.MonthlyElectricityPageDto;
 import live.ioteatime.frontservice.dto.OrganizationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -29,12 +30,20 @@ public class MonthlyReportController {
     @GetMapping("/monthly-report")
     public String getElectricityCharge(Model model) {
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
+        OrganizationResponse organization = userAdaptor.getOrganization().getBody();
+        if (Objects.isNull(organization)) {
+            throw new NullPointerException();
+        }
+        List<MonthlyElectricityDto> monthlyElectricityDtos = userAdaptor.getMonthlyElectricities(LocalDateTime.now(), organization.getId()).getBody();
+        model.addAttribute("recent12monthElectricities", monthlyElectricityDtos);
         model.addAttribute("userInfo", userInfo);
+        model.addAttribute("budget", organization.getElectricityBudget());
+        log.warn(Objects.requireNonNull(model.getAttribute("recent12monthElectricities")).toString());
         return "detail/monthly-report";
     }
 
     @GetMapping("/monthly-electricity/{localdate}")
-    public ResponseEntity<MonthlyElectricityDto> getElectricityByMonth(
+    public ResponseEntity<MonthlyElectricityPageDto> getElectricityByMonth(
             @PathVariable(name = "localdate")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             LocalDateTime localDateTime
@@ -43,11 +52,18 @@ public class MonthlyReportController {
         if (Objects.isNull(organization)) {
             throw new NullPointerException();
         }
-        MonthlyElectricityDto monthlyElectricityDto =
-                objectMapper.readValue(userAdaptor.getMonthlyElectricity(localDateTime, organization.getId()).getBody(), MonthlyElectricityDto.class);
-        monthlyElectricityDto.setDailyElectricityDtos(userAdaptor.getDailyElectricities(localDateTime, organization.getId()).getBody());
-
-        return ResponseEntity.ok().body(monthlyElectricityDto);
+        MonthlyElectricityPageDto monthlyElectricityPageDto =
+                objectMapper.readValue(
+                        userAdaptor.getMonthlyElectricity(localDateTime, organization.getId()).getBody(),
+                        MonthlyElectricityPageDto.class
+                );
+        monthlyElectricityPageDto.setDailyElectricityDtos(
+                userAdaptor.getDailyElectricities(localDateTime, organization.getId()).getBody()
+        );
+        monthlyElectricityPageDto.setMonthlyElectricityDtos(
+                userAdaptor.getMonthlyElectricities(localDateTime, organization.getId()).getBody()
+        );
+        return ResponseEntity.ok().body(monthlyElectricityPageDto);
     }
 
 }
