@@ -1,5 +1,6 @@
 package live.ioteatime.frontservice.adaptor;
 
+import live.ioteatime.frontservice.dto.DailyElectricityDto;
 import live.ioteatime.frontservice.dto.request.ChangePasswordRequest;
 import live.ioteatime.frontservice.dto.request.LoginRequest;
 import live.ioteatime.frontservice.dto.request.RegisterRequest;
@@ -8,8 +9,12 @@ import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import live.ioteatime.frontservice.dto.response.LoginResponse;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @FeignClient(value = "gateway-service", contextId = "user-adaptor")
 public interface UserAdaptor {
@@ -37,5 +42,11 @@ public interface UserAdaptor {
 
     @PutMapping("/api/users/password")
     ResponseEntity<String> updateUserPassword(@RequestBody ChangePasswordRequest changePasswordRequest);
+
+    @GetMapping("/api/monthly/electricity")
+    ResponseEntity<String> getMonthlyElectricity(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate);
+
+    @GetMapping("/api/daily/electricities")
+    ResponseEntity<List<DailyElectricityDto>> getDailyElectricities(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate);
 
 }
