@@ -18,7 +18,6 @@ public class IndexController {
 
     @GetMapping
     public String index(Model model) {
-        log.warn(userAdaptor.getUser().getBody() + "이거이거이거이거어");
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
         model.addAttribute("userInfo", userInfo);
         return "index";

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @FeignClient(value = "gateway-service", contextId = "user-adaptor")
@@ -37,9 +38,14 @@ public interface UserAdaptor {
     ResponseEntity<String> updateUserPassword(@RequestBody ChangePasswordRequest changePasswordRequest);
 
     @GetMapping("/api/monthly/electricity")
-    ResponseEntity<String> getMonthlyElectricity(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate);
+    ResponseEntity<String> getMonthlyElectricity(@RequestParam
+                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime localDateTime,
+                                                 @RequestParam int organizationId);
 
     @GetMapping("/api/daily/electricities")
-    ResponseEntity<List<DailyElectricityDto>> getDailyElectricities(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate);
+    ResponseEntity<List<DailyElectricityDto>> getDailyElectricities(@RequestParam
+                                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                    LocalDateTime localDateTime,
+                                                                    @RequestParam int organizationId);
 
 }

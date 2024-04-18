@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.GetUserResponse;
 import live.ioteatime.frontservice.dto.MonthlyElectricityDto;
+import live.ioteatime.frontservice.dto.OrganizationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Slf4j
 @Controller
@@ -32,12 +35,18 @@ public class MonthlyReportController {
 
     @GetMapping("/monthly-electricity/{localdate}")
     public ResponseEntity<MonthlyElectricityDto> getElectricityByMonth(
-            @PathVariable(name = "localdate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate)
-            throws JsonProcessingException {
+            @PathVariable(name = "localdate")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            LocalDateTime localDateTime
+    ) throws JsonProcessingException {
+        OrganizationResponse organization = userAdaptor.getOrganization().getBody();
+        if (Objects.isNull(organization)) {
+            throw new NullPointerException();
+        }
         MonthlyElectricityDto monthlyElectricityDto =
-                objectMapper.readValue(userAdaptor.getMonthlyElectricity(localDate).getBody(), MonthlyElectricityDto.class);
-        monthlyElectricityDto.setDailyElectricityDtos(userAdaptor.getDailyElectricities(localDate).getBody());
-        log.warn(monthlyElectricityDto.toString());
+                objectMapper.readValue(userAdaptor.getMonthlyElectricity(localDateTime, organization.getId()).getBody(), MonthlyElectricityDto.class);
+        monthlyElectricityDto.setDailyElectricityDtos(userAdaptor.getDailyElectricities(localDateTime, organization.getId()).getBody());
+
         return ResponseEntity.ok().body(monthlyElectricityDto);
     }
 
