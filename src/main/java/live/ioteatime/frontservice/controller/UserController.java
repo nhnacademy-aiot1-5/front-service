@@ -2,10 +2,10 @@ package live.ioteatime.frontservice.controller;
 
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.domain.Role;
-import live.ioteatime.frontservice.dto.ChangePasswordRequest;
-import live.ioteatime.frontservice.dto.GetUserResponse;
-import live.ioteatime.frontservice.dto.OrganizationResponse;
-import live.ioteatime.frontservice.dto.UpdateUserRequest;
+import live.ioteatime.frontservice.dto.request.ChangePasswordRequest;
+import live.ioteatime.frontservice.dto.response.GetUserResponse;
+import live.ioteatime.frontservice.dto.response.OrganizationResponse;
+import live.ioteatime.frontservice.dto.request.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

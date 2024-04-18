@@ -1,4 +1,4 @@
-package live.ioteatime.frontservice.dto;
+package live.ioteatime.frontservice.dto.request;
 
 import live.ioteatime.frontservice.domain.Role;
 import lombok.Getter;
