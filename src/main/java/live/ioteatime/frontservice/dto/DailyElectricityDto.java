@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponse {
-    String type;
-    String token;
+public class DailyElectricityDto {
+    private Long id;
+    private Long kwh;
+    private LocalDate time;
 }
