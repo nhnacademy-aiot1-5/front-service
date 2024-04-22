@@ -34,11 +34,11 @@ public class MonthlyReportController {
         if (Objects.isNull(organization)) {
             throw new NullPointerException();
         }
-        List<MonthlyElectricityDto> monthlyElectricityDtos = userAdaptor.getMonthlyElectricities(LocalDateTime.now(), organization.getId()).getBody();
+        List<MonthlyElectricityDto> monthlyElectricityDtos =
+                userAdaptor.getMonthlyElectricities(LocalDateTime.now(), organization.getId()).getBody();
         model.addAttribute("recent12monthElectricities", monthlyElectricityDtos);
         model.addAttribute("userInfo", userInfo);
         model.addAttribute("budget", organization.getElectricityBudget());
-        log.warn(Objects.requireNonNull(model.getAttribute("recent12monthElectricities")).toString());
         return "detail/monthly-report";
     }
 
