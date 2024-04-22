@@ -1,5 +1,6 @@
 package live.ioteatime.frontservice.controller;
 
+import feign.FeignException;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.request.LoginRequest;
 import live.ioteatime.frontservice.dto.response.LoginResponse;
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -27,14 +29,21 @@ public class AuthController {
      * @return 로그인 성공 시 메인 페이지로 리다이렉트
      */
     @PostMapping("/login")
-    public String login(@ModelAttribute LoginRequest loginRequest, HttpServletResponse response){
-        LoginResponse loginResponse = userAdaptor.login(loginRequest).getBody();
+    public String login(@ModelAttribute LoginRequest loginRequest, HttpServletResponse response, RedirectAttributes redirectAttributes){
+        try {
+            LoginResponse loginResponse = userAdaptor.login(loginRequest).getBody();
 
-        log.info("loginResponse: {} {}", loginResponse.getType(), loginResponse.getToken());
+            log.info("loginResponse: {} {}", loginResponse.getType(), loginResponse.getToken());
 
-        Cookie cookie = new Cookie(ACCESS_TOKEN_KEY, loginResponse.getToken());
-        cookie.setMaxAge(3600);
-        response.addCookie(cookie);
+            Cookie cookie = new Cookie(ACCESS_TOKEN_KEY, loginResponse.getToken());
+            cookie.setMaxAge(3600);
+            response.addCookie(cookie);
+
+        } catch (FeignException.Unauthorized exception) {
+            redirectAttributes.addFlashAttribute("message", "아이디 또는 비밀번호가 일치하지 않습니다.");
+            return "redirect:/login";
+        }
+
 
         return "redirect:/";
     }
