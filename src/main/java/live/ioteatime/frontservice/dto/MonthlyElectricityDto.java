@@ -3,18 +3,13 @@ package live.ioteatime.frontservice.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class MonthlyElectricityDto {
-    private long id;
-    private long kwh;
-    private LocalDate time;
-    private List<DailyElectricityDto> dailyElectricityDtos;
+    private LocalDateTime time;
+    private Long kwh;
 }
