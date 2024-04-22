@@ -1,4 +1,4 @@
-package live.ioteatime.frontservice.dto;
+package live.ioteatime.frontservice.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

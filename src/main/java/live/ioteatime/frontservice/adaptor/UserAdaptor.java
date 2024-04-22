@@ -1,6 +1,13 @@
 package live.ioteatime.frontservice.adaptor;
 
-import live.ioteatime.frontservice.dto.*;
+import live.ioteatime.frontservice.dto.DailyElectricityDto;
+import live.ioteatime.frontservice.dto.request.ChangePasswordRequest;
+import live.ioteatime.frontservice.dto.request.LoginRequest;
+import live.ioteatime.frontservice.dto.request.RegisterRequest;
+import live.ioteatime.frontservice.dto.request.UpdateUserRequest;
+import live.ioteatime.frontservice.dto.response.GetUserResponse;
+import live.ioteatime.frontservice.dto.response.LoginResponse;
+import live.ioteatime.frontservice.dto.response.OrganizationResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +38,7 @@ public interface UserAdaptor {
     @GetMapping("/api/users/organization")
     ResponseEntity<OrganizationResponse> getOrganization();
 
-    @PutMapping("/api/users")
+    @PutMapping("/api/users/update-user")
     ResponseEntity<String> updateUser(@RequestBody UpdateUserRequest updateUserRequest);
 
     @PutMapping("/api/users/password")

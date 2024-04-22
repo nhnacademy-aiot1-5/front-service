@@ -1,13 +1,17 @@
 package live.ioteatime.frontservice.controller;
 
+import live.ioteatime.frontservice.adaptor.AdminAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
-import live.ioteatime.frontservice.dto.GetUserResponse;
+import live.ioteatime.frontservice.dto.response.GetUserResponse;
+import live.ioteatime.frontservice.dto.response.OrganizationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/")
@@ -15,11 +19,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 public class IndexController {
     private final UserAdaptor userAdaptor;
+    private final AdminAdaptor adminAdaptor;
 
     @GetMapping
     public String index(Model model) {
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
         model.addAttribute("userInfo", userInfo);
+
+        //조직 예산
+        OrganizationResponse budget = adminAdaptor.requestBudget().getBody();
+        model.addAttribute("budget", budget);
         return "index";
+    }
+
+    @PutMapping("/budget")
+    public String updateBudget(@RequestParam Long budget , Model model) {
+
+        //사이드바
+        GetUserResponse userInfo = userAdaptor.getUser().getBody();
+        model.addAttribute("userInfo", userInfo);
+        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
+
+        //목표금액 변경
+        adminAdaptor.updateBudget(budget);
+        return "redirect:/";
     }
 }

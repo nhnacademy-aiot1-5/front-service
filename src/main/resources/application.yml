@@ -19,3 +19,8 @@ spring:
     name: front-service
   thymeleaf:
     cache: false
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true

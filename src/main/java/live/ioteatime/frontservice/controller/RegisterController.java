@@ -2,7 +2,7 @@ package live.ioteatime.frontservice.controller;
 
 import feign.FeignException;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
-import live.ioteatime.frontservice.dto.RegisterRequest;
+import live.ioteatime.frontservice.dto.request.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
