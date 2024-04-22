@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Getter
 @AllArgsConstructor
@@ -16,6 +17,9 @@ public class RegisterRequest {
     @JsonProperty("pw")
     @NotBlank
     private String password;
+
+    @NotBlank
+    private String passwordCheck;
 
     @NotBlank
     private String name;
