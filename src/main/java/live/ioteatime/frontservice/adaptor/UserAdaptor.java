@@ -1,6 +1,7 @@
 package live.ioteatime.frontservice.adaptor;
 
 import live.ioteatime.frontservice.dto.DailyElectricityDto;
+import live.ioteatime.frontservice.dto.MonthlyElectricityDto;
 import live.ioteatime.frontservice.dto.request.ChangePasswordRequest;
 import live.ioteatime.frontservice.dto.request.LoginRequest;
 import live.ioteatime.frontservice.dto.request.RegisterRequest;

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.MonthlyElectricityDto;
 import live.ioteatime.frontservice.dto.MonthlyElectricityPageDto;
-import live.ioteatime.frontservice.dto.OrganizationResponse;
+import live.ioteatime.frontservice.dto.response.OrganizationResponse;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -2,8 +2,8 @@ package live.ioteatime.frontservice.controller;
 
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.DailyElectricityDto;
-import live.ioteatime.frontservice.dto.GetUserResponse;
-import live.ioteatime.frontservice.dto.OrganizationResponse;
+import live.ioteatime.frontservice.dto.response.GetUserResponse;
+import live.ioteatime.frontservice.dto.response.OrganizationResponse;
 import live.ioteatime.frontservice.exception.UnauthorizedAccessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
