@@ -20,7 +20,6 @@ public class AdminController {
     private final AdminAdaptor adminAdaptor;
     private final UserAdaptor userAdaptor;
 
-
     /**
      * 어드민 페이지에 처음 들어왔을때 기본으로 로딩되는 페이지로 GUEST 유저의 리스트를 확인할 수 있는 페이지를 로딩합니다.
      * @param model 결과 페이지에 전달할 파라미터입니다.
