@@ -26,6 +26,10 @@ public interface UserAdaptor {
     @GetMapping("/api/users")
     ResponseEntity<GetUserResponse> getUser();
 
+    //조직의 설정 금액을 가져옴
+    @GetMapping("/api/users/budget")
+    ResponseEntity<OrganizationResponse> requestBudget();
+
     @PostMapping("/api/users/upgrade-request")
     ResponseEntity<String> requestUpgradeToUser();
 
