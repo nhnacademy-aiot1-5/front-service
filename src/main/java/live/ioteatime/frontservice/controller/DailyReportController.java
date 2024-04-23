@@ -53,7 +53,6 @@ public class DailyReportController {
                         LocalDateTime.now().withSecond(0).truncatedTo(ChronoUnit.SECONDS),
                         organizationResponse.getId()
                 ).getBody());
-
         return "detail/daily-report";
     }
 }

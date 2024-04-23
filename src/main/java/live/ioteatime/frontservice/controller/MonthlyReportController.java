@@ -63,7 +63,7 @@ public class MonthlyReportController {
         monthlyElectricityPageDto.setMonthlyElectricityDtos(
                 userAdaptor.getMonthlyElectricities(localDateTime, organization.getId()).getBody()
         );
-        return ResponseEntity.ok().body(monthlyElectricityPageDto);
+        return ResponseEntity.ok(monthlyElectricityPageDto);
     }
 
 }
