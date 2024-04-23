@@ -7,8 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
@@ -40,7 +42,11 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login(HttpServletRequest request){
+        Cookie cookie = WebUtils.getCookie(request, "iotaot");
+        if (cookie != null) {
+            return "redirect:/";
+        }
         return "authentication/login";
     }
 
