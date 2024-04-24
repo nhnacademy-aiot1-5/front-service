@@ -41,7 +41,7 @@ public class RegisterController {
             return "redirect:/register";
         }
 
-        if(! registerRequest.getPassword().equals(registerRequest.getPasswordCheck())){
+        if(!registerRequest.getPassword().equals(registerRequest.getPasswordCheck())){
             redirectAttributes.addFlashAttribute("message", "비밀번호가 일치하지 않습니다.");
             return "redirect:/register";
         }
