@@ -9,4 +9,5 @@ public class OrganizationResponse {
     private int id;
     private String name;
     private Long electricityBudget;
+    private String organizationCode;
 }
