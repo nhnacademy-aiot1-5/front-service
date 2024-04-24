@@ -1,5 +1,6 @@
 package live.ioteatime.frontservice.controller;
 
+import feign.FeignException;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.domain.Role;
 import live.ioteatime.frontservice.dto.request.ChangePasswordRequest;
@@ -82,14 +83,24 @@ public class UserController {
             return "redirect:/change-password";
         }
 
-        userAdaptor.updateUserPassword(changePasswordRequest);
+        try {
+            userAdaptor.updateUserPassword(changePasswordRequest);
+        } catch (FeignException e){
+            redirectAttributes.addFlashAttribute("message", "비밀번호가 일치하지 않습니다.");
+            return "redirect:/change-password";
+        }
         redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
 
         return "redirect:/mypage";
     }
 
     @GetMapping("/change-password")
-    public String changePasswordPage(){
+    public String changePasswordPage(Model model){
+
+        // 사이드바
+        GetUserResponse userInfo = userAdaptor.getUser().getBody();
+        model.addAttribute("userInfo", userInfo);
+
         return "/authentication/change-password";
     }
 
