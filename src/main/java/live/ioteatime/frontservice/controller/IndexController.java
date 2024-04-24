@@ -2,6 +2,7 @@ package live.ioteatime.frontservice.controller;
 
 import live.ioteatime.frontservice.adaptor.AdminAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
+import live.ioteatime.frontservice.domain.Role;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,18 +24,21 @@ public class IndexController {
 
     @GetMapping
     public String index(Model model) {
-        log.warn(userAdaptor.getUser().getBody() + "이거이거이거이거어");
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
         model.addAttribute("userInfo", userInfo);
 
+        if (userInfo.getRole() == Role.GUEST) {
+            return "redirect:/mypage";
+        }
+
         //조직 예산
-        OrganizationResponse budget = adminAdaptor.requestBudget().getBody();
+        OrganizationResponse budget = userAdaptor.requestBudget().getBody();
         model.addAttribute("budget", budget);
         return "index";
     }
 
     @PutMapping("/budget")
-    public String updateBudget(@RequestParam Long budget , Model model) {
+    public String updateBudget(@RequestParam Long budget, Model model) {
 
         //사이드바
         GetUserResponse userInfo = userAdaptor.getUser().getBody();

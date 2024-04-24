@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,36 +27,52 @@
                 <br/>
             </div>
             <!--  Header End -->
-            <div class="row">
-                <div class="col-2 mb-4">
-                    <button class="btn btn-primary"
-                            style="font-size: 14px; padding: 10px 20px;"
-                            onclick="location.href='/admin/roleup'">
-                        게스트 유저 관리
-                    </button>
-                </div>
-                <div class="col-2 mb-4">
-                    <button class="btn btn-primary"
-                            style="font-size: 14px; padding: 10px 20px;"
-                            onclick="location.href='/admin/users'">
-                        유저 관리
-                    </button>
-                </div>
-                <div class="col-2 mb-4">
-                    <button class="btn btn-primary"
-                            style="font-size: 14px; padding: 10px 20px;"
-                            onclick="location.href='/admin/budget'">
-                        요금 설정
-                    </button>
-                </div>
-                <div class="col-2 mb-4">
-                    <button class="btn btn-primary"
-                            style="font-size: 14px; padding: 10px 20px;"
-                            onclick="location.href='/admin/sensor'">
-                        사용 기기 관리
-                    </button>
-                </div>
-            </div>
+            <table>
+                <tr>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/admin/roleup'">
+                            게스트 유저 관리
+                        </button>
+                    </td>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/admin/users'">
+                            유저 관리
+                        </button>
+                    </td>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/admin/budget'">
+                            요금 설정
+                        </button>
+                    </td>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/admin/budgethistory'">
+                            요금 변경 내역
+                        </button>
+                    </td>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/admin/organization'">
+                            조직 정보 관리
+                        </button>
+                    </td>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="changePassword()">
+                            사용 기기 관리
+                        </button>
+                    </td>
+                </tr>
+            </table>
             <div class="row">
                 <div class="col-12 mb-4"> <!-- 멤버 리스트 -->
                     <div class="rounded-lg border bg-white text-dark shadow-sm">

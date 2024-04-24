@@ -1,6 +1,7 @@
 package live.ioteatime.frontservice.adaptor;
 
 import live.ioteatime.frontservice.dto.DailyElectricityDto;
+import live.ioteatime.frontservice.dto.MonthlyElectricityDto;
 import live.ioteatime.frontservice.dto.request.ChangePasswordRequest;
 import live.ioteatime.frontservice.dto.request.LoginRequest;
 import live.ioteatime.frontservice.dto.request.RegisterRequest;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @FeignClient(value = "gateway-service", contextId = "user-adaptor")
@@ -31,6 +33,10 @@ public interface UserAdaptor {
     @GetMapping("/api/users")
     ResponseEntity<GetUserResponse> getUser();
 
+    //조직의 설정 금액을 가져옴
+    @GetMapping("/api/users/budget")
+    ResponseEntity<OrganizationResponse> requestBudget();
+
     @PostMapping("/api/users/upgrade-request")
     ResponseEntity<String> requestUpgradeToUser();
 
@@ -44,9 +50,20 @@ public interface UserAdaptor {
     ResponseEntity<String> updateUserPassword(@RequestBody ChangePasswordRequest changePasswordRequest);
 
     @GetMapping("/api/monthly/electricity")
-    ResponseEntity<String> getMonthlyElectricity(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate);
+    ResponseEntity<String> getMonthlyElectricity(@RequestParam
+                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                 LocalDateTime localDateTime,
+                                                 @RequestParam int organizationId);
 
     @GetMapping("/api/daily/electricities")
-    ResponseEntity<List<DailyElectricityDto>> getDailyElectricities(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate);
+    ResponseEntity<List<DailyElectricityDto>> getDailyElectricities(@RequestParam
+                                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                    LocalDateTime localDateTime,
+                                                                    @RequestParam int organizationId);
 
+    @GetMapping("/api/monthly/electricities")
+    ResponseEntity<List<MonthlyElectricityDto>> getMonthlyElectricities(@RequestParam
+                                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                        LocalDateTime localDateTime,
+                                                                        @RequestParam int organizationId);
 }

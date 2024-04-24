@@ -60,8 +60,8 @@
                         <div class="col-9">
                             <div class="card">
                                 <div class="card-body pb-2">
-                                    <h4 class="card-title fw-semibold">최근 12 개월 전기 사용 내역</h4>
-                                    <div id="chart1"></div>
+                                    <h4 id="month-graph-title" class="card-title fw-semibold">조회 할 달을 선택해주세요</h4>
+                                    <div id="chart2"></div>
                                 </div>
                             </div>
                         </div>
@@ -69,19 +69,19 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h6 class="text-end">설정 요금</h6>
-                                    <h3 class="mb-0 text-end">10,000,000 원</h3>
+                                    <h3 class="mb-0 text-end" th:text="${budget}+'원'"></h3>
                                 </div>
                             </div>
                             <div class="card">
                                 <div class="card-body">
                                     <h6 class="text-end">사용 요금</h6>
-                                    <h3 class="mb-0 text-end">2,000,000 원</h3>
+                                    <h3 class="mb-0 text-end">원</h3>
                                 </div>
                             </div>
                             <div class="card">
                                 <div class="card-body">
                                     <h6 class="text-end">남은 요금</h6>
-                                    <h3 class="mb-0 text-primary text-end">8,000,000 원</h3>
+                                    <h3 class="mb-0 text-primary text-end">원</h3>
                                 </div>
                             </div>
                         </div>
@@ -90,8 +90,8 @@
                         <div class="col-9">
                             <div class="card">
                                 <div class="card-body pb-2">
-                                    <h4 id="month-graph-title" class="card-title fw-semibold">조회 할 달을 선택해주세요</h4>
-                                    <div id="chart2"></div>
+                                    <h4 class="card-title fw-semibold">최근 12 개월 전기 사용 내역</h4>
+                                    <div id="chart1"></div>
                                 </div>
                             </div>
                         </div>
@@ -153,26 +153,23 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th class="sorting sorting_asc col-1" tabindex="0"
-                                                    aria-controls="zero_config" rowspan="1" colspan="1"
-                                                    aria-sort="ascending">
-                                                    총 합
-                                                </th>
-                                                <th class="sorting col-1 text-end" tabindex="0"
-                                                    aria-controls="zero_config"
-                                                    rowspan="1" colspan="1">
-                                                    3,350 원
-                                                </th>
-                                                <th class="sorting col-1 text-end" tabindex="0"
-                                                    aria-controls="zero_config"
-                                                    rowspan="1" colspan="1">
-                                                    30,302 kWh
-                                                </th>
-                                                <th class="sorting col-1 text-end" tabindex="0"
-                                                    aria-controls="zero_config"
-                                                    rowspan="1" colspan="1">
-                                                    +25%
-                                                </th>
+<!--                                                <th class="sorting sorting_asc col-1" tabindex="0"-->
+<!--                                                    aria-controls="zero_config" rowspan="1" colspan="1"-->
+<!--                                                    aria-sort="ascending">-->
+<!--                                                    총 합-->
+<!--                                                </th>-->
+<!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
+<!--                                                    aria-controls="zero_config"-->
+<!--                                                    rowspan="1" colspan="1">-->
+<!--                                                </th>-->
+<!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
+<!--                                                    aria-controls="zero_config"-->
+<!--                                                    rowspan="1" colspan="1">-->
+<!--                                                </th>-->
+<!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
+<!--                                                    aria-controls="zero_config"-->
+<!--                                                    rowspan="1" colspan="1">-->
+<!--                                                </th>-->
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -184,7 +181,7 @@
             </div>
         </div>
 
-        <script>
+        <script th:inline="javascript">
             var options = {
                 chart: {
                     type: 'line',
@@ -192,17 +189,32 @@
                 },
                 series: [{
                     name: 'sales',
-                    data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
+                    data: []
                 }],
                 xaxis: {
-                    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
+                    categories: []
                 }
             }
+
             var chart1 = new ApexCharts(document.getElementById("chart1"), options);
             var chart2 = new ApexCharts(document.getElementById("chart2"), options);
 
             chart1.render();
             chart2.render();
+
+            const monthlyElectricityDtos = [[${recent12monthElectricities}]];
+            const kwhData = monthlyElectricityDtos.map(dto => dto.kwh);
+            const dates = monthlyElectricityDtos.map(dto => dto.time);
+
+            chart1.updateOptions({
+                series: [{
+                    name: 'KWh',
+                    data: kwhData
+                }],
+                xaxis: {
+                    categories: dates
+                }
+            });
 
             let table = new DataTable('#zero_config', {
                 responsive: true
@@ -214,17 +226,16 @@
                 const monthPadded = selectedMonth.padStart(2, '0');  // 월을 두 자리 숫자로 표현 (예: '02')
 
                 const lastDayOfCurrentMonth = new Date(year, monthPadded, 0).getDate();
-                const dateForRequest = `${year}-${monthPadded}-${lastDayOfCurrentMonth}`;
+                const dateForRequest = `${year}-${monthPadded}-${lastDayOfCurrentMonth}T00:00:00`;
 
                 const lastMonth = monthPadded - 1 < 1 ? 12 : monthPadded - 1;
                 const lastYear = lastMonth === 12 ? year - 1 : year;
                 const lastMonthPadded = lastMonth.toString().padStart(2, '0');
                 const lastDayOfLastMonth = new Date(lastYear, lastMonth, 0).getDate();
-                const lastDateForRequest = `${lastYear}-${lastMonthPadded}-${lastDayOfLastMonth}`;
+                const lastDateForRequest = `${lastYear}-${lastMonthPadded}-${lastDayOfLastMonth}T00:00:00`;
                 document.getElementById('month-graph-title').textContent = `${selectedMonth}월 전기 사용 내역`;
 
                 fetch(`/monthly-electricity/${lastDateForRequest}`)
-
                     .then(response => response.json())
                     .then(lastMonthData => {
                         fetch(`/monthly-electricity/${dateForRequest}`)
