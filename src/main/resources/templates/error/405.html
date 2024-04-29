@@ -2,12 +2,12 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>서버가 요청을 처리할 수 있는 상태가 아닙니다.</title>
+    <title>허용되지 않은 메소드 입니다.</title>
     <link rel="stylesheet" href="/css/style.css"/>
 </head>
 <body>
 <img id="errorImage" src="" class="mx-auto d-block" alt="403 이미지"/>
-<p class="text-center message">서버가 요청을 처리할 수 있는 상태가 아닙니다.</p>
+<p class="text-center message">허용되지 않은 메소드 입니다.</p>
 <form action="/" method="get">
     <button type="submit" class="btn btn-info mx-auto d-block">홈으로 돌아가기</button>
 </form>
@@ -15,8 +15,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         // 사용 가능한 이미지 파일 경로 배열
         var images = [
-            "/images/error/kejang/500.png",
-            "/images/error/cat/500.jpg"
+            "/images/error/cat/405.jpg"
         ];
 
         // 랜덤 인덱스 생성
