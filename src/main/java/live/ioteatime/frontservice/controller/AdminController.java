@@ -41,7 +41,7 @@ public class AdminController {
         model.addAttribute("userInfo", userInfo);
         log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
 
-        //Guest 유저 관리
+        //Guest 유저 리스트 불러오기
         List<GetUserResponse> userList = adminAdaptor.requestGuestUsers().getBody();
         model.addAttribute("userList", userList);
 

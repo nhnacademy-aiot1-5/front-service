@@ -1,12 +1,12 @@
 package live.ioteatime.frontservice.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
-@AllArgsConstructor
+@Getter
+@NoArgsConstructor
 public class BudgetHistoryResponse {
     private int id;
     private LocalDateTime changeTime;
