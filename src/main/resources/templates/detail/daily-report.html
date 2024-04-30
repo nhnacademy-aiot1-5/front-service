@@ -28,20 +28,40 @@
                     </div>
 
                     <div class="row mb-9" style="padding-left: 12px">
-                        <select id="sensorId" class="form-select fw-semibold w-auto">
-                            <option value="1">총 센서</option>
-                            <option value="2">2 센서</option>
-                            <option value="3">3 센서</option>
-                            <option value="4">4 센서</option>
-                            <option value="5">5 센서</option>
-                            <option value="6">6 센서</option>
-                            <option value="7">7 센서</option>
-                            <option value="8">8 센서</option>
-                            <option value="9">9 센서</option>
-                            <option value="10">10 센서</option>
-                            <option value="11">11 센서</option>
-                            <option value="12">12 센서</option>
+                        <select id="placeId" class="form-select fw-semibold w-auto">
+                            <option value="" disabled selected>메인 위치를 선택해 주세요</option>
                         </select>
+                        <select id="sensorId" class="form-select fw-semibold w-auto">
+                            <option value="" disabled selected>세부 위치를 선택해 주세요</option>
+                        </select>
+                        <script th:inline="javascript">
+                            // placeId select box 초기화 및 옵션 추가
+                            const places = [[${places}]];
+                            const placeSelect = document.getElementById('placeId');
+
+                            places.forEach(place => {
+                                const option = document.createElement('option');
+                                option.value = place.id;
+                                option.textContent = place.place_name;
+                                placeSelect.appendChild(option);
+                            });
+
+                            // sensorId select box 동적 업데이트
+                            const placeMap = [[${placeMap}]];
+                            document.getElementById('placeId').addEventListener('change', function () {
+                                const selectedPlaceId = this.value;
+                                const channels = placeMap[selectedPlaceId];
+                                const sensorSelect = document.getElementById('sensorId');
+                                sensorSelect.innerHTML = '<option value="" disabled selected>세부 위치를 선택해 주세요</option>'; // 이 부분을 추가
+
+                                channels.forEach(channel => {
+                                    const option = document.createElement('option');
+                                    option.value = channel.channel_id;
+                                    option.textContent = channel.channel_name;
+                                    sensorSelect.appendChild(option);
+                                });
+                            });
+                        </script>
                     </div>
 
                     <div class="row">
@@ -233,24 +253,38 @@
             });
 
             document.getElementById('sensorId').addEventListener('change', function () {
-                const selectedMonth = this.value;
-                const year = new Date().getFullYear();  // 현재 연도를 가져옴
-                const monthPadded = selectedMonth.padStart(2, '0');  // 월을 두 자리 숫자로 표현 (예: '02')
-
-                const lastDayOfCurrentMonth = new Date(year, monthPadded, 0).getDate();
-                const dateForRequest = `${year}-${monthPadded}-${lastDayOfCurrentMonth}T00:00:00`;
-
-                const lastMonth = monthPadded - 1 < 1 ? 12 : monthPadded - 1;
-                const lastYear = lastMonth === 12 ? year - 1 : year;
-                const lastMonthPadded = lastMonth.toString().padStart(2, '0');
-                const lastDayOfLastMonth = new Date(lastYear, lastMonth, 0).getDate();
-                const lastDateForRequest = `${lastYear}-${lastMonthPadded}-${lastDayOfLastMonth}T00:00:00`;
-                document.getElementById('month-graph-title').textContent = `${selectedMonth}월 전기 사용 내역`;
+                const now = new Date();
+                const isoString = now.toISOString(); // "YYYY-MM-DDTHH:mm:ss.sssZ"
+                const isoStringWithoutMilliseconds = isoString.slice(0, -5);
+                console.log(isoStringWithoutMilliseconds);
+                const channelId = this.value;
+                fetch(`/daily-report/${channelId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateChartData1(data.hourlyElectricityDtos);
+                        updateChartData2(data.dailyElectricityDtos);
+                    })
             });
 
-            function updateChartData(dailyData) {
+            function updateChartData1(dailyData) {
+                console.log(dailyData)
                 const kwhData = dailyData.map(dto => dto.kwh);
-                const dates = dailyData.map(dto => dto.localDate);
+                const dates = dailyData.map(dto => dto.time);
+
+                chart1.updateOptions({
+                    series: [{
+                        name: 'KWh',
+                        data: kwhData
+                    }],
+                    xaxis: {
+                        categories: dates
+                    }
+                });
+            }
+
+            function updateChartData2(dailyData) {
+                const kwhData = dailyData.map(dto => dto.kwh);
+                const dates = dailyData.map(dto => dto.time);
 
                 chart2.updateOptions({
                     series: [{

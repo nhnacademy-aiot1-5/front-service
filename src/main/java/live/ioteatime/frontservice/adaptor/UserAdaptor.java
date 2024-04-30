@@ -1,7 +1,9 @@
 package live.ioteatime.frontservice.adaptor;
 
+import live.ioteatime.frontservice.dto.ChannelDto;
 import live.ioteatime.frontservice.dto.DailyElectricityDto;
 import live.ioteatime.frontservice.dto.MonthlyElectricityDto;
+import live.ioteatime.frontservice.dto.PlaceDto;
 import live.ioteatime.frontservice.dto.request.ChangePasswordRequest;
 import live.ioteatime.frontservice.dto.request.LoginRequest;
 import live.ioteatime.frontservice.dto.request.RegisterRequest;
@@ -52,17 +54,23 @@ public interface UserAdaptor {
     ResponseEntity<String> getMonthlyElectricity(@RequestParam
                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                                  LocalDateTime localDateTime,
-                                                 @RequestParam int organizationId);
+                                                 @RequestParam int channelId);
 
     @GetMapping("/api/daily/electricities")
     ResponseEntity<List<DailyElectricityDto>> getDailyElectricities(@RequestParam
                                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                                                     LocalDateTime localDateTime,
-                                                                    @RequestParam int organizationId);
+                                                                    @RequestParam int channelId);
 
     @GetMapping("/api/monthly/electricities")
     ResponseEntity<List<MonthlyElectricityDto>> getMonthlyElectricities(@RequestParam
                                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                                                         LocalDateTime localDateTime,
-                                                                        @RequestParam int organizationId);
+                                                                        @RequestParam int channelId);
+
+    @GetMapping("/api/places")
+    ResponseEntity<List<PlaceDto>> getPlacesByOrganizationId(@RequestParam int organizationId);
+
+    @GetMapping("/api/sensors/modbus/channels/by_place")
+    ResponseEntity<List<ChannelDto>> getChannelsByPlaceId(@RequestParam int placeId);
 }
