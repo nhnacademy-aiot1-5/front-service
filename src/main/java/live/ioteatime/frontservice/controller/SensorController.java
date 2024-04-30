@@ -1,8 +1,10 @@
 package live.ioteatime.frontservice.controller;
 
+import live.ioteatime.frontservice.adaptor.ChannelAdaptor;
 import live.ioteatime.frontservice.adaptor.ModbusSensorAdaptor;
 import live.ioteatime.frontservice.adaptor.MqttSensorAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
+import live.ioteatime.frontservice.dto.response.GetModbusSensorChannelResponse;
 import live.ioteatime.frontservice.dto.response.GetModbusSensorResponse;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import java.util.List;
 public class SensorController {
     private final UserAdaptor userAdaptor;
     private final ModbusSensorAdaptor modbusSensorAdaptor;
+    private final ChannelAdaptor channelAdaptor;
     private final MqttSensorAdaptor mqttSensorAdaptor;
 
     @GetMapping
@@ -45,12 +48,15 @@ public class SensorController {
     }
 
     @GetMapping("/modbus/{sensorId}")
-    public String getModbusSensorDetail(Model model, @PathVariable("sensorId") String sensorId) {
+    public String getModbusSensorDetail(Model model, @PathVariable("sensorId") int sensorId) {
         //사이드바 전용
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
         model.addAttribute("userInfo", userInfo);
         log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
 
+        //modbus 센서 상세 채널 불러오기
+        List<GetModbusSensorChannelResponse> modbusChannelInfo = channelAdaptor.getChannels(sensorId).getBody();
+        model.addAttribute("modbusChannelInfo", modbusChannelInfo);
         return "/sensor/sensor-modbus-detail";
     }
 

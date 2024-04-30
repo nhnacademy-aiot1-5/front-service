@@ -1,17 +1,15 @@
 package live.ioteatime.frontservice.dto.response;
 
 import live.ioteatime.frontservice.domain.Role;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
 public class GetUserResponse {
     private String id;
     private String name;
     private String createdAt;
     private Role role;
-    private String organizationName;
+    private OrganizationResponse organization;
 }
