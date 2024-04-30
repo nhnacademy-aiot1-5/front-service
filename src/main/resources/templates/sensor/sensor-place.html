@@ -57,43 +57,23 @@
                     <div class="rounded-lg border bg-white text-dark shadow-sm">
                         <div class="card">
                             <div class="card-header">
-                                <h2 class="card-title">MODBUS 센서 관리</h2>
+                                <div style="justify-content: space-between">
+                                    <h2 class="card-title">MODBUS 센서 관리</h2>
+                                    <button type="submit" class="btn btn-primary" >저장</button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <table id="table" class="table table-striped">
                                     <thead>
                                     <tr>
-                                        <th>센서명</th>
-                                        <th>센서 모델</th>
-                                        <th>IP</th>
-                                        <th>PORT</th>
-                                        <th>채널 수</th>
-                                        <th>상태</th>
-                                        <th>동작</th>
-                                        <th>센서 상세</th>
+                                        <th>NO</th>
+                                        <th>센서 아이디</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="sensor : ${modbusSensorInfo}">
-                                        <td th:text="${sensor.name}"></td>
-                                        <td th:text="${sensor.modelName}"></td>
-                                        <td th:text="${sensor.ip}"></td>
-                                        <td th:text="${sensor.port}"></td>
-                                        <td th:text="${sensor.channelCount}"></td>
-                                        <td th:text="${sensor.alive}"></td>
-                                        <td>
-                                            <form th:action="@{/sensor/modbus/work/{sensorId}(sensorId=${sensor.id})}"
-                                                  th:method="PUT" onsubmit="return confirmRequest();">
-                                                <button type="submit" class="btn btn-primary" th:text="${sensor.alive.name() == 'UP' ? '중지' : '동작'}">권한 변경</button>
-
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <form th:action="@{/sensor/modbus/{sensorId}(sensorId=${sensor.id})}"
-                                                  th:method="GET">
-                                                <button type="submit" class="btn btn-primary">채널 상세 보기</button>
-                                            </form>
-                                        </td>
+                                    <tr th:each="place, iterStat : ${places}">
+                                        <td th:text="${iterStat.count}"></td>
+                                        <td th:text="${place.placeName}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
