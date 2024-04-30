@@ -10,12 +10,12 @@ import live.ioteatime.frontservice.dto.response.OrganizationResponse;
 import live.ioteatime.frontservice.exception.UnauthorizedAccessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -58,8 +58,7 @@ public class DailyReportController {
     }
 
     @GetMapping("/{channelId}")
-    @ResponseBody
-    public DailyElectricitiesDto getDailyElectricites(@PathVariable int channelId, Model model) {
+    public ResponseEntity<DailyElectricitiesDto> getDailyElectricites(@PathVariable int channelId, Model model) {
         List<DailyElectricityDto> dailyElectricityDtos = userAdaptor.getDailyElectricities(
                 LocalDateTime.now().toLocalDate().atTime(LocalTime.MIDNIGHT),
                 channelId
@@ -77,7 +76,7 @@ public class DailyReportController {
                         .collect(Collectors.toList())
         );
         model.addAttribute("recent24HoursElectricites", hourlyElectricityDtos);
-        return new DailyElectricitiesDto(dailyElectricityDtos, hourlyElectricityDtos);
+        return ResponseEntity.ok(new DailyElectricitiesDto(dailyElectricityDtos, hourlyElectricityDtos));
     }
 
 }
