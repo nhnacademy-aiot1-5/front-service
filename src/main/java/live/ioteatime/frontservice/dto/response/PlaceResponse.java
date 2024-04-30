@@ -1,14 +1,13 @@
 package live.ioteatime.frontservice.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @NoArgsConstructor
-public class BudgetHistoryResponse {
+public class PlaceResponse {
     private int id;
-    private LocalDateTime changeTime;
-    private long budget;
+    @JsonProperty("place_name")
+    private String placeName;
 }

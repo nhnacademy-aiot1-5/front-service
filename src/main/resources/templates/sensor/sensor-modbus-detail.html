@@ -23,7 +23,7 @@
         <th:block th:replace="header :: header"></th:block>
         <div class="container-fluid">
             <div>
-                <h1>관리자 페이지</h1>
+                <h1>센서관리 페이지</h1>
                 <br/>
             </div>
             <!--  Header End -->
@@ -32,60 +32,62 @@
                     <td class="mb-4" style="padding: 10px;">
                         <button class="btn btn-primary"
                                 style="font-size: 14px; padding: 10px 20px;"
-                                onclick="location.href='/admin/roleup'">
-                            게스트 유저 관리
+                                onclick="location.href='/place'">
+                            장소 관리
                         </button>
                     </td>
                     <td class="mb-4" style="padding: 10px;">
                         <button class="btn btn-primary"
                                 style="font-size: 14px; padding: 10px 20px;"
-                                onclick="location.href='/admin/users'">
-                            유저 관리
+                                onclick="location.href='/sensor/modbus'">
+                            MODBUS 센서 관리
                         </button>
                     </td>
                     <td class="mb-4" style="padding: 10px;">
                         <button class="btn btn-primary"
                                 style="font-size: 14px; padding: 10px 20px;"
-                                onclick="location.href='/admin/budget'">
-                            요금 설정
-                        </button>
-                    </td>
-                    <td class="mb-4" style="padding: 10px;">
-                        <button class="btn btn-primary"
-                                style="font-size: 14px; padding: 10px 20px;"
-                                onclick="location.href='/admin/budgethistory'">
-                            요금 변경 내역
-                        </button>
-                    </td>
-                    <td class="mb-4" style="padding: 10px;">
-                        <button class="btn btn-primary"
-                                style="font-size: 14px; padding: 10px 20px;"
-                                onclick="location.href='/admin/organization'">
-                            조직 정보 관리
+                                onclick="location.href='/sensor/mqtt'">
+                            MQTT 센서 관리
                         </button>
                     </td>
                 </tr>
             </table>
-
             <div class="row">
                 <div class="col-12 mb-4"> <!-- 멤버 리스트 -->
                     <div class="rounded-lg border bg-white text-dark shadow-sm">
                         <div class="card">
                             <div class="card-header">
-                                <h2 class="card-title">요금 변경 내역</h2>
+                                <h2 class="card-title">MODBUS 센서 관리</h2>
                             </div>
                             <div class="card-body">
                                 <table id="table" class="table table-striped">
                                     <thead>
                                     <tr>
-                                        <th>변경시간</th>
-                                        <th>요금</th>
+                                        <!--                                        <th>센서명</th>-->
+                                        <!--                                        <th>센서 모델</th>-->
+                                        <!--                                        <th>IP</th>-->
+                                        <!--                                        <th>PORT</th>-->
+                                        <!--                                        <th>채널 수</th>-->
+                                        <!--                                        <th>상태</th>-->
+                                        <!--                                        <th>동작</th>-->
+                                        <!--                                        <th>센서 상세</th>-->
+                                        <th>NO</th>
+                                        <th>장소</th>
+                                        <th>채널 이름</th>
+                                        <th>채널 이름 수정</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="history : ${budgetHistory}">
-                                        <td th:text="${#temporals.format(history.changeTime, 'yyyy년 MM월 dd일 - HH시 mm분')}"></td>
-                                        <td th:text="'₩ '+${#numbers.formatInteger(history.budget, 0, 'COMMA')}"></td>
+                                    <tr th:each="channel, iterStat : ${modbusChannelInfo}">
+                                        <td th:text="${iterStat.count}"></td>
+                                        <td th:text="${channel.place.placeName}"></td>
+                                        <td th:text="${channel.channelName}"></td>
+                                        <td>
+                                            <form th:action="@{/sensor/modbus/{channelId}(channelId=${channel.id})}"
+                                                  th:method="GET">
+                                                <button type="submit" class="btn btn-primary">채널 이름 수정</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -99,18 +101,8 @@
 </div>
 <script>
     let table = new DataTable('#table', {
-        responsive: true,
-        pageLength: 5,
-        order:{
-            idx: 0,
-            dir: 'desc'
-        }
+        responsive: true
     });
-
-    function confirmRequest() {
-        var userResponse = confirm("유저 권한을 정말로 바꾸시겠습니까?")
-        return userResponse;
-    }
 </script>
 </body>
 </html>

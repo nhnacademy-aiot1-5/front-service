@@ -73,16 +73,28 @@
                             <span>
                               <i class="ti ti-layout-dashboard"></i>
                             </span>
-                            <span class="hide-menu">마이페이지</span>
+                            <span class="hide-menu">마이 페이지</span>
                         </a>
                     </li>
 
+                    <li class="nav-small-cap">
+                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        <span class="hide-menu">ADMIN</span>
+                    </li>
                     <li class="sidebar-item" th:if="${userInfo.role.name() == 'ADMIN'}">
                         <a class="sidebar-link" href="/admin" aria-expanded="false">
                             <span>
                               <i class="ti ti-layout-dashboard"></i>
                             </span>
-                            <span class="hide-menu">어드민페이지</span>
+                            <span class="hide-menu">관리자 페이지</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item" th:if="${userInfo.role.name() == 'ADMIN'}">
+                        <a class="sidebar-link" href="/sensor" aria-expanded="false">
+                            <span>
+                              <i class="ti ti-layout-dashboard"></i>
+                            </span>
+                            <span class="hide-menu">센서관리 페이지</span>
                         </a>
                     </li>
 
