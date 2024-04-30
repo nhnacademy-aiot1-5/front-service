@@ -11,9 +11,9 @@ import java.util.List;
 
 @FeignClient(value = "gateway-service", contextId = "modbus-sensor-adaptor")
 public interface ModbusSensorAdaptor {
-    @GetMapping("api/sensors/modbus/list")
+    @GetMapping("/api/sensors/modbus/list")
     ResponseEntity<List<GetModbusSensorResponse>> getSensors();
 
-    @PutMapping("/api/sensor/modbus/work")
-    ResponseEntity<String> changeWork(@RequestParam Integer id);
+    @PutMapping("/api/sensors/modbus/work")
+    ResponseEntity<String> changeWork(@RequestParam int sensorId);
 }

@@ -63,35 +63,29 @@
                                 <table id="table" class="table table-striped">
                                     <thead>
                                     <tr>
-                                        <th>센서명</th>
-                                        <th>센서 모델</th>
-                                        <th>IP</th>
-                                        <th>PORT</th>
-                                        <th>채널 수</th>
-                                        <th>상태</th>
-                                        <th>동작</th>
-                                        <th>센서 상세</th>
+                                        <!--                                        <th>센서명</th>-->
+                                        <!--                                        <th>센서 모델</th>-->
+                                        <!--                                        <th>IP</th>-->
+                                        <!--                                        <th>PORT</th>-->
+                                        <!--                                        <th>채널 수</th>-->
+                                        <!--                                        <th>상태</th>-->
+                                        <!--                                        <th>동작</th>-->
+                                        <!--                                        <th>센서 상세</th>-->
+                                        <th>NO</th>
+                                        <th>장소</th>
+                                        <th>채널 이름</th>
+                                        <th>채널 이름 수정</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="sensor : ${modbusSensorInfo}">
-                                        <td th:text="${sensor.name}"></td>
-                                        <td th:text="${sensor.modelName}"></td>
-                                        <td th:text="${sensor.ip}"></td>
-                                        <td th:text="${sensor.port}"></td>
-                                        <td th:text="${sensor.channelCount}"></td>
-                                        <td th:text="${sensor.alive}"></td>
+                                    <tr th:each="channel, iterStat : ${modbusChannelInfo}">
+                                        <td th:text="${iterStat.count}"></td>
+                                        <td th:text="${channel.place.placeName}"></td>
+                                        <td th:text="${channel.channelName}"></td>
                                         <td>
-                                            <form th:action="@{/sensor/modbus/work/{sensorId}(sensorId=${sensor.id})}"
-                                                  th:method="PUT" onsubmit="return confirmRequest();">
-                                                <button type="submit" class="btn btn-primary" th:text="${sensor.alive.name() == 'UP' ? '중지' : '동작'}">권한 변경</button>
-
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <form th:action="@{/sensor/modbus/{sensorId}(sensorId=${sensor.id})}"
+                                            <form th:action="@{/sensor/modbus/{channelId}(channelId=${channel.id})}"
                                                   th:method="GET">
-                                                <button type="submit" class="btn btn-primary">채널 상세 보기</button>
+                                                <button type="submit" class="btn btn-primary">채널 이름 수정</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -109,11 +103,6 @@
     let table = new DataTable('#table', {
         responsive: true
     });
-
-    function confirmRequest() {
-        var userResponse = confirm("센서 상태를 바꾸시겠습니까?")
-        return userResponse;
-    }
 </script>
 </body>
 </html>
