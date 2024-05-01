@@ -32,26 +32,26 @@
                     <td class="mb-4" style="padding: 10px;">
                         <button class="btn btn-primary"
                                 style="font-size: 14px; padding: 10px 20px;"
-                                onclick="location.href='/sensor/modbus'">
+                                onclick="location.href='/sensors/modbus'">
                             MODBUS 센서 관리
                         </button>
                     </td>
                     <td class="mb-4" style="padding: 10px;">
                         <button class="btn btn-primary"
                                 style="font-size: 14px; padding: 10px 20px;"
-                                onclick="location.href='/sensor/mqtt'">
+                                onclick="location.href='/sensors/mqtt'">
                             MQTT 센서 관리
                         </button>
                     </td>
                 </tr>
             </table>
             <div class="row">
-                <div class="col-12 mb-4"> <!-- 멤버 리스트 -->
+                <div class="col-12 mb-4">
                     <div class="rounded-lg border bg-white text-dark shadow-sm">
                         <div class="card">
                             <div class="card-header">
                                 <h2 class="card-title">MQTT 센서 관리
-                                    <button class="btn btn-secondary" onclick="location.href='/sensor/mqtt/add'">
+                                    <button class="btn btn-secondary" onclick="location.href='/sensors/mqtt/add'">
                                         센서 등록
                                     </button>
                                 </h2>
@@ -67,8 +67,7 @@
                                         <th>장소</th>
                                         <th>상태</th>
                                         <th>동작</th>
-                                        <th>토픽 관리</th>
-                                        <th>센서 관리</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -86,15 +85,9 @@
                                             </form>
                                         </td>
                                         <td>
-                                            <form th:action="@{/sensor/mqtt/{sensorId}(sensorId=${sensor.id})}"
+                                            <form th:action="@{/sensors/mqtt/{sensorId}(sensorId=${sensor.id})}"
                                                   th:method="GET">
-                                                <button type="submit" class="btn btn-primary">토픽 관리</button>
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <form th:action="@{/sensor/mqtt/{sensorId}(sensorId=${sensor.id})}"
-                                                  th:method="GET">
-                                                <button type="submit" class="btn btn-primary">센서 관리</button>
+                                                <button type="submit" class="btn btn-primary">장치 및 토픽 관리</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -108,7 +101,6 @@
         </div>
     </div>
 </div>
-
 
 <script>
     let table = new DataTable('#table', {

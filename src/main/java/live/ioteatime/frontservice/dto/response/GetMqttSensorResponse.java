@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import live.ioteatime.frontservice.domain.Alive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
@@ -18,7 +19,7 @@ public class GetMqttSensorResponse {
     private Alive alive;
     private Place place;
 
-    @Getter @NoArgsConstructor
+    @Getter @NoArgsConstructor @Setter
     public static class Place {
         private int id;
         @JsonProperty("place_name")

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+    <!-- 부트스트랩 CSS 파일 -->
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
+     data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <th:block th:replace="side-bar :: sidebar"></th:block>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+        <!--  Header Start -->
+        <th:block th:replace="header :: header"></th:block>
+        <div class="container-fluid">
+            <div>
+                <h1>센서관리 페이지</h1>
+                <br/>
+            </div>
+            <!--  Header End -->
+            <table>
+                <tr>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/sensors/modbus'">
+                            MODBUS 센서 관리
+                        </button>
+                    </td>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/sensors/mqtt'">
+                            MQTT 센서 관리
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="rounded-lg border bg-white text-dark shadow-sm">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">MQTT 센서 정보</h2>
+                            </div>
+                            <div class="card-body">
+
+
+                                <form id="mqtt-sensor-details" method="post" action="/sensors/mqtt/update">
+
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="fw-semibold me-3" style="min-width: 70px;">센서 이름</div>
+                                        <input type="text" class="form-control" id="sensorName" name="sensorName" th:value="${sensorInfo.name}">
+                                    </div>
+
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="fw-semibold me-3" style="min-width: 70px;">센서 모델명</div>
+                                        <input type="text" class="form-control" id="sensorModel" name="sensorModel" th:value="${sensorInfo.modelName}" readonly>
+                                    </div>
+
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="fw-semibold me-3" style="min-width: 70px;">장소</div>
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="placeBtn" data-bs-toggle="dropdown" aria-expanded="false" th:text="${sensorInfo.place.placeName}" >
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-dark">
+                                                <li th:each="place : ${placeList}" th:text="${place.placeName}" th:attr="data-value=${place.id}" onclick="updatePlaceBtn(this)"></li>
+                                            </ul>
+                                        </div>
+                                        <input type="hidden" id="placeId" name="placeId">
+                                    </div>
+
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="fw-semibold me-3" style="min-width: 70px;">ip</div>
+                                        <input type="text" class="form-control" id="ip" name="ip" th:value="${sensorInfo.ip}">
+                                    </div>
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="fw-semibold me-3" style="min-width: 70px;">port</div>
+                                        <input type="text" class="form-control" id="port" name="port" th:value="${sensorInfo.port}">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">센서 정보 수정</button>
+                                </form>
+                            </div></div></div></div></div>
+
+                                <div class="col-12 mb-4">
+                                    <div class="rounded-lg border bg-white text-dark shadow-sm">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h2 class="card-title">토픽 정보</h2>
+                                            </div>
+                                            <div class="card-body">
+
+                                    <table id="table" class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>토픽</th>
+                                            <th>설명</th>
+                                            <th></th>
+                                            <th></th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="topic : ${topicList}">
+                                            <td th:text="${topic.topic}"></td>
+                                            <td th:text="${topic.description}"></td>
+                                            <td>
+<!--                                                <form th:action="@{/sensors/mqtt/{sensorId}/topics/{topicId}/update(sensorId=${sensorInfo.id},topicId=${topic.id})}"-->
+<!--                                                      th:method="GET">-->
+                                                    <button type="submit" class="btn btn-primary edit-btn" onclick="showModal(this)"
+                                                    th:data-sensor-id="${sensorInfo.id}" th:data-topic-id="${topic.id}" th:data-topic="${topic.topic}" th:data-description="${topic.description}">
+                                                        수정</button>
+<!--                                                </form>-->
+                                            </td>
+                                            <td>
+                                                <form th:action="@{/sensors/mqtt/{sensorId}/topics/{topicId}(sensorId=${sensorInfo.id},topicId=${topic.id})}"
+                                                      th:method="DELETE">
+                                                    <button type="submit" class="btn btn-primary">삭제</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+<!-- 토픽 수정 모달 -->
+<div id="editTopicModal" class="modal" style="width: 50%; height: 50%;">
+    <div class="modal-content" style="border: none; padding: 0; margin: 0;">
+        <div class="modal-header" style="border-bottom: 1px solid #e9ecef; padding: 10px;">
+            <h5 class="modal-title">토픽 수정</h5>
+            <button type="button" class="close" onclick="closeEditModal()" aria-label="Close"
+                    style="border: none; background: transparent; font-size: 20px; color: #000; padding: 0; margin: 0;">
+                &times;
+            </button>
+        </div>
+        <div class="modal-body" style="padding: 10px;">
+            <form id="editTopicForm" th:action="@{/}" th:method="PUT">
+                <div class="mb-3 d-flex align-items-center">
+                    <div class="fw-semibold me-3" style="min-width: 70px;">토픽</div>
+                    <input type="text" class="form-control" id="modal-topic" name="topic">
+                </div>
+                <div class="mb-3 d-flex align-items-center">
+                    <div class="fw-semibold me-3" style="min-width: 70px;">설명</div>
+                    <input type="text" class="form-control" id="modal-description" name="description">
+                </div>
+                <input type="hidden" id="modal-topic-id" name="id">
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">저장</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+
+
+<script>
+    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+        return new bootstrap.Dropdown(dropdownToggleEl)
+    });
+
+    function updateSensorModelBtn(item) {
+        var button = document.getElementById('sensorModelBtn');
+        button.textContent = item.textContent;
+
+        var input = document.getElementById('sensorModelName');
+        input.value = item.textContent;
+
+
+    }
+
+    function updatePlaceBtn(item) {
+        var button = document.getElementById('placeBtn');
+        button.textContent = item.textContent;
+
+        var input = document.getElementById('placeId');
+        input.value = item.getAttribute('data-value');
+    }
+
+
+    function showModal(button) {
+
+        const topicField = document.getElementById('modal-topic');
+        const descriptionField = document.getElementById('modal-description');
+        const idField = document.getElementById('modal-topic-id');
+
+        const editForm = document.getElementById('editTopicForm');
+        const sensorId = button.getAttribute('data-sensor-id')
+        const topicId = button.getAttribute('data-topic-id');
+
+        topicField.value = button.getAttribute('data-topic');
+        descriptionField.value = button.getAttribute('data-description');
+        idField.value = topicId;
+        editForm.action = `/sensors/mqtt/`+ sensorId + `/topics/` + topicId + `/update`;
+
+        document.getElementById('editTopicModal').style.display = 'block';
+    }
+
+    function closeEditModal() {
+        document.getElementById('editTopicModal').style.display = 'none';
+    }
+
+
+
+</script>
+</html>

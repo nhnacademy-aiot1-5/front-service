@@ -1,11 +1,12 @@
 package live.ioteatime.frontservice.adaptor;
 
 import live.ioteatime.frontservice.dto.request.AddMqttSensorRequest;
+import live.ioteatime.frontservice.dto.request.TopicRequest;
 import live.ioteatime.frontservice.dto.response.GetMqttSensorResponse;
+import live.ioteatime.frontservice.dto.response.GetTopicResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,5 +20,21 @@ public interface MqttSensorAdaptor {
 
     @PostMapping("/api/sensors/mqtt")
     ResponseEntity<String> addMqttSensor(AddMqttSensorRequest addMqttSensorRequest);
+
+    @GetMapping("/api/sensors/mqtt/{sensorId}")
+    ResponseEntity<GetMqttSensorResponse> getMqttSensor(@PathVariable("sensorId") int sensorId);
+
+    @GetMapping("/api/sensors/mqtt/{sensorId}/topics")
+    ResponseEntity<List<GetTopicResponse>> getTopicsBySensorId(@PathVariable("sensorId") int sensorId);
+
+    @PostMapping("/api/sensors/mqtt/{sensorId}/topics")
+    ResponseEntity<String> addTopic(@PathVariable("sensorId") int sensorId, @RequestBody TopicRequest topicRequest);
+
+    @PutMapping("/api/sensors/mqtt/{sensorId}/topics/{topicId}/update")
+    ResponseEntity<String> updateTopic(@PathVariable("sensorId") int sensorId, @PathVariable("topicId") int topicId,
+                                       @RequestBody TopicRequest topicRequest);
+
+    @DeleteMapping("/api/sensors/mqtt/{sensorId}/topics/{topicId}")
+    ResponseEntity<String> deleteTopic(@PathVariable("sensorId") int sensorId, @PathVariable("topicId") int topicId);
 
 }
