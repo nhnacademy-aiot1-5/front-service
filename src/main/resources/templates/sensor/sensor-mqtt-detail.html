@@ -96,7 +96,11 @@
                                     <div class="rounded-lg border bg-white text-dark shadow-sm">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h2 class="card-title">토픽 정보</h2>
+                                                <h2 class="card-title">토픽 정보
+                                                    <button class="btn btn-secondary" th:data-sensor-id="${sensorInfo.id}" onclick="showTopicForm(this)">
+                                                        추가
+                                                    </button>
+                                                </h2>
                                             </div>
                                             <div class="card-body">
 
@@ -115,12 +119,9 @@
                                             <td th:text="${topic.topic}"></td>
                                             <td th:text="${topic.description}"></td>
                                             <td>
-<!--                                                <form th:action="@{/sensors/mqtt/{sensorId}/topics/{topicId}/update(sensorId=${sensorInfo.id},topicId=${topic.id})}"-->
-<!--                                                      th:method="GET">-->
                                                     <button type="submit" class="btn btn-primary edit-btn" onclick="showModal(this)"
                                                     th:data-sensor-id="${sensorInfo.id}" th:data-topic-id="${topic.id}" th:data-topic="${topic.topic}" th:data-description="${topic.description}">
                                                         수정</button>
-<!--                                                </form>-->
                                             </td>
                                             <td>
                                                 <form th:action="@{/sensors/mqtt/{sensorId}/topics/{topicId}(sensorId=${sensorInfo.id},topicId=${topic.id})}"
@@ -142,32 +143,33 @@
             </div>
 
 
-<!-- 토픽 수정 모달 -->
-<div id="editTopicModal" class="modal" style="width: 50%; height: 50%;">
-    <div class="modal-content" style="border: none; padding: 0; margin: 0;">
-        <div class="modal-header" style="border-bottom: 1px solid #e9ecef; padding: 10px;">
-            <h5 class="modal-title">토픽 수정</h5>
-            <button type="button" class="close" onclick="closeEditModal()" aria-label="Close"
-                    style="border: none; background: transparent; font-size: 20px; color: #000; padding: 0; margin: 0;">
-                &times;
-            </button>
-        </div>
-        <div class="modal-body" style="padding: 10px;">
-            <form id="editTopicForm" th:action="@{/}" th:method="PUT">
-                <div class="mb-3 d-flex align-items-center">
-                    <div class="fw-semibold me-3" style="min-width: 70px;">토픽</div>
-                    <input type="text" class="form-control" id="modal-topic" name="topic">
-                </div>
-                <div class="mb-3 d-flex align-items-center">
-                    <div class="fw-semibold me-3" style="min-width: 70px;">설명</div>
-                    <input type="text" class="form-control" id="modal-description" name="description">
-                </div>
-                <input type="hidden" id="modal-topic-id" name="id">
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">저장</button>
-            </form>
-        </div>
+<!-- 토픽 등록, 수정 모달 -->
+<div id="topicModal" class="modal" style="width: 50%; height: 50%;">
+<div class="modal-content" style="border: none; padding: 0; margin: 0;">
+    <div class="modal-header" style="border-bottom: 1px solid #e9ecef; padding: 10px;">
+        <h5 class="modal-title" id="title-text"></h5>
+        <button type="button" class="close" onclick="closeEditModal()" aria-label="Close"
+                style="border: none; background: transparent; font-size: 20px; color: #000; padding: 0; margin: 0;">
+            &times;
+        </button>
+    </div>
+    <div class="modal-body" style="padding: 10px;">
+        <form id="topicForm" th:action="@{/}" th:method="PUT">
+            <div class="mb-3 d-flex align-items-center">
+                <div class="fw-semibold me-3" style="min-width: 70px;">토픽</div>
+                <input type="text" class="form-control" id="modal-topic" name="topic">
+            </div>
+            <div class="mb-3 d-flex align-items-center">
+                <div class="fw-semibold me-3" style="min-width: 70px;">설명</div>
+                <input type="text" class="form-control" id="modal-description" name="description">
+            </div>
+            <input type="hidden" id="modal-topic-id" name="id">
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">저장</button>
+        </form>
     </div>
 </div>
+</div>
+
 
 </body>
 
@@ -196,27 +198,47 @@
         input.value = item.getAttribute('data-value');
     }
 
-
     function showModal(button) {
+
+        document.getElementById('title-text').textContent = "토픽 수정";
 
         const topicField = document.getElementById('modal-topic');
         const descriptionField = document.getElementById('modal-description');
         const idField = document.getElementById('modal-topic-id');
 
-        const editForm = document.getElementById('editTopicForm');
+        const editForm = document.getElementById('topicForm');
         const sensorId = button.getAttribute('data-sensor-id')
         const topicId = button.getAttribute('data-topic-id');
 
         topicField.value = button.getAttribute('data-topic');
         descriptionField.value = button.getAttribute('data-description');
         idField.value = topicId;
+
         editForm.action = `/sensors/mqtt/`+ sensorId + `/topics/` + topicId + `/update`;
 
-        document.getElementById('editTopicModal').style.display = 'block';
+        document.getElementById('topicModal').style.display = 'block';
     }
 
+    function showTopicForm(button) {
+
+        const addTopicForm = document.getElementById('topicForm');
+
+        addTopicForm.action = '/sensors/mqtt/' + button.getAttribute('data-sensor-id') + '/topics';
+        document.getElementById('topicForm').method = 'POST';
+        const hiddenMethodInput = addTopicForm.querySelector('input[name="_method"]');
+        if (hiddenMethodInput) {
+            hiddenMethodInput.value = 'POST';
+        }
+
+        document.getElementById('title-text').textContent = "토픽 등록";
+        document.getElementById('modal-topic').value = "";
+        document.getElementById('modal-description').value = "";
+        document.getElementById('modal-topic-id').value = "";
+
+        document.getElementById('topicModal').style.display = 'block';
+    }
     function closeEditModal() {
-        document.getElementById('editTopicModal').style.display = 'none';
+        document.getElementById('topicModal').style.display = 'none';
     }
 
 
