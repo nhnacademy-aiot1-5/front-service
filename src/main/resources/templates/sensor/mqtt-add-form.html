@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+    <!-- 부트스트랩 CSS 파일 -->
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css"/>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
+     data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <th:block th:replace="side-bar :: sidebar"></th:block>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+        <!--  Header Start -->
+        <th:block th:replace="header :: header"></th:block>
+        <div class="container-fluid">
+            <div>
+                <h1>센서관리 페이지</h1>
+                <br/>
+            </div>
+            <!--  Header End -->
+            <table>
+                <tr>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/sensors/modbus'">
+                            MODBUS 센서 관리
+                        </button>
+                    </td>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/sensors/mqtt'">
+                            MQTT 센서 관리
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="rounded-lg border bg-white text-dark shadow-sm">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">MQTT 센서 등록</h2>
+                            </div>
+                            <div class="card-body">
+
+                                <form id="add-mqtt-sensor" method="post" action="/sensors/mqtt">
+
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="fw-semibold me-3" style="min-width: 70px;">센서 모델</div>
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="sensorModelBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                                센서 모델 선택
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-dark">
+                                                <li th:each="supportedSensor : ${supportedSensorList}" th:text="${supportedSensor.modelName}" onclick="updateSensorModelBtn(this)"></li>
+                                            </ul>
+                                        </div>
+                                        <input type="hidden" id="modelName" name="modelName">
+                                    </div>
+
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="fw-semibold me-3" style="min-width: 70px;">장소</div>
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="placeBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                                장소 선택
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-dark">
+                                                <li th:each="place : ${placeList}" th:text="${place.placeName}" th:attr="data-value=${place.id}" onclick="updatePlaceBtn(this)"></li>
+                                            </ul>
+                                        </div>
+                                        <input type="hidden" id="placeId" name="placeId">
+                                    </div>
+
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="fw-semibold me-3" style="min-width: 70px;">센서 이름</div>
+                                        <input type="text" class="form-control" id="sensorName" name="sensorName">
+                                    </div>
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="fw-semibold me-3" style="min-width: 70px;">ip</div>
+                                        <input type="text" class="form-control" id="ip" name="ip" required>
+                                    </div>
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="fw-semibold me-3" style="min-width: 70px;">port</div>
+                                        <input type="text" class="form-control" id="port" name="port" required>
+                                    </div>
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="fw-semibold me-3" style="min-width: 70px;">기본 토픽</div>
+                                        <input type="text" class="form-control" id="topic" name="topic" required>
+                                    </div>
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="fw-semibold me-3" style="min-width: 70px;"></div>
+                                        <small class="form-text text-muted">
+                                            센서 등록 후, 토픽 관리 페이지에서 토픽을 추가할 수 있습니다.
+                                        </small>
+                                    </div>
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="fw-semibold me-3" style="min-width: 70px;">토픽 설명</div>
+                                        <input type="text" class="form-control" id="description" name="description">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">저장</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+        return new bootstrap.Dropdown(dropdownToggleEl)
+    });
+
+    function updateSensorModelBtn(item) {
+        var button = document.getElementById('sensorModelBtn');
+        button.textContent = item.textContent;
+
+        var input = document.getElementById('modelName');
+        input.value = item.textContent;
+
+
+    }
+
+    function updatePlaceBtn(item) {
+        var button = document.getElementById('placeBtn');
+        button.textContent = item.textContent;
+
+        var input = document.getElementById('placeId');
+        input.value = item.getAttribute('data-value');
+    }
+
+</script>
+</body>
+</html>

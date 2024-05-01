@@ -25,7 +25,6 @@ public class AdminController {
     private final AdminAdaptor adminAdaptor;
     private final UserAdaptor userAdaptor;
 
-
     /**
      * 어드민 페이지에 처음 들어왔을때 기본으로 로딩되는 페이지로 소속된 조직에서 Guest 권한을 가지고 있는 유저들의 리스트를 확인할 수 있는
      * 페이지를 불러옵니다.

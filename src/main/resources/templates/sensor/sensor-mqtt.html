@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+    <!-- 부트스트랩 CSS 파일 -->
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css"/>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+</head>
+<body>
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
+     data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <th:block th:replace="side-bar :: sidebar"></th:block>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+        <!--  Header Start -->
+        <th:block th:replace="header :: header"></th:block>
+        <div class="container-fluid">
+            <div>
+                <h1>센서관리 페이지</h1>
+                <br/>
+            </div>
+            <!--  Header End -->
+            <table>
+                <tr>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/sensors/modbus'">
+                            MODBUS 센서 관리
+                        </button>
+                    </td>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/sensors/mqtt'">
+                            MQTT 센서 관리
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="rounded-lg border bg-white text-dark shadow-sm">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">MQTT 센서 관리
+                                    <button class="btn btn-secondary" onclick="location.href='/sensors/mqtt/add'">
+                                        센서 등록
+                                    </button>
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <table id="table" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>센서명</th>
+                                        <th>센서 모델</th>
+                                        <th>IP</th>
+                                        <th>PORT</th>
+                                        <th>장소</th>
+                                        <th>상태</th>
+                                        <th>동작</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="sensor : ${mqttSensorInfo}">
+                                        <td th:text="${sensor.name}"></td>
+                                        <td th:text="${sensor.modelName}"></td>
+                                        <td th:text="${sensor.ip}"></td>
+                                        <td th:text="${sensor.port}"></td>
+                                        <td th:text="${sensor.place.placeName}"></td>
+                                        <td th:text="${sensor.alive}"></td>
+                                        <td>
+                                            <form th:action="@{/sensor/mqtt/work/{sensorId}(sensorId=${sensor.id})}"
+                                                  th:method="PUT" onsubmit="return confirmRequest();">
+                                                <button type="submit" class="btn btn-primary" th:text="${sensor.alive == 'UP'} ? '중지' : '동작'">권한 변경</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form th:action="@{/sensors/mqtt/{sensorId}(sensorId=${sensor.id})}"
+                                                  th:method="GET">
+                                                <button type="submit" class="btn btn-primary">장치 및 토픽 관리</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let table = new DataTable('#table', {
+        responsive: true
+    });
+
+    function confirmRequest() {
+        var userResponse = confirm("유저 권한을 정말로 바꾸시겠습니까?")
+        return userResponse;
+    }
+
+</script>
+</body>
+</html>
