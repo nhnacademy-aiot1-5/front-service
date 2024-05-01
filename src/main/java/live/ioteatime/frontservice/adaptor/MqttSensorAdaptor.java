@@ -1,6 +1,6 @@
 package live.ioteatime.frontservice.adaptor;
 
-import live.ioteatime.frontservice.dto.request.AddMqttSensorRequest;
+import live.ioteatime.frontservice.dto.request.MqttSensorRequest;
 import live.ioteatime.frontservice.dto.request.TopicRequest;
 import live.ioteatime.frontservice.dto.response.GetMqttSensorResponse;
 import live.ioteatime.frontservice.dto.response.GetTopicResponse;
@@ -19,7 +19,10 @@ public interface MqttSensorAdaptor {
     ResponseEntity<List<GetMqttSensorResponse>> getSupportedMqttSensors();
 
     @PostMapping("/api/sensors/mqtt")
-    ResponseEntity<String> addMqttSensor(AddMqttSensorRequest addMqttSensorRequest);
+    ResponseEntity<String> addMqttSensor(MqttSensorRequest addMqttSensorRequest);
+
+    @PutMapping("/api/sensors/mqtt/{sensorId}/update")
+    ResponseEntity<String> updateMqttSensor(@PathVariable("sensorId") int sensorId, MqttSensorRequest request);
 
     @GetMapping("/api/sensors/mqtt/{sensorId}")
     ResponseEntity<GetMqttSensorResponse> getMqttSensor(@PathVariable("sensorId") int sensorId);

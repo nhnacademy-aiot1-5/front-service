@@ -67,7 +67,7 @@
                                                 <li th:each="supportedSensor : ${supportedSensorList}" th:text="${supportedSensor.modelName}" onclick="updateSensorModelBtn(this)"></li>
                                             </ul>
                                         </div>
-                                        <input type="hidden" id="sensorModelName" name="sensorModelName">
+                                        <input type="hidden" id="modelName" name="modelName">
                                     </div>
 
                                     <div class="mb-3 d-flex align-items-center">
@@ -133,7 +133,7 @@
         var button = document.getElementById('sensorModelBtn');
         button.textContent = item.textContent;
 
-        var input = document.getElementById('sensorModelName');
+        var input = document.getElementById('modelName');
         input.value = item.textContent;
 
 

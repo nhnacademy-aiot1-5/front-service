@@ -1,7 +1,7 @@
 package live.ioteatime.frontservice.controller;
 
 import live.ioteatime.frontservice.adaptor.*;
-import live.ioteatime.frontservice.dto.request.AddMqttSensorRequest;
+import live.ioteatime.frontservice.dto.request.MqttSensorRequest;
 import live.ioteatime.frontservice.dto.request.TopicRequest;
 import live.ioteatime.frontservice.dto.response.*;
 import lombok.RequiredArgsConstructor;
@@ -107,16 +107,16 @@ public class SensorController {
      * @return
      */
     @PostMapping("/mqtt")
-    public String addMqttSensor(@ModelAttribute AddMqttSensorRequest addMqttSensorRequest){
+    public String addMqttSensor(@ModelAttribute MqttSensorRequest addMqttSensorRequest){
         mqttSensorAdaptor.addMqttSensor(addMqttSensorRequest);
         return "redirect:/sensors/mqtt";
     }
 
     /**
      * Mqtt 센서 상세 조회 및 수정, 토픽 관리 페이지
-     * @param sensorId
-     * @param model
-     * @return
+     * @param sensorId 센서아이디
+     * @param model 센서정보, 토픽정보, 조직 장소 목록을 모델에 넣어줍니다
+     * @return 센서 상세 페이지
      */
     @GetMapping("/mqtt/{sensorId}")
     public String mqttSensorDetailsPage(@PathVariable("sensorId") int sensorId, Model model){
@@ -134,6 +134,19 @@ public class SensorController {
 
         return "sensor/sensor-mqtt-detail";
     }
+
+    /**
+     * Mqtt 센서 정보 수정
+     * @param sensorId 센서아이디
+     * @param request 수정 요청 폼 데이터
+     * @return 센서 단일 조회 페이지 리다이렉트
+     */
+    @PutMapping("/mqtt/{sensorId}")
+    public String updateMqttSensor(@PathVariable("sensorId") int sensorId, @ModelAttribute MqttSensorRequest request){
+        mqttSensorAdaptor.updateMqttSensor(sensorId, request);
+        return "redirect:/sensors/mqtt/" + sensorId;
+    }
+
 
     /**
      * 토픽 추가
