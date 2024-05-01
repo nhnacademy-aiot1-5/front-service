@@ -12,11 +12,14 @@ import java.util.List;
 
 @FeignClient(value = "gateway-service", contextId = "mqtt-sensor-adaptor")
 public interface MqttSensorAdaptor {
+    @GetMapping("/api/sensors/mqtt/supported")
+    ResponseEntity<List<GetMqttSensorResponse>> getSupportedMqttSensors();
+
     @GetMapping("/api/sensors/mqtt/list")
     ResponseEntity<List<GetMqttSensorResponse>> getUserOrganizationMqttSensors();
 
-    @GetMapping("/api/sensors/mqtt/supported")
-    ResponseEntity<List<GetMqttSensorResponse>> getSupportedMqttSensors();
+    @GetMapping("/api/sensors/mqtt/{sensorId}")
+    ResponseEntity<GetMqttSensorResponse> getMqttSensor(@PathVariable("sensorId") int sensorId);
 
     @PostMapping("/api/sensors/mqtt")
     ResponseEntity<String> addMqttSensor(MqttSensorRequest addMqttSensorRequest);
@@ -24,8 +27,8 @@ public interface MqttSensorAdaptor {
     @PutMapping("/api/sensors/mqtt/{sensorId}/update")
     ResponseEntity<String> updateMqttSensor(@PathVariable("sensorId") int sensorId, MqttSensorRequest request);
 
-    @GetMapping("/api/sensors/mqtt/{sensorId}")
-    ResponseEntity<GetMqttSensorResponse> getMqttSensor(@PathVariable("sensorId") int sensorId);
+    @DeleteMapping("/api/sensors/mqtt/{sensorId}")
+    ResponseEntity<String> deleteMqttSensor(@PathVariable("sensorId") int sensorId);
 
     @GetMapping("/api/sensors/mqtt/{sensorId}/topics")
     ResponseEntity<List<GetTopicResponse>> getTopicsBySensorId(@PathVariable("sensorId") int sensorId);

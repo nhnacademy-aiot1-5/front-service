@@ -54,7 +54,6 @@
                             </div>
                             <div class="card-body">
 
-
                                 <form id="mqtt-sensor-details" th:method="PUT" th:action="@{/sensors/mqtt/{sensorId}(sensorId=${sensorInfo.id})}">
 
                                     <div class="mb-3 d-flex align-items-center">
@@ -87,9 +86,17 @@
                                         <div class="fw-semibold me-3" style="min-width: 70px;">port</div>
                                         <input type="text" class="form-control" id="port" name="port" th:value="${sensorInfo.port}">
                                     </div>
-
-                                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">센서 정보 수정</button>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">센서 정보 수정</button>
+                                        </div>
+                                        <div class="col-6">
+                                            <button type="submit" onclick="requestSensorDelete()" class="btn btn-danger" style="width: 100%; margin-top: 10px;">센서 삭제</button>
+                                        </div>
+                                    </div>
                                 </form>
+
+                                <input type="hidden" id="sensorId" th:value="${sensorInfo.id}">
                             </div></div></div></div></div>
 
                                 <div class="col-12 mb-4">
@@ -241,6 +248,24 @@
         document.getElementById('topicModal').style.display = 'none';
     }
 
+    function requestSensorDelete() {
+        const sensorId = document.getElementById('sensorId').value;
+        fetch(`/sensors/mqtt/`+ sensorId, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.redirected) {
+                    alert('센서가 삭제되었습니다.')
+                    window.location.href = response.url;
+                } else {
+                    alert('센서 삭제에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('오류가 발생했습니다.');
+            });
+    }
 
 
 </script>

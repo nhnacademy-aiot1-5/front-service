@@ -147,6 +147,16 @@ public class SensorController {
         return "redirect:/sensors/mqtt/" + sensorId;
     }
 
+    /**
+     * 샌서 석제
+     * @param sensorId 센서아이디
+     * @return mqtt 센서 목록 페이지 리다이렉트
+     */
+    @DeleteMapping("/mqtt/{sensorId}")
+    public String deleteMqttSensor(@PathVariable("sensorId") int sensorId){
+        mqttSensorAdaptor.deleteMqttSensor(sensorId);
+        return "redirect:/sensors/mqtt";
+    }
 
     /**
      * 토픽 추가
