@@ -171,27 +171,6 @@
                                         </thead>
                                         <tbody>
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <!--                                                <th class="sorting sorting_asc col-1" tabindex="0"-->
-                                                <!--                                                    aria-controls="zero_config" rowspan="1" colspan="1"-->
-                                                <!--                                                    aria-sort="ascending">-->
-                                                <!--                                                    총 합-->
-                                                <!--                                                </th>-->
-                                                <!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
-                                                <!--                                                    aria-controls="zero_config"-->
-                                                <!--                                                    rowspan="1" colspan="1">-->
-                                                <!--                                                </th>-->
-                                                <!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
-                                                <!--                                                    aria-controls="zero_config"-->
-                                                <!--                                                    rowspan="1" colspan="1">-->
-                                                <!--                                                </th>-->
-                                                <!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
-                                                <!--                                                    aria-controls="zero_config"-->
-                                                <!--                                                    rowspan="1" colspan="1">-->
-                                                <!--                                                </th>-->
-                                            </tr>
-                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -252,6 +231,8 @@
                 responsive: true
             });
 
+            updateDataTable(dailyElectricityPerHour)
+
             document.getElementById('sensorId').addEventListener('change', function () {
                 const now = new Date();
                 const isoString = now.toISOString(); // "YYYY-MM-DDTHH:mm:ss.sssZ"
@@ -263,6 +244,7 @@
                     .then(data => {
                         updateChartData1(data.hourlyElectricityDtos);
                         updateChartData2(data.dailyElectricityDtos);
+                        updateDataTable(data.hourlyElectricityDtos);
                     })
             });
 
@@ -303,7 +285,7 @@
                     table.row.add([
                         dto.time,
                         `${dto.kwh} 원`,
-                        `${dto.kwh} kWh`,
+                        `${dto.kwh} Wh`,
                         `+${Math.random().toFixed(2)}%`
                     ]).draw(false); // 변경 사항을 테이블에 즉시 반영하지 않음
                 });

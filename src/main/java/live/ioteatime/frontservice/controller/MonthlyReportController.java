@@ -3,6 +3,7 @@ package live.ioteatime.frontservice.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
+import live.ioteatime.frontservice.dto.DailyElectricityDto;
 import live.ioteatime.frontservice.dto.MonthlyElectricityDto;
 import live.ioteatime.frontservice.dto.MonthlyElectricityPageDto;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
@@ -17,8 +18,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -57,8 +61,15 @@ public class MonthlyReportController {
                         userAdaptor.getMonthlyElectricity(localDateTime, organization.getId()).getBody(),
                         MonthlyElectricityPageDto.class
                 );
+        ResponseEntity<List<DailyElectricityDto>> dailyResponse =
+                userAdaptor.getDailyElectricities(localDateTime, organization.getId());
+        List<DailyElectricityDto> dailyElectricityDtos = Optional.ofNullable(dailyResponse.getBody())
+                .orElse(Collections.emptyList());
+
         monthlyElectricityPageDto.setDailyElectricityDtos(
-                userAdaptor.getDailyElectricities(localDateTime, organization.getId()).getBody()
+                dailyElectricityDtos.stream()
+                        .filter(dailyElectricityDto -> dailyElectricityDto.getTime().getMonth().equals(localDateTime.getMonth()))
+                        .collect(Collectors.toList())
         );
         monthlyElectricityPageDto.setMonthlyElectricityDtos(
                 userAdaptor.getMonthlyElectricities(localDateTime, organization.getId()).getBody()

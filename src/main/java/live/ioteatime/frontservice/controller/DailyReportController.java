@@ -70,11 +70,10 @@ public class DailyReportController {
         if (dailyElectricityDtos == null) {
             dailyElectricityDtos = Collections.emptyList();
         }
-        model.addAttribute("recent7DaysElectricities",
-                dailyElectricityDtos.stream()
-                        .filter(dailyElectricityDto -> dailyElectricityDto.getTime().isAfter(LocalDateTime.now().minusDays(8)))
-                        .collect(Collectors.toList())
-        );
+        dailyElectricityDtos = dailyElectricityDtos.stream()
+                .filter(dailyElectricityDto -> dailyElectricityDto.getTime().isAfter(LocalDateTime.now().minusDays(8)))
+                .collect(Collectors.toList());
+        model.addAttribute("recent7DaysElectricities", dailyElectricityDtos);
         model.addAttribute("recent24HoursElectricites", hourlyElectricityDtos);
         return ResponseEntity.ok(new DailyElectricitiesDto(dailyElectricityDtos, hourlyElectricityDtos));
     }
