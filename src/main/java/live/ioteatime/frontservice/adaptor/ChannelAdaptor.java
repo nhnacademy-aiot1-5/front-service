@@ -10,6 +10,6 @@ import java.util.List;
 
 @FeignClient(value = "gateway-service", contextId = "channel-adaptor")
 public interface ChannelAdaptor {
-    @GetMapping("/api/sensor/modbus/channels")
+    @GetMapping("/api/sensors/modbus/channels")
     ResponseEntity<List<GetModbusSensorChannelResponse>> getChannels(@RequestParam int sensorId);
 }
