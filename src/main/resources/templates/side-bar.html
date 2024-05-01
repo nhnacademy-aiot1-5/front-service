@@ -90,7 +90,7 @@
                         </a>
                     </li>
                     <li class="sidebar-item" th:if="${userInfo.role.name() == 'ADMIN'}">
-                        <a class="sidebar-link" href="/sensor" aria-expanded="false">
+                        <a class="sidebar-link" href="/sensors" aria-expanded="false">
                             <span>
                               <i class="ti ti-layout-dashboard"></i>
                             </span>
@@ -109,14 +109,6 @@
                               <i class="ti ti-alert-circle"></i>
                             </span>
                             <span class="hide-menu">일 별 리포트</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item" th:if="${userInfo.role.name() !='GUEST'}">
-                        <a class="sidebar-link" href="/weekly-report" aria-expanded="false">
-                            <span>
-                              <i class="ti ti-alert-circle"></i>
-                            </span>
-                            <span class="hide-menu">주 별 리포트</span>
                         </a>
                     </li>
                     <li class="sidebar-item" th:if="${userInfo.role.name() !='GUEST'}">
