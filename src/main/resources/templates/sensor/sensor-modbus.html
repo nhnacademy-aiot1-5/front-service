@@ -32,21 +32,21 @@
                     <td class="mb-4" style="padding: 10px;">
                         <button class="btn btn-primary"
                                 style="font-size: 14px; padding: 10px 20px;"
-                                onclick="location.href='/place'">
+                                onclick="location.href='/places'">
                             장소 관리
                         </button>
                     </td>
                     <td class="mb-4" style="padding: 10px;">
                         <button class="btn btn-primary"
                                 style="font-size: 14px; padding: 10px 20px;"
-                                onclick="location.href='/sensor/modbus'">
+                                onclick="location.href='/sensors/modbus'">
                             MODBUS 센서 관리
                         </button>
                     </td>
                     <td class="mb-4" style="padding: 10px;">
                         <button class="btn btn-primary"
                                 style="font-size: 14px; padding: 10px 20px;"
-                                onclick="location.href='/sensor/mqtt'">
+                                onclick="location.href='/sensors/mqtt'">
                             MQTT 센서 관리
                         </button>
                     </td>
@@ -82,14 +82,14 @@
                                         <td th:text="${sensor.channelCount}"></td>
                                         <td th:text="${sensor.alive}"></td>
                                         <td>
-                                            <form th:action="@{/sensor/modbus/work/{sensorId}(sensorId=${sensor.id})}"
+                                            <form th:action="@{/sensors/modbus/work/{sensorId}(sensorId=${sensor.id})}"
                                                   th:method="PUT" onsubmit="return confirmRequest();">
                                                 <button type="submit" class="btn btn-primary" th:text="${sensor.alive.name() == 'UP' ? '중지' : '동작'}">권한 변경</button>
 
                                             </form>
                                         </td>
                                         <td>
-                                            <form th:action="@{/sensor/modbus/{sensorId}(sensorId=${sensor.id})}"
+                                            <form th:action="@{/sensors/modbus/{sensorId}(sensorId=${sensor.id})}"
                                                   th:method="GET">
                                                 <button type="submit" class="btn btn-primary">채널 상세 보기</button>
                                             </form>
