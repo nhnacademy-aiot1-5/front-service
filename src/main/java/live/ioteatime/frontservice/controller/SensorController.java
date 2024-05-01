@@ -21,7 +21,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/sensor")
+@RequestMapping("/sensors")
 public class SensorController {
     private final UserAdaptor userAdaptor;
     private final ModbusSensorAdaptor modbusSensorAdaptor;
@@ -60,9 +60,12 @@ public class SensorController {
         return "/sensor/sensor-modbus-detail";
     }
 
+//    @PutMapping("/modbus/channels/changename")
+//    public String changeName()
+
     @PutMapping("/modbus/work/{sensorId}")
     public String changeWork(@PathVariable("sensorId") int sensorId){
         modbusSensorAdaptor.changeWork(sensorId);
-        return "redirect:/sensor/modbus";
+        return "redirect:/sensors/modbus";
     }
 }
