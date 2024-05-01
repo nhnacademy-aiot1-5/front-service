@@ -10,5 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DailyElectricitiesDto {
-    List<DailyElectricityDto> dailyElectricityDtos;
+    private List<DailyElectricityDto> dailyElectricityDtos;
+    private List<DailyElectricityDto> hourlyElectricityDtos;
 }

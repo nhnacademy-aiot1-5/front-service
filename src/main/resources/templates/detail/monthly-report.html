@@ -153,23 +153,23 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-<!--                                                <th class="sorting sorting_asc col-1" tabindex="0"-->
-<!--                                                    aria-controls="zero_config" rowspan="1" colspan="1"-->
-<!--                                                    aria-sort="ascending">-->
-<!--                                                    총 합-->
-<!--                                                </th>-->
-<!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
-<!--                                                    aria-controls="zero_config"-->
-<!--                                                    rowspan="1" colspan="1">-->
-<!--                                                </th>-->
-<!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
-<!--                                                    aria-controls="zero_config"-->
-<!--                                                    rowspan="1" colspan="1">-->
-<!--                                                </th>-->
-<!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
-<!--                                                    aria-controls="zero_config"-->
-<!--                                                    rowspan="1" colspan="1">-->
-<!--                                                </th>-->
+                                                <!--                                                <th class="sorting sorting_asc col-1" tabindex="0"-->
+                                                <!--                                                    aria-controls="zero_config" rowspan="1" colspan="1"-->
+                                                <!--                                                    aria-sort="ascending">-->
+                                                <!--                                                    총 합-->
+                                                <!--                                                </th>-->
+                                                <!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
+                                                <!--                                                    aria-controls="zero_config"-->
+                                                <!--                                                    rowspan="1" colspan="1">-->
+                                                <!--                                                </th>-->
+                                                <!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
+                                                <!--                                                    aria-controls="zero_config"-->
+                                                <!--                                                    rowspan="1" colspan="1">-->
+                                                <!--                                                </th>-->
+                                                <!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
+                                                <!--                                                    aria-controls="zero_config"-->
+                                                <!--                                                    rowspan="1" colspan="1">-->
+                                                <!--                                                </th>-->
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -261,16 +261,18 @@
             });
 
             function updateChartData(dailyData) {
-                const kwhData = dailyData.map(dto => dto.kwh);
-                const dates = dailyData.map(dto => dto.localDate);
+                console.log(dailyData);
+                const kwhData2 = dailyData.map(dto => dto.kwh);
+                const dates2 = dailyData.map(dto => dto.time);
 
+                console.log(dates2);
                 chart2.updateOptions({
                     series: [{
                         name: 'KWh',
-                        data: kwhData
+                        data: kwhData2
                     }],
                     xaxis: {
-                        categories: dates
+                        categories: dates2
                     }
                 });
             }
