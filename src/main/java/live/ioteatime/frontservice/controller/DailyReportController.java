@@ -32,8 +32,6 @@ public class DailyReportController {
 
     @GetMapping
     public String dailyReport(Model model) {
-        GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        model.addAttribute("userInfo", userInfo);
         OrganizationResponse organizationResponse = userAdaptor.getOrganization().getBody();
         if (Objects.isNull(organizationResponse)) {
             throw new UnauthorizedAccessException("organization not found");

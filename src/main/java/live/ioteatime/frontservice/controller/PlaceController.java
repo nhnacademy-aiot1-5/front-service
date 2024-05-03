@@ -23,10 +23,7 @@ public class PlaceController {
 
     @GetMapping
     public String getPlaces(Model model) {
-        //사이드바 전용
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        model.addAttribute("userInfo", userInfo);
-        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
 
         List<GetPlaceResponse> placeList = placeAdaptor.getPlaces(userInfo.getOrganization().getId()).getBody();
         model.addAttribute("placeList", placeList);

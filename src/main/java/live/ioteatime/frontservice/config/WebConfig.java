@@ -2,19 +2,25 @@ package live.ioteatime.frontservice.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import live.ioteatime.frontservice.adaptor.UserAdaptor;
+import live.ioteatime.frontservice.interceptor.UserInfoInterceptor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/login").setViewName("authentication/login");
-        registry.addViewController("/register").setViewName("authentication/register");
-        registry.addViewController("/mypage").setViewName("mypage/mypage");
+    private final UserAdaptor userAdaptor;
+
+    public WebConfig(@Lazy UserAdaptor userAdaptor) {
+        this.userAdaptor = userAdaptor;
     }
 
     @Bean
@@ -24,4 +30,10 @@ public class WebConfig implements WebMvcConfigurer {
         return mapper;
     }
 
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new UserInfoInterceptor(userAdaptor))
+                .addPathPatterns(List.of("/admin", "/admin/**", "/sensors/**", "/change-password",
+                        "/daily-report/**"));
+    }
 }

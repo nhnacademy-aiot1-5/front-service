@@ -14,6 +14,6 @@ public interface ModbusSensorAdaptor {
     @GetMapping("/api/sensors/modbus/list")
     ResponseEntity<List<GetModbusSensorResponse>> getSensors();
 
-    @PutMapping("/api/sensors/modbus/work")
+    @PutMapping("/api/sensors/modbus/health")
     ResponseEntity<String> changeWork(@RequestParam int sensorId);
 }

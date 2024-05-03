@@ -16,9 +16,9 @@ public interface PlaceAdaptor {
     @PostMapping("/api/place")
     ResponseEntity<String> createPlace(@RequestBody PlaceRequest placeRequest);
 
-    @PutMapping("/api/place/update")
+    @PutMapping("/api/place")
     ResponseEntity<String> updatePlace(@RequestParam int placeId, @RequestParam String placeName);
 
-    @DeleteMapping("/api/place/delete")
+    @DeleteMapping("/api/place")
     ResponseEntity<String> deletePlace(@RequestParam int placeId);
 }

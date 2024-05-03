@@ -71,6 +71,6 @@ public interface UserAdaptor {
     @GetMapping("/api/places")
     ResponseEntity<List<PlaceDto>> getPlacesByOrganizationId(@RequestParam int organizationId);
 
-    @GetMapping("/api/sensors/modbus/channels/by_place")
+    @GetMapping("/api/sensors/modbus/channels/by-place")
     ResponseEntity<List<ChannelDto>> getChannelsByPlaceId(@RequestParam int placeId);
 }

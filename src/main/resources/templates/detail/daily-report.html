@@ -10,7 +10,7 @@
                 crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css"/>
-        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <script src="https://fastly.jsdelivr.net/npm/apexcharts"></script>
         <link rel="stylesheet" href="/css/style.css">
     </head>
 
@@ -179,7 +179,6 @@
                 </div>
             </div>
         </div>
-
         <script th:inline="javascript">
             var options = {
                 chart: {
@@ -194,7 +193,6 @@
                     categories: []
                 }
             }
-
             var chart1 = new ApexCharts(document.getElementById("chart1"), options);
             var chart2 = new ApexCharts(document.getElementById("chart2"), options);
 

@@ -17,4 +17,8 @@ public class ChannelDto {
     private int placeId;
     @JsonProperty("channel_name")
     private String channelName;
+    private int address;
+    private int quantity;
+    @JsonProperty("function_code")
+    private int functionCode;
 }

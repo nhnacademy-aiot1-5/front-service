@@ -26,11 +26,6 @@ public class SensorController {
 
     @GetMapping
     public String sensorPage(Model model) {
-        //사이드바 전용
-        GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        model.addAttribute("userInfo", userInfo);
-        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
-
         //modbus센서 리스트 불러오기
         List<GetModbusSensorResponse> modbusSensorInfo = modbusSensorAdaptor.getSensors().getBody();
         model.addAttribute("modbusSensorInfo", modbusSensorInfo);
@@ -45,11 +40,6 @@ public class SensorController {
 
     @GetMapping("/modbus/{sensorId}")
     public String getModbusSensorDetail(Model model, @PathVariable("sensorId") int sensorId) {
-        //사이드바 전용
-        GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        model.addAttribute("userInfo", userInfo);
-        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
-
         //modbus 센서 상세 채널 불러오기
         List<GetModbusSensorChannelResponse> modbusChannelInfo = channelAdaptor.getChannels(sensorId).getBody();
         model.addAttribute("modbusChannelInfo", modbusChannelInfo);
@@ -72,11 +62,6 @@ public class SensorController {
      */
     @GetMapping("/mqtt")
     public String getMqttSensorPage(Model model) {
-        //사이드바 전용
-        GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        model.addAttribute("userInfo", userInfo);
-        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
-
         List<GetMqttSensorResponse> mqttSensorInfo = mqttSensorAdaptor.getUserOrganizationMqttSensors().getBody();
         model.addAttribute("mqttSensorInfo", mqttSensorInfo);
 
@@ -90,10 +75,7 @@ public class SensorController {
      */
     @GetMapping("/mqtt/add")
     public String addMqttSensorPage(Model model) {
-        //사이드바 전용
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        model.addAttribute("userInfo", userInfo);
-        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
 
         List<GetMqttSensorResponse> supportedSensorList = mqttSensorAdaptor.getSupportedMqttSensors().getBody();
         model.addAttribute("supportedSensorList", supportedSensorList);
@@ -125,8 +107,6 @@ public class SensorController {
     public String mqttSensorDetailsPage(@PathVariable("sensorId") int sensorId, Model model){
         //사이드바 전용
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        model.addAttribute("userInfo", userInfo);
-        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
 
         List<GetPlaceResponse> placeList = placeAdaptor.getPlaces(userInfo.getOrganization().getId()).getBody();
         model.addAttribute("placeList", placeList);

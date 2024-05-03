@@ -40,11 +40,6 @@ public class IndexController {
     @PutMapping("/budget")
     public String updateBudget(@RequestParam Long budget, Model model) {
 
-        //사이드바
-        GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        model.addAttribute("userInfo", userInfo);
-        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
-
         //목표금액 변경
         adminAdaptor.updateBudget(budget);
         return "redirect:/";
