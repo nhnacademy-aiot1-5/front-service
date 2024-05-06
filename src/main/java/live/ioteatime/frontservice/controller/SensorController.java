@@ -22,7 +22,6 @@ import java.util.List;
 public class SensorController {
     private final UserAdaptor userAdaptor;
     private final ModbusSensorAdaptor modbusSensorAdaptor;
-    private final ChannelAdaptor channelAdaptor;
     private final MqttSensorAdaptor mqttSensorAdaptor;
     private final PlaceAdaptor placeAdaptor;
 
@@ -60,7 +59,7 @@ public class SensorController {
     @GetMapping("/modbus/{sensorId}")
     public String getModbusSensorDetail(Model model, @PathVariable("sensorId") int sensorId) {
         //modbus 센서 상세 채널 불러오기
-        List<ChannelDto> modbusChannelInfo = channelAdaptor.getChannels(sensorId).getBody();
+        List<ChannelDto> modbusChannelInfo = modbusSensorAdaptor.getChannels(sensorId).getBody();
         model.addAttribute("modbusChannelInfo", modbusChannelInfo);
         return "/sensor/sensor-modbus-detail";
     }
