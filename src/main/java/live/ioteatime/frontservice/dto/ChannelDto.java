@@ -1,6 +1,8 @@
 package live.ioteatime.frontservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import live.ioteatime.frontservice.dto.response.GetModbusSensorResponse;
+import live.ioteatime.frontservice.dto.response.PlaceResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChannelDto {
     @JsonProperty("channel_id")
-    private int channelId;
+    private int id;
     @JsonProperty("sensor_id")
     private int sensorId;
     @JsonProperty("place_id")
@@ -21,4 +23,6 @@ public class ChannelDto {
     private int quantity;
     @JsonProperty("function_code")
     private int functionCode;
+    private GetModbusSensorResponse sensor;
+    private PlaceResponse place;
 }
