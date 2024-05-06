@@ -57,7 +57,10 @@
                     <div class="rounded-lg border bg-white text-dark shadow-sm">
                         <div class="card">
                             <div class="card-header">
-                                <h2 class="card-title">MODBUS 센서 관리</h2>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <h2 class="card-title">MODBUS 센서 관리</h2>
+                                    <button type="submit" class="btn btn-primary" onclick="location.href='/sensors/modbus/add'">센서 등록</button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <table id="table" class="table table-striped">
@@ -84,7 +87,9 @@
                                         <td>
                                             <form th:action="@{/sensors/modbus/work/{sensorId}(sensorId=${sensor.id})}"
                                                   th:method="PUT" onsubmit="return confirmRequest();">
-                                                <button type="submit" class="btn btn-primary" th:text="${sensor.alive.name() == 'UP' ? '중지' : '동작'}">권한 변경</button>
+                                                <button type="submit" class="btn btn-primary"
+                                                        th:text="${sensor.alive.name() == 'UP' ? '중지' : '동작'}">권한 변경
+                                                </button>
 
                                             </form>
                                         </td>
