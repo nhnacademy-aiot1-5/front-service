@@ -160,7 +160,7 @@ public class SensorController {
      * @param topicId 토픽아이디
      * @return 센서 상세 페이지
      */
-    @PutMapping("/mqtt/{sensorId}/topics/{topicId}/update")
+    @PutMapping("/mqtt/{sensorId}/topics/{topicId}")
     public String updateTopic(@PathVariable("sensorId") int sensorId, @PathVariable("topicId") int topicId,
                               @ModelAttribute TopicRequest request){
         log.info("update topic request- topic:{}, description:{}", request.getTopic(), request.getDescription());
@@ -177,7 +177,7 @@ public class SensorController {
     @DeleteMapping("/mqtt/{sensorId}/topics/{topicId}")
     public String deleteTopic(@PathVariable("sensorId") int sensorId, @PathVariable("topicId") int topicId){
         mqttSensorAdaptor.deleteTopic(sensorId,topicId);
-        return "redirect:/sensors/mqtt";
+        return "redirect:/sensors/mqtt/" + sensorId;
     }
 
 }
