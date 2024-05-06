@@ -2,8 +2,8 @@ package live.ioteatime.frontservice.controller;
 
 import live.ioteatime.frontservice.adaptor.PlaceAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
+import live.ioteatime.frontservice.dto.PlaceDto;
 import live.ioteatime.frontservice.dto.request.PlaceRequest;
-import live.ioteatime.frontservice.dto.response.GetPlaceResponse;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +24,9 @@ public class PlaceController {
     @GetMapping
     public String getPlaces(Model model) {
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
+        model.addAttribute("userInfo", userInfo);
 
-        List<GetPlaceResponse> placeList = placeAdaptor.getPlaces(userInfo.getOrganization().getId()).getBody();
+        List<PlaceDto> placeList = placeAdaptor.getPlaces(userInfo.getOrganization().getId()).getBody();
         model.addAttribute("placeList", placeList);
         return "/sensor/sensor-place";
     }
@@ -44,7 +45,7 @@ public class PlaceController {
 
     @DeleteMapping("/{placeId}")
     public String deletePlace(@PathVariable("placeId") int placeId){
-        placeAdaptor.deletePlace(placeId);
+         placeAdaptor.deletePlace(placeId);
         return "redirect:/places";
     }
 }

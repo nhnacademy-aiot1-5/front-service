@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PlaceRequest {
+    @JsonProperty("place_id")
     private int id;
     @JsonProperty("place_name")
     private String placeName;
