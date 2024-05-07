@@ -244,9 +244,8 @@
                                 const lastMonthCharge = lastMonthData.kwh;
                                 const currentMonthCharge = currentMonthData.kwh;
                                 const changePercent = ((currentMonthCharge - lastMonthCharge) / lastMonthCharge) * 100;
-                                const changeText = `${changePercent.toFixed(1)}% 저번 달 대비 전기료`;
-
-                                document.getElementById('electricityChange').textContent = changeText;
+                                document.getElementById('electricityChange').textContent =
+                                    `${changePercent.toFixed(1)}% 저번 달 대비 전기료`;
                                 if (changePercent < 0) {
                                     document.getElementById('electricitySlogan').textContent = "집에 피카츄가 있으신가요? ⚡";
                                 } else {
