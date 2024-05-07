@@ -70,8 +70,8 @@
                                     <thead>
                                     <tr>
                                         <th>NO</th>
-                                        <th>센서 아이디</th>
-                                        <th>수정</th>
+                                        <th>장소</th>
+                                        <th>장소 수정</th>
                                         <th>삭제</th>
                                     </tr>
                                     </thead>
@@ -81,7 +81,7 @@
                                         <td th:text="${place.placeName}"></td>
                                         <td>
                                             <button type="button" class="btn btn-primary"
-                                                    th:onclick="'openUpdatePlaceModal(' + ${place.id} + ');'">채널 이름 수정
+                                                    th:onclick="'openUpdatePlaceModal(' + ${place.id} + ');'">장소 수정
                                             </button>
                                         </td>
                                         <td>

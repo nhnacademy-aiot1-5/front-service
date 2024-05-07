@@ -6,7 +6,6 @@ import live.ioteatime.frontservice.dto.response.OrganizationResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -28,7 +27,7 @@ public interface AdminAdaptor {
     ResponseEntity<List<GetUserResponse>> requestSensors();
 
     //요금 내역 리스트를 가져옴
-    @GetMapping("/api/admin/budgethistory")
+    @GetMapping("/api/admin/budget-histories")
     ResponseEntity<List<BudgetHistoryResponse>> requestBudgetHistory();
 
     //조직의 이름과 조직코드를 가져옴
@@ -36,11 +35,11 @@ public interface AdminAdaptor {
     ResponseEntity<OrganizationResponse> requestOrganization();
 
     //조직 코드를 중복체크함
-    @GetMapping("/api/admin/checkcode")
+    @GetMapping("/api/admin/check-code")
     ResponseEntity<Boolean> requestCheckcode(@RequestParam String code);
 
     //해당하는 유저의 권한을 GUEST에서 USER로 바꿈
-    @PutMapping("/api/admin/roles")
+    @PutMapping("/api/admin/role")
     ResponseEntity<String> requestRole(@RequestParam String userId);
 
     //조직의 목표 요금을 설정함
@@ -48,10 +47,10 @@ public interface AdminAdaptor {
     ResponseEntity<String> updateBudget(@RequestParam Long budget);
 
     //조직의 이름을 설정함
-    @PutMapping("/api/admin/organizationname")
+    @PutMapping("/api/admin/organization-name")
     ResponseEntity<String> updateOrganizationName(@RequestParam String name);
 
     //조직의 코드를 설정함
-    @PutMapping("/api/admin/organizationcode")
+    @PutMapping("/api/admin/organization-code")
     ResponseEntity<String> updateOrganizationCode(@RequestParam String code);
 }

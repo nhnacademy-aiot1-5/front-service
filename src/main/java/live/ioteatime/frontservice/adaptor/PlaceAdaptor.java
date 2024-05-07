@@ -1,5 +1,6 @@
 package live.ioteatime.frontservice.adaptor;
 
+import live.ioteatime.frontservice.dto.PlaceDto;
 import live.ioteatime.frontservice.dto.request.PlaceRequest;
 import live.ioteatime.frontservice.dto.response.GetPlaceResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -11,14 +12,14 @@ import java.util.List;
 @FeignClient(value = "gateway-service", contextId = "place-adaptor")
 public interface PlaceAdaptor {
     @GetMapping("/api/places")
-    ResponseEntity<List<GetPlaceResponse>> getPlaces(@RequestParam int organizationId);
+    ResponseEntity<List<PlaceDto>> getPlaces(@RequestParam int organizationId);
 
     @PostMapping("/api/place")
     ResponseEntity<String> createPlace(@RequestBody PlaceRequest placeRequest);
 
-    @PutMapping("/api/place/update")
+    @PutMapping("/api/place")
     ResponseEntity<String> updatePlace(@RequestParam int placeId, @RequestParam String placeName);
 
-    @DeleteMapping("/api/place/delete")
+    @DeleteMapping("/api/place")
     ResponseEntity<String> deletePlace(@RequestParam int placeId);
 }

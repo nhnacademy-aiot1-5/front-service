@@ -73,10 +73,11 @@
                                     <tbody>
                                     <tr th:each="channel, iterStat : ${modbusChannelInfo}">
                                         <td th:text="${iterStat.count}"></td>
-                                        <td th:text="${channel.place.placeName}"></td>
+                                        <td th:text="${channel.place != null and channel.place.placeName != null ? channel.place.placeName : '장소 없음'}"></td>
                                         <td th:text="${channel.channelName}"></td>
                                         <td>
-                                            <button type="submit" class="btn btn-primary" onclick="openSetBudgetModal()">채널 이름 수정</button>
+                                            <button type="submit" class="btn btn-primary"
+                                                    th:onclick="'openUpdateChannelNameModal(' + ${channel.id} + ');'">채널 이름 수정</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -90,7 +91,7 @@
     </div>
 </div>
 <!--모달-->
-<div class="modal fade" id="settingPriceModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"
+<div class="modal fade" id="settingUpdateModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -98,22 +99,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body d-flex justify-content-center align-items-center">
-                <form th:action="@{/places}" th:method="POST" id="resetTargetAmountForm" style="width: 90%;">
+                <form th:method="PUT" id="updateForm" style="width: 90%;">
                     <div class="mb-3">
-                        <h4 class="fw-semibold mb-3">장소 수정</h4>
+                        <h4 class="fw-semibold mb-3">채널 이름 수정</h4>
                         <br>
                         <div class="input-group" style="width: 100%;">
-                            <input type="text" class="form-control" id="placeName" name="placeName"
+                            <input type="text" class="form-control" id="channelName" name="channelName"
                                    aria-describedby="amountAddon" placeholder="채널">
-                            <input type="hidden" th:id="channelId"
-                                   th:name="channelId" th:value="${userInfo.organization.id}">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                <button type="submit" class="btn btn-primary" form="resetTargetAmountForm">저장</button>
+                <button type="submit" class="btn btn-primary" form="updateForm">저장</button>
             </div>
         </div>
     </div>
@@ -122,12 +121,18 @@
     let table = new DataTable('#table', {
         responsive: true
     });
-    function openSetBudgetModal() {
-        var myModal = new bootstrap.Modal(document.getElementById('settingPriceModal'), {
+
+    function openUpdateChannelNameModal(channelId) {
+        // form의 action 속성을 동적으로 설정합니다.
+        var updateForm = document.getElementById('updateForm');
+        updateForm.action = '/sensors/modbus/' + channelId + '/change-name'
+        // 모달을 열기
+        var myModal = new bootstrap.Modal(document.getElementById('settingUpdateModal'), {
             keyboard: false
         });
         myModal.show();
     }
+
 </script>
 </body>
 </html>

@@ -221,7 +221,7 @@
         descriptionField.value = button.getAttribute('data-description');
         idField.value = topicId;
 
-        editForm.action = `/sensors/mqtt/`+ sensorId + `/topics/` + topicId + `/update`;
+        editForm.action = `/sensors/mqtt/`+ sensorId + `/topics/` + topicId ;
 
         document.getElementById('topicModal').style.display = 'block';
     }

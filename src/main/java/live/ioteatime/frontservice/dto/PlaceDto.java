@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlaceDto {
+    @JsonProperty("place_id")
     private int id;
     @JsonProperty("place_name")
     private String placeName;

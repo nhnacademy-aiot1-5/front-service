@@ -4,9 +4,9 @@ import feign.FeignException;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.domain.Role;
 import live.ioteatime.frontservice.dto.request.ChangePasswordRequest;
+import live.ioteatime.frontservice.dto.request.UpdateUserRequest;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
-import live.ioteatime.frontservice.dto.request.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -96,10 +96,6 @@ public class UserController {
 
     @GetMapping("/change-password")
     public String changePasswordPage(Model model){
-
-        // 사이드바
-        GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        model.addAttribute("userInfo", userInfo);
 
         return "/authentication/change-password";
     }
