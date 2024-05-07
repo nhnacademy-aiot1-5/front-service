@@ -24,7 +24,7 @@ public interface MqttSensorAdaptor {
     @PostMapping("/api/sensors/mqtt")
     ResponseEntity<String> addMqttSensor(MqttSensorRequest addMqttSensorRequest);
 
-    @PutMapping("/api/sensors/mqtt/{sensorId}/update")
+    @PutMapping("/api/sensors/mqtt/{sensorId}")
     ResponseEntity<String> updateMqttSensor(@PathVariable("sensorId") int sensorId, MqttSensorRequest request);
 
     @DeleteMapping("/api/sensors/mqtt/{sensorId}")
@@ -36,7 +36,7 @@ public interface MqttSensorAdaptor {
     @PostMapping("/api/sensors/mqtt/{sensorId}/topics")
     ResponseEntity<String> addTopic(@PathVariable("sensorId") int sensorId, @RequestBody TopicRequest topicRequest);
 
-    @PutMapping("/api/sensors/mqtt/{sensorId}/topics/{topicId}/update")
+    @PutMapping("/api/sensors/mqtt/{sensorId}/topics/{topicId}")
     ResponseEntity<String> updateTopic(@PathVariable("sensorId") int sensorId, @PathVariable("topicId") int topicId,
                                        @RequestBody TopicRequest topicRequest);
 

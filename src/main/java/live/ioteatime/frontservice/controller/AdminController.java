@@ -34,12 +34,6 @@ public class AdminController {
      */
     @GetMapping
     public String adminPage(Model model) {
-
-        //사이드바 전용
-        GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        model.addAttribute("userInfo", userInfo);
-        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
-
         //Guest 유저 리스트 불러오기
         List<GetUserResponse> userList = adminAdaptor.requestGuestUsers().getBody();
         model.addAttribute("userList", userList);
@@ -65,12 +59,6 @@ public class AdminController {
      */
     @GetMapping("/users")
     public String userListPage(Model model) {
-
-        //사이드바
-        GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        model.addAttribute("userInfo", userInfo);
-        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
-
         //유저 정보
         List<GetUserResponse> userList = adminAdaptor.requestUsers().getBody();
         model.addAttribute("userList", userList);
@@ -86,12 +74,6 @@ public class AdminController {
      */
     @GetMapping("/budget")
     public String budgetPage(Model model) {
-
-        //사이드바
-        GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        model.addAttribute("userInfo", userInfo);
-        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
-
         //조직 예산
         OrganizationResponse budget = userAdaptor.requestBudget().getBody();
         model.addAttribute("budget", budget);
@@ -107,11 +89,6 @@ public class AdminController {
      */
     @GetMapping("/budgethistory")
     public String budgetHistoryPage(Model model) {
-        //사이드바
-        GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        model.addAttribute("userInfo", userInfo);
-        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
-
         //예산 내역
         List<BudgetHistoryResponse> budgetHistory = adminAdaptor.requestBudgetHistory().getBody();
         model.addAttribute("budgetHistory", budgetHistory);
@@ -127,11 +104,6 @@ public class AdminController {
      */
     @GetMapping("/organization")
     public String organizationPage(Model model) {
-        //사이드바
-        GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        model.addAttribute("userInfo", userInfo);
-        log.info("userId: {}, userName: {}, userRole={}", userInfo.getId(), userInfo.getName(), userInfo.getRole());
-
         //조직 내용
         OrganizationResponse organization = adminAdaptor.requestOrganization().getBody();
         model.addAttribute("organization", organization);
