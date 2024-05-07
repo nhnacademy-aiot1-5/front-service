@@ -41,7 +41,7 @@
 
                             places.forEach(place => {
                                 const option = document.createElement('option');
-                                option.value = place.id;
+                                option.value = place.place_id;
                                 option.textContent = place.place_name;
                                 placeSelect.appendChild(option);
                             });
@@ -235,7 +235,6 @@
                 const now = new Date();
                 const isoString = now.toISOString(); // "YYYY-MM-DDTHH:mm:ss.sssZ"
                 const isoStringWithoutMilliseconds = isoString.slice(0, -5);
-                console.log(isoStringWithoutMilliseconds);
                 const channelId = this.value;
                 fetch(`/daily-report/${channelId}`)
                     .then(response => response.json())
@@ -247,7 +246,6 @@
             });
 
             function updateChartData1(dailyData) {
-                console.log(dailyData)
                 const kwhData = dailyData.map(dto => dto.kwh);
                 const dates = dailyData.map(dto => dto.time);
 

@@ -16,10 +16,13 @@ public class UserInfoInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView model)
-            throws Exception{
-        if(!request.getMethod().equalsIgnoreCase("GET")) return;
+            throws Exception {
+        if (!request.getMethod().equalsIgnoreCase("GET") || model == null) return;
 
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
+        if (userInfo == null) {
+            throw new IllegalStateException();
+        }
         model.addObject("userInfo", userInfo);
     }
 }
