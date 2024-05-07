@@ -97,10 +97,6 @@ public class UserController {
     @GetMapping("/change-password")
     public String changePasswordPage(Model model){
 
-        // 사이드바
-//        GetUserResponse userInfo = userAdaptor.getUser().getBody();
-//        model.addAttribute("userInfo", userInfo);
-
         return "/authentication/change-password";
     }
 
