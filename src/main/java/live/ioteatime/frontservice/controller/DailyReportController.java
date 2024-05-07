@@ -59,6 +59,7 @@ public class DailyReportController {
 
     @GetMapping("/{channelId}")
     public ResponseEntity<DailyElectricitiesDto> getDailyElectricites(@PathVariable int channelId, Model model) {
+        System.out.println(userAdaptor.getDailyElectricities(LocalDateTime.now().toLocalDate().atTime(LocalTime.MIDNIGHT), channelId));
         List<DailyElectricityDto> dailyElectricityDtos = userAdaptor.getDailyElectricities(
                 LocalDateTime.now().toLocalDate().atTime(LocalTime.MIDNIGHT),
                 channelId
