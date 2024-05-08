@@ -13,10 +13,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MonthlyElectricityPageDto {
+public class MonthlyElectricitiesDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime time;
     private long kwh;
     private List<DailyElectricityDto> dailyElectricityDtos;
-    private List<MonthlyElectricityDto> monthlyElectricityDtos;
 }
