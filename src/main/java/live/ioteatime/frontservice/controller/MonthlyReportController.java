@@ -1,8 +1,6 @@
 package live.ioteatime.frontservice.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import live.ioteatime.frontservice.dto.MonthlyElectricityPageDto;
+import live.ioteatime.frontservice.dto.MonthlyElectricitiesDto;
 import live.ioteatime.frontservice.service.MonthlyReportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +26,11 @@ public class MonthlyReportController {
     }
 
     @GetMapping("/monthly-electricity/{localdate}")
-    public ResponseEntity<MonthlyElectricityPageDto> getElectricityByMonth(
+    public ResponseEntity<MonthlyElectricitiesDto> getElectricityByMonth(
             @PathVariable(name = "localdate")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             LocalDateTime localDateTime
-    ) throws JsonProcessingException {
+    ) {
         return ResponseEntity.ok(monthlyReportService.getElectricityByMonth(localDateTime));
     }
 
