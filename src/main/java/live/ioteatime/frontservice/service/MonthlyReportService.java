@@ -58,48 +58,55 @@ public class MonthlyReportService {
                 .collect(Collectors.toList());
 
         MonthlyElectricitiesDto monthlyElectricitiesDto = new MonthlyElectricitiesDto();
-        Map<LocalDateTime, Long> monthlyElectricitiesDtoMap = mainChannelIds.stream()
-                .flatMap(channelDto -> {
-                    try {
-                        MonthlyElectricityDto monthlyElectricityDto = userAdaptor.getMonthlyElectricity(localDateTime, channelDto.getId()).getBody();
-                        return Optional.ofNullable(monthlyElectricityDto).stream();
-                    } catch (FeignException.NotFound e) {
-                        return Stream.empty();
-                    }
-                })
-                .collect(Collectors.groupingBy(
-                        MonthlyElectricityDto::getTime,
-                        Collectors.summingLong(MonthlyElectricityDto::getKwh)
-                ));
-
         monthlyElectricitiesDto.setTime(localDateTime);
-        monthlyElectricitiesDto.setKwh(monthlyElectricitiesDtoMap.get(localDateTime));
+        monthlyElectricitiesDto.setKwh(getMonthlyKwh(mainChannelIds, localDateTime));
 
-        // 시간을 기준으로 kwh 값을 합산하여 Map으로 수집
+        List<DailyElectricityDto> dailyElectricityDtos = getDailyElectricities(mainChannelIds, localDateTime);
+        monthlyElectricitiesDto.setDailyElectricityDtos(filterCurrentMonth(dailyElectricityDtos, localDateTime));
+
+        return monthlyElectricitiesDto;
+    }
+
+    private Long getMonthlyKwh(List<ChannelDto> mainChannelIds, LocalDateTime dateTime) {
+        return mainChannelIds.stream()
+                .flatMap(channelDto -> fetchMonthlyElectricity(dateTime, channelDto.getId()))
+                .collect(Collectors.groupingBy(MonthlyElectricityDto::getTime, Collectors.summingLong(MonthlyElectricityDto::getKwh)))
+                .getOrDefault(dateTime, 0L);
+    }
+
+    private Stream<MonthlyElectricityDto> fetchMonthlyElectricity(LocalDateTime dateTime, Integer channelId) {
+        try {
+            MonthlyElectricityDto result = userAdaptor.getMonthlyElectricity(dateTime, channelId).getBody();
+            return Optional.ofNullable(result).stream();
+        } catch (FeignException.NotFound e) {
+            return Stream.empty();
+        }
+    }
+
+    private List<DailyElectricityDto> getDailyElectricities(List<ChannelDto> mainChannelIds, LocalDateTime dateTime) {
         Map<LocalDateTime, Long> dailyElectricitySummed = mainChannelIds.stream()
-                .flatMap(channelDto -> {
-                    try{
-                        return Objects.requireNonNull(
-                                userAdaptor.getDailyElectricities(localDateTime, channelDto.getId()).getBody()
-                        ).stream();
-                    } catch (FeignException.NotFound e) {
-                        return Stream.empty();
-                    }
-                })
+                .flatMap(channelDto -> fetchDailyElectricities(dateTime, channelDto.getId()))
                 .collect(Collectors.groupingBy(DailyElectricityDto::getTime, Collectors.summingLong(DailyElectricityDto::getKwh)));
 
-        // Map에서 DailyElectricityDto 리스트로 변환
-        List<DailyElectricityDto> dailyElectricityDtos = dailyElectricitySummed.entrySet().stream()
+        return dailyElectricitySummed.entrySet().stream()
                 .map(entry -> new DailyElectricityDto(entry.getKey(), entry.getValue()))
                 .sorted(Comparator.comparing(DailyElectricityDto::getTime))
                 .collect(Collectors.toList());
+    }
 
-        monthlyElectricitiesDto.setDailyElectricityDtos(
-                dailyElectricityDtos.stream()
-                        .filter(dailyElectricityDto -> dailyElectricityDto.getTime().getMonth().equals(localDateTime.getMonth()))
-                        .collect(Collectors.toList())
-        );
-        return monthlyElectricitiesDto;
+    private Stream<DailyElectricityDto> fetchDailyElectricities(LocalDateTime dateTime, Integer channelId) {
+        try {
+            List<DailyElectricityDto> results = userAdaptor.getDailyElectricities(dateTime, channelId).getBody();
+            return Optional.ofNullable(results).stream().flatMap(Collection::stream);
+        } catch (FeignException.NotFound e) {
+            return Stream.empty();
+        }
+    }
+
+    private List<DailyElectricityDto> filterCurrentMonth(List<DailyElectricityDto> electricityDtos, LocalDateTime dateTime) {
+        return electricityDtos.stream()
+                .filter(d -> d.getTime().getMonth() == dateTime.getMonth())
+                .collect(Collectors.toList());
     }
 
     private OrganizationResponse getOrganization() {
