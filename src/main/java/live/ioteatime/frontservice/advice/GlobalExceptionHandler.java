@@ -7,12 +7,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
     @ExceptionHandler(UnauthorizedAccessException.class)
     public String handleUnauthorizedException() {
         return "redirect:/login";
     }
-
 
     @ExceptionHandler(FeignException.Unauthorized.class)
     public String handleFeignUnauthorizedException() {
@@ -24,6 +22,10 @@ public class GlobalExceptionHandler {
         return "error/405";
     }
 
+    @ExceptionHandler(FeignException.Forbidden.class)
+    public String handleFeignForbiddenException() {
+        return "error/403";
+    }
 
 }
 
