@@ -36,10 +36,16 @@ public class MonthlyReportService {
                         Collectors.summingLong(MonthlyElectricityDto::getKwh)
                 ));
 
-        List<MonthlyElectricityDto> monthlyElectricityDtos = summedKwhByTime.entrySet().stream()
-                .map(entry -> new MonthlyElectricityDto(entry.getKey(), entry.getValue()))
-                .sorted(Comparator.comparing(MonthlyElectricityDto::getTime))
-                .collect(Collectors.toList());
+        List<MonthlyElectricityDto> monthlyElectricityDtos =
+                summedKwhByTime.entrySet().stream()
+                        .map(entry -> {
+                            MonthlyElectricityDto monthlyElectricityDto = new MonthlyElectricityDto();
+                            monthlyElectricityDto.setTime(entry.getKey());
+                            monthlyElectricityDto.setKwh(entry.getValue());
+                            return monthlyElectricityDto;
+                        })
+                        .sorted(Comparator.comparing(MonthlyElectricityDto::getTime))
+                        .collect(Collectors.toList());
 
         model.addAttribute("recent12monthElectricities", monthlyElectricityDtos);
         model.addAttribute("budget", organization.getElectricityBudget());
