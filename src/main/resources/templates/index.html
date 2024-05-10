@@ -9,7 +9,6 @@
         <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
         <script src="https://fastly.jsdelivr.net/npm/apexcharts"></script>
         <script src="https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
 
     <body>
@@ -107,92 +106,125 @@
                                                 <div class="col-12">
                                                     <div id="gauge-chart"></div>
                                                     <script th:inline="javascript">
-                                                        var billPercentage = [[${budget}]];
-                                                        console.log(billPercentage.electricity_budget)
-                                                        // 차액 * 100 / 설정 요금
-                                                        var options1 = {
-                                                            series: [70],
-                                                            chart: {
-                                                                height: 200,
-                                                                type: 'radialBar',
-                                                                toolbar: {
-                                                                    show: true
-                                                                }
-                                                            },
-                                                            plotOptions: {
-                                                                radialBar: {
-                                                                    startAngle: -135,
-                                                                    endAngle: 225,
-                                                                    hollow: {
-                                                                        margin: 0,
-                                                                        size: '60%',
-                                                                        background: '#fff',
-                                                                        image: undefined,
-                                                                        imageOffsetX: 0,
-                                                                        imageOffsetY: 0,
-                                                                        position: 'front',
-                                                                        dropShadow: {
-                                                                            enabled: true,
-                                                                            top: 3,
-                                                                            left: 0,
-                                                                            blur: 4,
-                                                                            opacity: 0.24
-                                                                        }
-                                                                    },
-                                                                    track: {
-                                                                        background: '#fff',
-                                                                        strokeWidth: '0%',
-                                                                        margin: 0, // margin is in pixels
-                                                                        dropShadow: {
-                                                                            enabled: true,
-                                                                            top: 0,
-                                                                            left: 0,
-                                                                            blur: 4,
-                                                                            opacity: 0.35
-                                                                        }
-                                                                    },
+                                                        function addAllBills(dailyElectricities) {
+                                                            let sum = 0;
+                                                            dailyElectricities.forEach(dto => {
+                                                                sum = sum + dto.bill;
+                                                            });
+                                                            return sum;
+                                                        }
 
-                                                                    dataLabels: {
-                                                                        show: true,
-                                                                        name: {
-                                                                            offsetY: -10,
-                                                                            show: true,
-                                                                            color: '#888',
-                                                                            fontSize: '16px'
-                                                                        },
-                                                                        value: {
-                                                                            formatter: function (val) {
-                                                                                return parseInt(val) + '%';
+                                                        function getPercentage(dailyElectricities) {
+                                                            if (dailyElectricities.length < 2) {
+                                                                return 0; // 데이터가 1개 이하인 경우 비교할 수 없으므로 0을 반환
+                                                            }
+                                                            const last = dailyElectricities[dailyElectricities.length - 1].bill;
+                                                            const secondLast = dailyElectricities[dailyElectricities.length - 2].bill;
+                                                            return (last - secondLast) / secondLast * 100;
+                                                        }
+
+                                                        const date = new Date();
+                                                        console.log(date.toISOString().slice(0, 10) + 'T00:00:00');
+                                                        const localDate = date.toISOString().slice(0, 10) + 'T00:00:00'
+                                                        var bill = 0;
+                                                        var budget = [[${budget}]].electricity_budget;
+
+                                                        fetch(`/monthly-electricity/${localDate}`)
+                                                            .then(response => response.json())
+                                                            .then(data => {
+                                                                const dailyElectricities = data.dailyElectricityDtos;
+                                                                bill = addAllBills(dailyElectricities);
+                                                                var percentage = (budget - bill) * 100 / budget;
+                                                                console.log(bill);
+                                                                document.getElementById("bill").textContent = bill.toString();
+                                                                document.getElementById("remain-budget").textContent =
+                                                                    '₩ ' + (budget - bill).toString();
+                                                                let billPercentage = getPercentage(dailyElectricities);
+                                                                document.getElementById("bill-percentage").textContent =
+                                                                    billPercentage >= 0 ? '+' + billPercentage + '%' : billPercentage + '%';
+                                                                var options1 = {
+                                                                    series: [percentage],
+                                                                    chart: {
+                                                                        height: 200,
+                                                                        type: 'radialBar',
+                                                                        toolbar: {
+                                                                            show: true
+                                                                        }
+                                                                    },
+                                                                    plotOptions: {
+                                                                        radialBar: {
+                                                                            startAngle: -135,
+                                                                            endAngle: 225,
+                                                                            hollow: {
+                                                                                margin: 0,
+                                                                                size: '60%',
+                                                                                background: '#fff',
+                                                                                image: undefined,
+                                                                                imageOffsetX: 0,
+                                                                                imageOffsetY: 0,
+                                                                                position: 'front',
+                                                                                dropShadow: {
+                                                                                    enabled: true,
+                                                                                    top: 3,
+                                                                                    left: 0,
+                                                                                    blur: 4,
+                                                                                    opacity: 0.24
+                                                                                }
                                                                             },
-                                                                            color: '#111',
-                                                                            fontSize: '20px',
-                                                                            show: true,
+                                                                            track: {
+                                                                                background: '#fff',
+                                                                                strokeWidth: '0%',
+                                                                                margin: 0, // margin is in pixels
+                                                                                dropShadow: {
+                                                                                    enabled: true,
+                                                                                    top: 0,
+                                                                                    left: 0,
+                                                                                    blur: 4,
+                                                                                    opacity: 0.35
+                                                                                }
+                                                                            },
+
+                                                                            dataLabels: {
+                                                                                show: true,
+                                                                                name: {
+                                                                                    offsetY: -10,
+                                                                                    show: true,
+                                                                                    color: '#888',
+                                                                                    fontSize: '16px'
+                                                                                },
+                                                                                value: {
+                                                                                    formatter: function (val) {
+                                                                                        return parseInt(val) + '%';
+                                                                                    },
+                                                                                    color: '#111',
+                                                                                    fontSize: '20px',
+                                                                                    show: true,
+                                                                                }
+                                                                            }
                                                                         }
-                                                                    }
-                                                                }
-                                                            },
-                                                            fill: {
-                                                                type: 'gradient',
-                                                                gradient: {
-                                                                    shade: 'dark',
-                                                                    type: 'horizontal',
-                                                                    shadeIntensity: 0.5,
-                                                                    gradientToColors: ['#ABE5A1'],
-                                                                    inverseColors: true,
-                                                                    opacityFrom: 1,
-                                                                    opacityTo: 1,
-                                                                    stops: [0, 100]
-                                                                }
-                                                            },
-                                                            stroke: {
-                                                                lineCap: 'round'
-                                                            },
-                                                            labels: ['Percent'],
-                                                        };
+                                                                    },
+                                                                    fill: {
+                                                                        type: 'gradient',
+                                                                        gradient: {
+                                                                            shade: 'dark',
+                                                                            type: 'horizontal',
+                                                                            shadeIntensity: 0.5,
+                                                                            gradientToColors: ['#ABE5A1'],
+                                                                            inverseColors: true,
+                                                                            opacityFrom: 1,
+                                                                            opacityTo: 1,
+                                                                            stops: [0, 100]
+                                                                        }
+                                                                    },
+                                                                    stroke: {
+                                                                        lineCap: 'round'
+                                                                    },
+                                                                    labels: ['Percent'],
+                                                                };
 
-                                                        var chart1 = new ApexCharts(document.querySelector("#gauge-chart"), options1);
-                                                        chart1.render();
-
+                                                                var chart1 = new ApexCharts(document.querySelector("#gauge-chart"), options1);
+                                                                chart1.render();
+                                                            })
                                                     </script>
                                                 </div>
                                             </div>
@@ -208,13 +240,13 @@
                                                     <h5 class="card-title mb-9 fw-semibold">사용 요금</h5>
                                                     <div class="row align-items-center">
                                                         <div class="col-20">
-                                                            <h2 class="fs-2 fw-semibold mb-3 text-nowrap">₩
+                                                            <h2 class="fs-2 fw-semibold mb-3 text-nowrap" id="bill">₩
                                                                 112,136,358</h2>
                                                             <div class="d-flex align-items-center mb-3">
                                                                 <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
                                                                    style="font-size: 0.5rem;"></i>
-                                                                <p class="me-1 fs-2 mb-0">+9%</p>
-                                                                <p class="fs-1 mb-0">지난 달</p>
+                                                                <p class="me-1 fs-2 mb-0" id="bill-percentage">+9%</p>
+                                                                <p class="fs-1 mb-0">작일</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -250,12 +282,14 @@
                                                     <h5 class="card-title mb-9 fw-semibold">요금 차액</h5>
                                                     <div class="row align-items-center">
                                                         <div class="col-20">
-                                                            <h2 class="fs-2 fw-semibold mb-3 text-nowrap">₩ 136,358</h2>
+                                                            <h2 class="fs-2 fw-semibold mb-3 text-nowrap"
+                                                                id="remain-budget">₩ 136,358</h2>
                                                             <div class="d-flex align-items-center mb-3">
                                                                 <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
                                                                    style="font-size: 0.5rem;"></i>
-                                                                <p class="me-1 fs-2 mb-0">+9%</p>
-                                                                <p class="fs-1 mb-0">지난 달</p>
+                                                                <p class="me-1 fs-2 mb-0" id="remain-budget-percentage">
+                                                                    남은</p>
+                                                                <p class="fs-2 mb-0"> 금액</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -327,26 +361,28 @@
                                     </div>
                                 </div>
 
-                        <!-- 차액 -->
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row alig n-items-start">
-                                        <div class="col-8">
-                                            <h5 class="card-title mb-9 fw-semibold"> 차액 </h5>
-                                            <h2 class="fw-semibold mb-3">₩ 16,358</h2>
-                                            <div class="d-flex align-items-center mb-3">
-                                                <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
-                                                   style="font-size: 1.5rem;"></i>
-                                                <p class="me-1 fs-5 mb-0">-9%</p>
-                                                <p class="fs-5 mb-0">지난 달</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="d-flex justify-content-end">
-                                                <div
-                                                        class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
-                                                    <i class="ti ti-currency-dollar fs-6"></i>
+                                <!-- 차액 -->
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row alig n-items-start">
+                                                <div class="col-8">
+                                                    <h5 class="card-title mb-9 fw-semibold"> 차액 </h5>
+                                                    <h2 class="fw-semibold mb-3">₩ 16,358</h2>
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
+                                                           style="font-size: 1.5rem;"></i>
+                                                        <p class="me-1 fs-5 mb-0">-9%</p>
+                                                        <p class="fs-5 mb-0">지난 달</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="d-flex justify-content-end">
+                                                        <div
+                                                                class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
+                                                            <i class="ti ti-currency-dollar fs-6"></i>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -355,25 +391,23 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="row">
+                    <div class="row">
 
-                <!-- 그래프 -->
-                <div class="col-lg-9 d-flex align-items-strech">
-                    <div class="card w-100">
-                        <div class="card-body">
-                            <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                                <div class="mb-3 mb-sm-0">
-                                    <h5 class="card-title fw-semibold">실시간 전력량</h5>
+                        <!-- 그래프 -->
+                        <div class="col-lg-9 d-flex align-items-strech">
+                            <div class="card w-100">
+                                <div class="card-body">
+                                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                                        <div class="mb-3 mb-sm-0">
+                                            <h5 class="card-title fw-semibold">실시간 전력량</h5>
+                                        </div>
+                                    </div>
+                                    <!-- 차트 -->
+                                    <div id="realtimeChart"></div>
                                 </div>
                             </div>
-                            <!-- 차트 -->
-                            <div id="realtimeChart"></div>
                         </div>
-                    </div>
-                </div>
 
                 <!-- 사용 전력량 -->
                 <div class="col-md-3">
@@ -422,102 +456,103 @@
 </div>
 
 
-<!--모달-->
-<div class="modal fade" id="settingPriceModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">현재 설정 요금</h5>
-                        <h4 class="fw-semibold mb-3"
-                            th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">현재 설정 요금</h4>
+        <!--모달-->
+        <div class="modal fade" id="settingPriceModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">현재 설정 요금</h5>
+                                <h4 class="fw-semibold mb-3"
+                                    th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">현재 설정
+                                    요금</h4>
+                            </div>
+                        </div>
+                        <p><br>
+                        <form th:action="@{/budget}" th:method="PUT" id="resetTargetAmountForm">
+                            <div class="mb-3">
+                                <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>
+                                <div class="input-group" style="width: 70%;">
+                                    <input type="number" class="form-control" id="budget" name="budget"
+                                           aria-describedby="amountAddon">
+                                    <span class="input-group-text" id="amountAddon">원</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="submit" class="btn btn-primary" form="resetTargetAmountForm">저장</button>
                     </div>
                 </div>
-                <p><br>
-                <form th:action="@{/budget}" th:method="PUT" id="resetTargetAmountForm">
-                    <div class="mb-3">
-                        <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>
-                        <div class="input-group" style="width: 70%;">
-                            <input type="number" class="form-control" id="budget" name="budget"
-                                   aria-describedby="amountAddon">
-                            <span class="input-group-text" id="amountAddon">원</span>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                <button type="submit" class="btn btn-primary" form="resetTargetAmountForm">저장</button>
             </div>
         </div>
-    </div>
-</div>
-<script>
-    let options = {
-        chart: {
-            type: 'bar',
-        },
-        plotOptions: {
-            bar: {
-                horizontal: true,
-            },
-        },
-        series: [
-            {
-                name: 'Electricity',
-                data: [],
-            },
-        ],
-        xaxis: {
-            categories: [],
-        },
-        title: {
-            text: '실시간 전력량 Top 10',
-            align: 'center',
-        },
-    };
-
-    let chart = new ApexCharts(document.querySelector('#realtimeChart'), options);
-
-    chart.render();
-
-    function fetchDataAndUpdateChart() {
-        fetch('/top10')
-            .then((response) => response.json())
-            .then((data) => {
-                chart.updateSeries([
+        <script>
+            let options = {
+                chart: {
+                    type: 'bar',
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                    },
+                },
+                series: [
                     {
                         name: 'Electricity',
-                        data: data.map((item) => item.w),
+                        data: [],
                     },
-                ]);
+                ],
+                xaxis: {
+                    categories: [],
+                },
+                title: {
+                    text: '실시간 전력량 Top 10',
+                    align: 'center',
+                },
+            };
 
-                chart.updateOptions({
-                    xaxis: {
-                        categories: data.map((item) => `${item.place}\n${item.channel}`),
-                    },
-                });
-            });
-    }
+            let chart = new ApexCharts(document.querySelector('#realtimeChart'), options);
 
-    fetchDataAndUpdateChart();
+            chart.render();
 
-    setInterval(fetchDataAndUpdateChart, 60000);
-</script>
+            function fetchDataAndUpdateChart() {
+                fetch('/top10')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        chart.updateSeries([
+                            {
+                                name: 'Electricity',
+                                data: data.map((item) => item.w),
+                            },
+                        ]);
 
-<script>
-    function checkRoleAndOpenModal() {
-        var updateFeeDiv = document.getElementById('update-fee');
-        var role = updateFeeDiv.getAttribute('data-role');
-        if (role === 'ADMIN') {
-            openSetBudgetModal();
-        }
-    }
+                        chart.updateOptions({
+                            xaxis: {
+                                categories: data.map((item) => `${item.place}\n${item.channel}`),
+                            },
+                        });
+                    });
+            }
+
+            fetchDataAndUpdateChart();
+
+            setInterval(fetchDataAndUpdateChart, 60000);
+        </script>
+
+        <script>
+            function checkRoleAndOpenModal() {
+                var updateFeeDiv = document.getElementById('update-fee');
+                var role = updateFeeDiv.getAttribute('data-role');
+                if (role === 'ADMIN') {
+                    openSetBudgetModal();
+                }
+            }
 
     function openSetBudgetModal() {
         var myModal = new bootstrap.Modal(document.getElementById('settingPriceModal'), {
@@ -551,26 +586,25 @@
     });
 </script>
 
-<script>
-    var options2 = {
-        chart: {
-            type: 'line'
-        },
-        series: [{
-            name: 'sales',
-            data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
-        }],
-        xaxis: {
-            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
-        }
-    }
+        <script>
+            var options2 = {
+                chart: {
+                    type: 'line'
+                },
+                series: [{
+                    name: 'sales',
+                    data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
+                }],
+                xaxis: {
+                    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
+                }
+            }
 
-    var chart2 = new ApexCharts(document.querySelector("#chart"), options2);
+            var chart2 = new ApexCharts(document.querySelector("#chart"), options2);
 
-    chart2.render();
+            chart2.render();
 
-</script>
-
-</body>
+        </script>
+    </body>
 
 </html>

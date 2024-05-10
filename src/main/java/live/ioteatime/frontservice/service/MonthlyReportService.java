@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -80,7 +81,7 @@ public class MonthlyReportService {
                 .getOrDefault(dateTime, 0L);
     }
 
-    private Stream<MonthlyElectricityDto> fetchMonthlyElectricity(LocalDateTime dateTime, Integer channelId) {
+    private Stream<MonthlyElectricityDto> fetchMonthlyElectricity(LocalDateTime dateTime, int channelId) {
         try {
             MonthlyElectricityDto result = userAdaptor.getMonthlyElectricity(dateTime, channelId).getBody();
             return Optional.ofNullable(result).stream();
@@ -90,17 +91,24 @@ public class MonthlyReportService {
     }
 
     private List<DailyElectricityDto> getDailyElectricities(List<ChannelDto> mainChannelIds, LocalDateTime dateTime) {
-        Map<LocalDateTime, Long> dailyElectricitySummed = mainChannelIds.stream()
+        Map<LocalDateTime, DailyElectricityDto> dailyElectricitySummed = mainChannelIds.stream()
                 .flatMap(channelDto -> fetchDailyElectricities(dateTime, channelDto.getId()))
-                .collect(Collectors.groupingBy(DailyElectricityDto::getTime, Collectors.summingLong(DailyElectricityDto::getKwh)));
+                .collect(Collectors.toMap(
+                        DailyElectricityDto::getTime,
+                        Function.identity(),
+                        (dto1, dto2) -> new DailyElectricityDto(
+                                dto1.getTime(),
+                                dto1.getKwh() + dto2.getKwh(),
+                                dto1.getBill() + dto2.getBill()
+                        )
+                ));
 
-        return dailyElectricitySummed.entrySet().stream()
-                .map(entry -> new DailyElectricityDto(entry.getKey(), entry.getValue()))
+        return dailyElectricitySummed.values().stream()
                 .sorted(Comparator.comparing(DailyElectricityDto::getTime))
                 .collect(Collectors.toList());
     }
 
-    private Stream<DailyElectricityDto> fetchDailyElectricities(LocalDateTime dateTime, Integer channelId) {
+    private Stream<DailyElectricityDto> fetchDailyElectricities(LocalDateTime dateTime, int channelId) {
         try {
             List<DailyElectricityDto> results = userAdaptor.getDailyElectricities(dateTime, channelId).getBody();
             return Optional.ofNullable(results).stream().flatMap(Collection::stream);
