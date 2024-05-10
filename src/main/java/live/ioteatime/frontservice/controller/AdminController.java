@@ -141,14 +141,14 @@ public class AdminController {
         return "redirect:/admin/budget";
     }
 
-    @PutMapping("/organizationname")
+    @PutMapping("/organization-name")
     public String updateOrganizationName(@RequestParam String name){
         //조직 이름 변경
         adminAdaptor.updateOrganizationName(name);
         return "redirect:/admin/organization";
     }
 
-    @PutMapping("/organizationcode")
+    @PutMapping("/organization-code")
     public String updateOrganizationCode(@RequestParam String code){
         //조직 코드 변경
         adminAdaptor.updateOrganizationCode(code);
