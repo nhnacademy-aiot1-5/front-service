@@ -109,7 +109,7 @@
                                                         var billPercentage = [[${budget}]];
                                                         console.log(billPercentage.electricity_budget)
                                                         // 차액 * 100 / 설정 요금
-                                                        var options = {
+                                                        var options1 = {
                                                             series: [70],
                                                             chart: {
                                                                 height: 200,
@@ -189,8 +189,8 @@
                                                             labels: ['Percent'],
                                                         };
 
-                                                        var chart = new ApexCharts(document.querySelector("#gauge-chart"), options);
-                                                        chart.render();
+                                                        var chart1 = new ApexCharts(document.querySelector("#gauge-chart"), options1);
+                                                        chart1.render();
 
                                                     </script>
                                                 </div>
@@ -518,7 +518,7 @@
 </script>
 
 <script>
-    var options = {
+    var options2 = {
         chart: {
             type: 'line'
         },
@@ -531,9 +531,9 @@
         }
     }
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    var chart2 = new ApexCharts(document.querySelector("#chart"), options2);
 
-    chart.render();
+    chart2.render();
 
 </script>
 </body>
