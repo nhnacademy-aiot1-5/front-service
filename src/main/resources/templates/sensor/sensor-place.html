@@ -71,6 +71,7 @@
                                     <tr>
                                         <th>NO</th>
                                         <th>장소</th>
+                                        <th>MODBUS 채널 확인</th>
                                         <th>장소 수정</th>
                                         <th>삭제</th>
                                     </tr>
@@ -79,6 +80,11 @@
                                     <tr th:each="place, iterStat : ${placeList}">
                                         <td th:text="${iterStat.count}"></td>
                                         <td th:text="${place.placeName}"></td>
+                                        <td>
+                                            <form th:action="@{/sensors/modbus/channels/{placeId}(placeId=${place.id})}" th:method="GET">
+                                                <button type="submit" class="btn btn-primary">MODBUS 채널 확인</button>
+                                            </form>
+                                        </td>
                                         <td>
                                             <button type="button" class="btn btn-primary"
                                                     th:onclick="'openUpdatePlaceModal(' + ${place.id} + ');'">장소 수정
@@ -118,8 +124,7 @@
                         <div class="input-group" style="width: 100%;">
                             <input type="text" class="form-control" id="createPlaceName" name="placeName"
                                    aria-describedby="amountAddon" placeholder="장소 이름">
-                            <input type="hidden" th:id="organizationId"
-                                   th:name="organizationId" th:value="${userInfo.organization.id}">
+                            <input type="hidden" th:id="organizationId" th:name="organizationId" th:value="${userInfo.organization.id}">
                         </div>
                     </div>
                 </form>
