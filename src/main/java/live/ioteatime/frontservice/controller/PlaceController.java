@@ -3,7 +3,6 @@ package live.ioteatime.frontservice.controller;
 import live.ioteatime.frontservice.adaptor.PlaceAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.PlaceDto;
-import live.ioteatime.frontservice.dto.request.PlaceRequest;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +31,8 @@ public class PlaceController {
     }
 
     @PostMapping
-    public String createPlace(@ModelAttribute PlaceRequest placeRequest) {
-        placeAdaptor.createPlace(placeRequest);
+    public String createPlace(@ModelAttribute PlaceDto placeDto) {
+        placeAdaptor.createPlace(placeDto);
         return "redirect:/places";
     }
 

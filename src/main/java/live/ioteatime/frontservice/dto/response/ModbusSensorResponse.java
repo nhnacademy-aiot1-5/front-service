@@ -7,10 +7,11 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class GetModbusSensorResponse {
+public class ModbusSensorResponse {
+    @JsonProperty("sensor_id")
     private int id;
     @JsonProperty("sensor_name")
-    private String name;
+    private String sensorName;
     @JsonProperty("sensor_model_name")
     private String modelName;
     private String ip;

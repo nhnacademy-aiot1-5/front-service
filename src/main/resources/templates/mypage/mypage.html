@@ -75,18 +75,11 @@
                                     onclick="showModal()">
                                 수정
                             </button>
+                            <div style="height: 20px;"></div>
                             <form action="change-password" method="get">
                                 <button class="btn btn-primary"
                                         style="font-size: 14px; padding: 6px 12px;">
                                     비밀번호 변경
-                                </button>
-                            </form>
-                            <div style="height: 20px;"></div>
-                            <form method="post" action="/upgrade-request" th:if="${userInfo.role.name() == 'GUEST'}">
-                                <button class="btn btn-primary"
-                                        style="font-size: 14px; padding: 6px 12px;"
-                                        type="submit">
-                                    조직 등록 승인 요청
                                 </button>
                             </form>
                         </div>

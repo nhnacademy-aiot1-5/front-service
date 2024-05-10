@@ -32,6 +32,13 @@
                     <td class="mb-4" style="padding: 10px;">
                         <button class="btn btn-primary"
                                 style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/places'">
+                            장소 관리
+                        </button>
+                    </td>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
                                 onclick="location.href='/sensors/modbus'">
                             MODBUS 센서 관리
                         </button>
@@ -50,11 +57,10 @@
                     <div class="rounded-lg border bg-white text-dark shadow-sm">
                         <div class="card">
                             <div class="card-header">
-                                <h2 class="card-title">MQTT 센서 관리
-                                    <button class="btn btn-secondary" onclick="location.href='/sensors/mqtt/add'">
-                                        센서 등록
-                                    </button>
-                                </h2>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <h2 class="card-title">MQTT 센서 관리</h2>
+                                    <button class="btn btn-primary" onclick="location.href='/sensors/mqtt/add'">센서 등록</button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <table id="table" class="table table-striped">
@@ -81,7 +87,9 @@
                                         <td>
                                             <form th:action="@{/sensor/mqtt/work/{sensorId}(sensorId=${sensor.id})}"
                                                   th:method="PUT" onsubmit="return confirmRequest();">
-                                                <button type="submit" class="btn btn-primary" th:text="${sensor.alive == 'UP'} ? '중지' : '동작'">권한 변경</button>
+                                                <button type="submit" class="btn btn-primary"
+                                                        th:text="${sensor.alive == 'UP'} ? '중지' : '동작'">권한 변경
+                                                </button>
                                             </form>
                                         </td>
                                         <td>

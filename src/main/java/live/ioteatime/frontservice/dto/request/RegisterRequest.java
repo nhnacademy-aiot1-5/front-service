@@ -23,7 +23,9 @@ public class RegisterRequest {
     @NotBlank
     private String name;
     @NotEmpty
+    @JsonProperty("organization_name")
     private String organizationName;
     @NotEmpty
+    @JsonProperty("organization_code")
     private String organizationCode;
 }
