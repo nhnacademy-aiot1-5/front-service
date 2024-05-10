@@ -62,7 +62,7 @@
                             </div>
                             <div class="card-body">
 
-                                <form id="add-modbus-sensor" method="post" action="/sensors/modbus" onsubmit="return validateForm()">
+                                <form id="add-modbus-sensor" method="post" action="/sensors/modbus">
                                     <div class="mb-3 d-flex align-items-center">
                                         <div class="fw-semibold me-3" style="min-width: 70px;">센서 모델</div>
                                         <div class="dropdown">
@@ -81,19 +81,11 @@
                                     </div>
                                     <div class="mb-3 d-flex align-items-center">
                                         <div class="fw-semibold me-3" style="min-width: 70px;">ip</div>
-                                        <input type="text" class="form-control" id="ip" name="ip" required>
+                                        <input type="text" class="form-control" id="ip" name="ip">
                                     </div>
                                     <div class="mb-3 d-flex align-items-center">
                                         <div class="fw-semibold me-3" style="min-width: 70px;">port</div>
-                                        <input type="text" class="form-control" id="port" name="port" required>
-                                    </div>
-                                    <div class="mb-3 d-flex align-items-center">
-                                        <div class="fw-semibold me-3" style="min-width: 70px;">채널수</div>
-                                        <input type="text" class="form-control" id="channelCount" name="channelCount" required>
-                                    </div>
-                                    <div class="mb-3 d-flex align-items-center">
-                                        <div class="fw-semibold me-3" style="min-width: 70px;">센서 설명</div>
-                                        <input type="text" class="form-control" id="description" name="description">
+                                        <input type="number" class="form-control" id="port" name="port" min="0" max="65535" required>
                                     </div>
                                     <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">저장</button>
                                 </form>
@@ -119,8 +111,6 @@
 
         var input = document.getElementById('modelName');
         input.value = item.textContent;
-
-
     }
 
     function updatePlaceBtn(item) {
@@ -129,44 +119,6 @@
 
         var input = document.getElementById('placeId');
         input.value = item.getAttribute('data-value');
-    }
-
-    function validateForm() {
-        var modelName = document.getElementById('modelName').value;
-        var sensorName = document.getElementById('sensorName').value;
-        var ip = document.getElementById('ip').value;
-        var port = document.getElementById('port').value;
-        var channelCount = document.getElementById('channelCount').value;
-
-        var errorMessages = [];
-
-        // modelName이 초기 텍스트인 "센서 모델 선택"일 경우를 검사합니다.
-        if (modelName === '센서 모델 선택' || modelName.trim() === '') {
-            errorMessages.push('센서 모델을 선택해주세요.');
-        }
-
-        if (sensorName.trim() === '') {
-            errorMessages.push('센서 이름을 입력해주세요.');
-        }
-
-        if (ip.trim() === '') {
-            errorMessages.push('IP를 입력해주세요.');
-        }
-
-        if (port.trim() === '') {
-            errorMessages.push('포트를 입력해주세요.');
-        }
-
-        if (channelCount.trim() === '') {
-            errorMessages.push('채널 수를 입력해주세요.');
-        }
-
-        if (errorMessages.length > 0) {
-            alert(errorMessages.join('\n'));
-            return false; // 폼 제출을 중단합니다.
-        }
-
-        return true; // 유효성 검사가 통과되었습니다.
     }
 </script>
 </body>
