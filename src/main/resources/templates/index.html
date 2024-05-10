@@ -528,28 +528,27 @@
 </script>
 
 <script>
-// Fetch new data every minute
-setInterval(fetchDataAndUpdateUsage, 60000);
+    setInterval(fetchDataAndUpdateUsage, 60000);
 
-function fetchDataAndUpdateUsage() {
-$.ajax({
-    url : "/kwh",
-    type : "GET",
-    success : function(result){
-        $('#lastMonth').text(result.lastMonthKwh + ' kwh');
-        $('#todayKwh').text(result.todayKwh + ' kwh');
-        $('#yesterdayKwh').text(result.yesterdayKwh + ' kwh');
-        $('#thisMonthKwh').text(result.thisMonthKwh + ' kwh');
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-        console.log(textStatus, errorThrown);
+    function fetchDataAndUpdateUsage() {
+        $.ajax({
+            url : "/kwh",
+            type : "GET",
+            success : function(result){
+                $('#lastMonth').text(result.lastMonthKwh + ' kwh');
+                $('#todayKwh').text(result.todayKwh + ' kwh');
+                $('#yesterdayKwh').text(result.yesterdayKwh + ' kwh');
+                $('#thisMonthKwh').text(result.thisMonthKwh + ' kwh');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
     }
-});
-}
 
-$(document).ready(function() {
-fetchDataAndUpdateUsage();
-});
+    $(document).ready(function() {
+        fetchDataAndUpdateUsage();
+    });
 </script>
 
 <script>
