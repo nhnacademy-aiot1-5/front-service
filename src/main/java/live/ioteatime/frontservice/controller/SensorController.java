@@ -77,6 +77,12 @@ public class SensorController {
         return "/sensor/sensor-modbus-detail";
     }
 
+    /**
+     * 장소에 따른 채널들을 불러옵니다.
+     * @param model
+     * @param placeId 장소 아이디입니다.
+     * @return
+     */
     @GetMapping("/modbus/channels/{placeId}")
     public String getChannelsByPlace(Model model, @PathVariable("placeId") int placeId) {
         List<ChannelDto> modbusChannelInfo = modbusSensorAdaptor.getChannelsByPlaceId(placeId).getBody();
@@ -139,7 +145,7 @@ public class SensorController {
     }
 
     /**
-     * MODBUS Sensor의 정보를 수정합니다.
+     * MODBUS 센서의 정보를 수정합니다.
      * @param sensorId            수정할 센서 아이디입니다.
      * @param updateModbusRequest 수정할 정보가 담겨있는 Request입니다.
      * @return
