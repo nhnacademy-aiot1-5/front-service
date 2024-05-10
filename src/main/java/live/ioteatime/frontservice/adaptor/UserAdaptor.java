@@ -51,10 +51,10 @@ public interface UserAdaptor {
     ResponseEntity<String> updateUserPassword(@RequestBody ChangePasswordRequest changePasswordRequest);
 
     @GetMapping("/api/monthly/electricity")
-    ResponseEntity<String> getMonthlyElectricity(@RequestParam
-                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                 LocalDateTime localDateTime,
-                                                 @RequestParam int channelId);
+    ResponseEntity<MonthlyElectricityDto> getMonthlyElectricity(@RequestParam
+                                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                LocalDateTime localDateTime,
+                                                                @RequestParam int channelId);
 
     @GetMapping("/api/daily/electricities")
     ResponseEntity<List<DailyElectricityDto>> getDailyElectricities(@RequestParam

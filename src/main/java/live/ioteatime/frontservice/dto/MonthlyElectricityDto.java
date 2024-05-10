@@ -12,4 +12,5 @@ import java.time.LocalDateTime;
 public class MonthlyElectricityDto {
     private LocalDateTime time;
     private Long kwh;
+    private Long bill;
 }

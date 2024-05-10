@@ -1,18 +1,21 @@
 package live.ioteatime.frontservice.controller;
 
 import live.ioteatime.frontservice.adaptor.AdminAdaptor;
+import live.ioteatime.frontservice.adaptor.ElectricityAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.domain.Role;
+import live.ioteatime.frontservice.dto.KwhDto;
+import live.ioteatime.frontservice.dto.RealtimeElectricityResponseDto;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
+import live.ioteatime.frontservice.service.ElectricityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -21,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class IndexController {
     private final UserAdaptor userAdaptor;
     private final AdminAdaptor adminAdaptor;
+    private final ElectricityAdaptor electricityAdaptor;
+    private final ElectricityService electricityService;
 
     @GetMapping
     public String index(Model model) {
@@ -34,6 +39,12 @@ public class IndexController {
         //조직 예산
         OrganizationResponse budget = userAdaptor.requestBudget().getBody();
         model.addAttribute("budget", budget);
+
+        model.addAttribute("lastMonthKwh", electricityAdaptor.getLastMonthElectricity().getBody().getKwh());
+        model.addAttribute("todayKwh", electricityAdaptor.getCurrentDayElectricity().getBody().getKwh());
+        model.addAttribute("yesterdayKwh", electricityAdaptor.getLastDayElectricity().getBody().getKwh());
+        model.addAttribute("thisMonthKwh", electricityAdaptor.getcurrentMonthElectricity().getBody().getKwh());
+        model.addAttribute("wTop10", electricityService.getTop10Electricity());
         return "index";
     }
 
@@ -43,5 +54,22 @@ public class IndexController {
         //목표금액 변경
         adminAdaptor.updateBudget(budget);
         return "redirect:/";
+    }
+
+    @GetMapping("/top10")
+    @ResponseBody
+    public List<RealtimeElectricityResponseDto> getTop10(){
+        return electricityService.getTop10Electricity();
+    }
+
+    @GetMapping("/kwh")
+    @ResponseBody
+    public KwhDto getKwh(){
+        long lastMonthKwh = electricityAdaptor.getLastMonthElectricity().getBody().getKwh();
+        long thisMonthKwh = electricityAdaptor.getcurrentMonthElectricity().getBody().getKwh();
+        long yesterdayKwh = electricityAdaptor.getLastDayElectricity().getBody().getKwh();
+        long todayKwh = electricityAdaptor.getCurrentDayElectricity().getBody().getKwh();
+
+        return new KwhDto(lastMonthKwh, thisMonthKwh, todayKwh, yesterdayKwh);
     }
 }
