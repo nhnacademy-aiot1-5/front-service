@@ -326,28 +326,26 @@
                                     </div>
                                 </div>
 
-                                <!-- 차액 -->
-                                <div class="col-lg-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row alig n-items-start">
-                                                <div class="col-8">
-                                                    <h5 class="card-title mb-9 fw-semibold"> 차액 </h5>
-                                                    <h2 class="fw-semibold mb-3">₩ 16,358</h2>
-                                                    <div class="d-flex align-items-center mb-3">
-                                                        <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
-                                                           style="font-size: 1.5rem;"></i>
-                                                        <p class="me-1 fs-5 mb-0">-9%</p>
-                                                        <p class="fs-5 mb-0">지난 달</p>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="d-flex justify-content-end">
-                                                        <div
-                                                                class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
-                                                            <i class="ti ti-currency-dollar fs-6"></i>
-                                                        </div>
-                                                    </div>
+                        <!-- 차액 -->
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row alig n-items-start">
+                                        <div class="col-8">
+                                            <h5 class="card-title mb-9 fw-semibold"> 차액 </h5>
+                                            <h2 class="fw-semibold mb-3">₩ 16,358</h2>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
+                                                   style="font-size: 1.5rem;"></i>
+                                                <p class="me-1 fs-5 mb-0">-9%</p>
+                                                <p class="fs-5 mb-0">지난 달</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="d-flex justify-content-end">
+                                                <div
+                                                        class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
+                                                    <i class="ti ti-currency-dollar fs-6"></i>
                                                 </div>
                                             </div>
                                         </div>
@@ -358,81 +356,186 @@
                     </div>
                 </div>
             </div>
-        </div>
 
+            <div class="row">
 
-        <!--모달-->
-        <div class="modal fade" id="settingPriceModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">현재 설정 요금</h5>
-                                <h4 class="fw-semibold mb-3"
-                                    th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">현재 설정
-                                    요금</h4>
-                            </div>
-                        </div>
-                        <p><br>
-                        <form th:action="@{/budget}" th:method="PUT" id="resetTargetAmountForm">
-                            <div class="mb-3">
-                                <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>
-                                <div class="input-group" style="width: 70%;">
-                                    <input type="number" class="form-control" id="budget" name="budget"
-                                           aria-describedby="amountAddon">
-                                    <span class="input-group-text" id="amountAddon">원</span>
+                <!-- 그래프 -->
+                <div class="col-lg-9 d-flex align-items-strech">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                                <div class="mb-3 mb-sm-0">
+                                    <h5 class="card-title fw-semibold">실시간 전력량</h5>
                                 </div>
                             </div>
-                        </form>
+                            <!-- 차트 -->
+                            <div id="realtimeChart"></div>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                        <button type="submit" class="btn btn-primary" form="resetTargetAmountForm">저장</button>
+                </div>
+
+                <!-- 사용 전력량 -->
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>
+                                    전월 사용 전력량
+                                    <i class="ti ti-bolt fs-6 text-warning"></i>
+                                </h5>
+                                <h4 th:text="${{lastMonthKwh + ' kwh'}}">5,596.70 kWh</h4>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>
+                                    금일 사용 전력량
+                                    <i class="ti ti-bolt fs-6 text-warning"></i>
+                                </h5>
+                                <h4 th:text="${{todayKwh + ' kwh'}}">54.50 kWh</h4>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>
+                                    금월 사용 전력량
+                                    <i class="ti ti-bolt fs-6 text-warning"></i>
+                                </h5>
+                                <h4 th:text="${{thisMonthKwh + ' kwh'}}">1,257.60 kWh</h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <script>
-            function checkRoleAndOpenModal() {
-                var updateFeeDiv = document.getElementById('update-fee');
-                var role = updateFeeDiv.getAttribute('data-role');
-                if (role === 'ADMIN') {
-                    openSetBudgetModal();
-                }
-            }
 
-            function openSetBudgetModal() {
-                var myModal = new bootstrap.Modal(document.getElementById('settingPriceModal'), {
-                    keyboard: false
+<!--모달-->
+<div class="modal fade" id="settingPriceModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">현재 설정 요금</h5>
+                        <h4 class="fw-semibold mb-3"
+                            th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">현재 설정 요금</h4>
+                    </div>
+                </div>
+                <p><br>
+                <form th:action="@{/budget}" th:method="PUT" id="resetTargetAmountForm">
+                    <div class="mb-3">
+                        <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>
+                        <div class="input-group" style="width: 70%;">
+                            <input type="number" class="form-control" id="budget" name="budget"
+                                   aria-describedby="amountAddon">
+                            <span class="input-group-text" id="amountAddon">원</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="submit" class="btn btn-primary" form="resetTargetAmountForm">저장</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let options = {
+        chart: {
+            type: 'bar',
+        },
+        plotOptions: {
+            bar: {
+                horizontal: true,
+            },
+        },
+        series: [
+            {
+                name: 'Electricity',
+                data: [],
+            },
+        ],
+        xaxis: {
+            categories: [],
+        },
+        title: {
+            text: '실시간 전력량 Top 10',
+            align: 'center',
+        },
+    };
+
+    let chart = new ApexCharts(document.querySelector('#realtimeChart'), options);
+
+    chart.render();
+
+    function fetchDataAndUpdateChart() {
+        fetch('/top10')
+            .then((response) => response.json())
+            .then((data) => {
+                chart.updateSeries([
+                    {
+                        name: 'Electricity',
+                        data: data.map((item) => item.w),
+                    },
+                ]);
+
+                chart.updateOptions({
+                    xaxis: {
+                        categories: data.map((item) => `${item.place}\n${item.channel}`),
+                    },
                 });
-                myModal.show();
-            }
-        </script>
-        <script>
-            var options = {
-                chart: {
-                    type: 'line'
-                },
-                series: [{
-                    name: 'sales',
-                    data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
-                }],
-                xaxis: {
-                    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
-                }
-            }
+            });
+    }
 
-            var chart = new ApexCharts(document.querySelector("#chart"), options);
+    fetchDataAndUpdateChart();
 
-            chart.render();
+    setInterval(fetchDataAndUpdateChart, 60000);
+</script>
 
-        </script>
-    </body>
+<script>
+    function checkRoleAndOpenModal() {
+        var updateFeeDiv = document.getElementById('update-fee');
+        var role = updateFeeDiv.getAttribute('data-role');
+        if (role === 'ADMIN') {
+            openSetBudgetModal();
+        }
+    }
+
+    function openSetBudgetModal() {
+        var myModal = new bootstrap.Modal(document.getElementById('settingPriceModal'), {
+            keyboard: false
+        });
+        myModal.show();
+    }
+</script>
+
+<script>
+    var options = {
+        chart: {
+            type: 'line'
+        },
+        series: [{
+            name: 'sales',
+            data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
+        }],
+        xaxis: {
+            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
+        }
+    }
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+
+    chart.render();
+
+</script>
+</body>
 
 </html>
