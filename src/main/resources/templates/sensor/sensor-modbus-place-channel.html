@@ -59,10 +59,11 @@
                         <div class="card">
                             <div class="card-header">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <h2 class="card-title">장소 관리</h2>
-                                    <button type="submit" class="btn btn-primary" onclick="openCreatePlaceModal()">장소
-                                        추가
-                                    </button>
+                                    <h2 class="card-title">장소별 채널 정보</h2>
+                                    <button type="submit" class="btn btn-primary" onclick="openCreatePlaceModal()">장소 추가</button>
+                                </div>
+                                <div>
+                                    <h5 class="text-danger">장소별 채널에서는 채널을 수정할 수 없습니다.</h5>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -71,31 +72,22 @@
                                     <tr>
                                         <th>NO</th>
                                         <th>장소</th>
-                                        <th>MODBUS 채널 확인</th>
-                                        <th>장소 수정</th>
-                                        <th>삭제</th>
+                                        <th>센서 이름</th>
+                                        <th>채널이름</th>
+                                        <th>Address(주소)</th>
+                                        <th>Type</th>
+                                        <th>Function-Code</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="place, iterStat : ${placeList}">
+                                    <tr th:each="channel, iterStat : ${modbusChannelInfo}">
                                         <td th:text="${iterStat.count}"></td>
-                                        <td th:text="${place.placeName}"></td>
-                                        <td>
-                                            <form th:action="@{/sensors/modbus/channels/{placeId}(placeId=${place.id})}" th:method="GET">
-                                                <button type="submit" class="btn btn-primary">MODBUS 채널 확인</button>
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary"
-                                                    th:onclick="'openUpdatePlaceModal(' + ${place.id} + ');'">장소 수정
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <form th:action="@{/places/{placeId}(placeId=${place.id})}"
-                                                  th:method="DELETE" onsubmit="return confirmRequest();">
-                                                <button type="submit" class="btn btn-primary">장소 삭제</button>
-                                            </form>
-                                        </td>
+                                        <td th:text="${channel.place.placeName}"></td>
+                                        <td th:text="${channel.sensor.sensorName}"></td>
+                                        <td th:text="${channel.channelName}"></td>
+                                        <td th:text="${channel.address}"></td>
+                                        <td th:text="${channel.type}"></td>
+                                        <td th:text="${channel.functionCode}"></td>
                                     </tr>
                                     </tbody>
                                 </table>

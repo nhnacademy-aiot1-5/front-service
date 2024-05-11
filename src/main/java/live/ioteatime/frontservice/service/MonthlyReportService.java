@@ -1,6 +1,8 @@
 package live.ioteatime.frontservice.service;
 
 import feign.FeignException;
+import live.ioteatime.frontservice.adaptor.ModbusSensorAdaptor;
+import live.ioteatime.frontservice.adaptor.PlaceAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.*;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
@@ -10,6 +12,7 @@ import org.springframework.ui.Model;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,6 +20,8 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class MonthlyReportService {
     private final UserAdaptor userAdaptor;
+    private final PlaceAdaptor placeAdaptor;
+    private final ModbusSensorAdaptor modbusSensorAdaptor;
 
     public void initMonthlyReport(Model model) {
         OrganizationResponse organization = getOrganization();
@@ -80,7 +85,7 @@ public class MonthlyReportService {
                 .getOrDefault(dateTime, 0L);
     }
 
-    private Stream<MonthlyElectricityDto> fetchMonthlyElectricity(LocalDateTime dateTime, Integer channelId) {
+    private Stream<MonthlyElectricityDto> fetchMonthlyElectricity(LocalDateTime dateTime, int channelId) {
         try {
             MonthlyElectricityDto result = userAdaptor.getMonthlyElectricity(dateTime, channelId).getBody();
             return Optional.ofNullable(result).stream();
@@ -90,17 +95,24 @@ public class MonthlyReportService {
     }
 
     private List<DailyElectricityDto> getDailyElectricities(List<ChannelDto> mainChannelIds, LocalDateTime dateTime) {
-        Map<LocalDateTime, Long> dailyElectricitySummed = mainChannelIds.stream()
+        Map<LocalDateTime, DailyElectricityDto> dailyElectricitySummed = mainChannelIds.stream()
                 .flatMap(channelDto -> fetchDailyElectricities(dateTime, channelDto.getId()))
-                .collect(Collectors.groupingBy(DailyElectricityDto::getTime, Collectors.summingLong(DailyElectricityDto::getKwh)));
+                .collect(Collectors.toMap(
+                        DailyElectricityDto::getTime,
+                        Function.identity(),
+                        (dto1, dto2) -> new DailyElectricityDto(
+                                dto1.getTime(),
+                                dto1.getKwh() + dto2.getKwh(),
+                                dto1.getBill() + dto2.getBill()
+                        )
+                ));
 
-        return dailyElectricitySummed.entrySet().stream()
-                .map(entry -> new DailyElectricityDto(entry.getKey(), entry.getValue()))
+        return dailyElectricitySummed.values().stream()
                 .sorted(Comparator.comparing(DailyElectricityDto::getTime))
                 .collect(Collectors.toList());
     }
 
-    private Stream<DailyElectricityDto> fetchDailyElectricities(LocalDateTime dateTime, Integer channelId) {
+    private Stream<DailyElectricityDto> fetchDailyElectricities(LocalDateTime dateTime, int channelId) {
         try {
             List<DailyElectricityDto> results = userAdaptor.getDailyElectricities(dateTime, channelId).getBody();
             return Optional.ofNullable(results).stream().flatMap(Collection::stream);
@@ -125,7 +137,7 @@ public class MonthlyReportService {
 
     private List<PlaceDto> getPlacesByOrganizationId() {
         OrganizationResponse organizationResponse = getOrganization();
-        List<PlaceDto> placeDtos = userAdaptor.getPlacesByOrganizationId(organizationResponse.getId()).getBody();
+        List<PlaceDto> placeDtos = placeAdaptor.getPlacesByOrganizationId(organizationResponse.getId()).getBody();
         if (Objects.isNull(placeDtos)) {
             throw new NullPointerException("couldn't find places");
         }
@@ -138,7 +150,7 @@ public class MonthlyReportService {
         placeDtos.stream()
                 .map(PlaceDto::getId)
                 .forEach(integer -> {
-                    List<ChannelDto> channelDtos = userAdaptor.getChannelsByPlaceId(integer).getBody();
+                    List<ChannelDto> channelDtos = modbusSensorAdaptor.getChannelsByPlaceId(integer).getBody();
                     if (Objects.isNull(channelDtos)) {
                         throw new NullPointerException("couldn't find channels");
                     }

@@ -260,20 +260,20 @@
 
             <div class="row">
 
-                <!-- 그래프 -->
-                <div class="col-lg-9 d-flex align-items-strech">
-                    <div class="card w-100">
-                        <div class="card-body">
-                            <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                                <div class="mb-3 mb-sm-0">
-                                    <h5 class="card-title fw-semibold">실시간 전력량</h5>
+                        <!-- 그래프 -->
+                        <div class="col-lg-9 d-flex align-items-strech">
+                            <div class="card w-100">
+                                <div class="card-body">
+                                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                                        <div class="mb-3 mb-sm-0">
+                                            <h5 class="card-title fw-semibold">실시간 전력량</h5>
+                                        </div>
+                                    </div>
+                                    <!-- 차트 -->
+                                    <div id="realtimeChart"></div>
                                 </div>
                             </div>
-                            <!-- 차트 -->
-                            <div id="realtimeChart"></div>
                         </div>
-                    </div>
-                </div>
 
                 <!-- 사용 전력량 -->
                 <div class="col-md-3">
@@ -281,10 +281,10 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5>
-                                    전월 사용 전력량
+                                    전일 사용 전력량
                                     <i class="ti ti-bolt fs-6 text-warning"></i>
                                 </h5>
-                                <h4 th:text="${{lastMonthKwh + ' kwh'}}">5,596.70 kWh</h4>
+                                <h4 id="yesterdayKwh">67.12 kWh</h4>
                             </div>
                         </div>
                         <div class="card">
@@ -293,7 +293,16 @@
                                     금일 사용 전력량
                                     <i class="ti ti-bolt fs-6 text-warning"></i>
                                 </h5>
-                                <h4 th:text="${{todayKwh + ' kwh'}}">54.50 kWh</h4>
+                                <h4 id="todayKwh">54.50 kWh</h4>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>
+                                    전월 사용 전력량
+                                    <i class="ti ti-bolt fs-6 text-warning"></i>
+                                </h5>
+                                <h4 id="lastMonth">5,596.70 kWh</h4>
                             </div>
                         </div>
                         <div class="card">
@@ -302,7 +311,7 @@
                                     금월 사용 전력량
                                     <i class="ti ti-bolt fs-6 text-warning"></i>
                                 </h5>
-                                <h4 th:text="${{thisMonthKwh + ' kwh'}}">1,257.60 kWh</h4>
+                                <h4 id="thisMonthKwh">1,257.60 kWh</h4>
                             </div>
                         </div>
                     </div>
@@ -313,6 +322,67 @@
 </div>
 
 
+        <!--모달-->
+        <div class="modal fade" id="settingPriceModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">현재 설정 요금</h5>
+                                <h4 class="fw-semibold mb-3"
+                                    th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">현재 설정
+                                    요금</h4>
+                            </div>
+                        </div>
+                        <p><br>
+                        <form th:action="@{/budget}" th:method="PUT" id="resetTargetAmountForm">
+                            <div class="mb-3">
+                                <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>
+                                <div class="input-group" style="width: 70%;">
+                                    <input type="number" class="form-control" id="budget" name="budget"
+                                           aria-describedby="amountAddon">
+                                    <span class="input-group-text" id="amountAddon">원</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="submit" class="btn btn-primary" form="resetTargetAmountForm">저장</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            let options = {
+                chart: {
+                    type: 'bar',
+                    height: 250
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                    },
+                },
+                series: [
+                    {
+                        name: 'Electricity',
+                        data: [],
+                    },
+                ],
+                xaxis: {
+                    categories: [],
+                },
+                title: {
+                    text: '실시간 전력량 Top 10',
+                    align: 'center',
+                },
+            };
 <!--모달-->
 <div class="modal fade" id="settingPriceModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"
      aria-hidden="true">
@@ -374,42 +444,42 @@
         },
     };
 
-    let chart = new ApexCharts(document.querySelector('#realtimeChart'), options);
+            let chart = new ApexCharts(document.querySelector('#realtimeChart'), options);
 
-    chart.render();
+            chart.render();
 
-    function fetchDataAndUpdateChart() {
-        fetch('/top10')
-            .then((response) => response.json())
-            .then((data) => {
-                chart.updateSeries([
-                    {
-                        name: 'Electricity',
-                        data: data.map((item) => item.w),
-                    },
-                ]);
+            function fetchDataAndUpdateChart() {
+                fetch('/top10')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        chart.updateSeries([
+                            {
+                                name: 'Electricity',
+                                data: data.map((item) => item.w),
+                            },
+                        ]);
 
-                chart.updateOptions({
-                    xaxis: {
-                        categories: data.map((item) => `${item.place}\n${item.channel}`),
-                    },
-                });
-            });
-    }
+                        chart.updateOptions({
+                            xaxis: {
+                                categories: data.map((item) => `${item.place}\n${item.channel}`),
+                            },
+                        });
+                    });
+            }
 
-    fetchDataAndUpdateChart();
+            fetchDataAndUpdateChart();
 
-    setInterval(fetchDataAndUpdateChart, 60000);
-</script>
+            setInterval(fetchDataAndUpdateChart, 60000);
+        </script>
 
-<script>
-    function checkRoleAndOpenModal() {
-        var updateFeeDiv = document.getElementById('update-fee');
-        var role = updateFeeDiv.getAttribute('data-role');
-        if (role === 'ADMIN') {
-            openSetBudgetModal();
-        }
-    }
+        <script>
+            function checkRoleAndOpenModal() {
+                var updateFeeDiv = document.getElementById('update-fee');
+                var role = updateFeeDiv.getAttribute('data-role');
+                if (role === 'ADMIN') {
+                    openSetBudgetModal();
+                }
+            }
 
     function openSetBudgetModal() {
         var myModal = new bootstrap.Modal(document.getElementById('settingPriceModal'), {
@@ -417,6 +487,30 @@
         });
         myModal.show();
     }
+</script>
+
+<script>
+    setInterval(fetchDataAndUpdateUsage, 60000);
+
+    function fetchDataAndUpdateUsage() {
+        $.ajax({
+            url : "/kwh",
+            type : "GET",
+            success : function(result){
+                $('#lastMonth').text(result.lastMonthKwh + ' kwh');
+                $('#todayKwh').text(result.todayKwh + ' kwh');
+                $('#yesterdayKwh').text(result.yesterdayKwh + ' kwh');
+                $('#thisMonthKwh').text(result.thisMonthKwh + ' kwh');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        fetchDataAndUpdateUsage();
+    });
 </script>
 
 
@@ -518,7 +612,7 @@
             setInterval(fetchOneHourTotalData, 300000);
         });
 
-    </script>
-</body>
+        </script>
+    </body>
 
 </html>

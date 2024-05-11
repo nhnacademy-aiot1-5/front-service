@@ -2,12 +2,12 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>거부된 접근입니다.</title>
+    <title>권한이 없습니다.</title>
     <link rel="stylesheet" href="/css/style.css"/>
 </head>
 <body>
 <img id="errorImage" src="" class="mx-auto d-block" alt="403 이미지"/>
-<p class="text-center message">거부된 접근입니다.</p>
+<p class="text-center message">권한이 없습니다.</p>
 <form action="/" method="get">
     <button type="submit" class="btn btn-info mx-auto d-block">홈으로 돌아가기</button>
 </form>
@@ -15,9 +15,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         // 사용 가능한 이미지 파일 경로 배열
         var images = [
-            "/images/error/cat/403.jpg",
-            "/images/error/kejang/403.png",
-            "/images/error/poby/403.jpg"
+            "/images/error/cat/400.png"
         ];
 
         // 랜덤 인덱스 생성
