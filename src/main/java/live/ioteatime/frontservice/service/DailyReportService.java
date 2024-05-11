@@ -1,5 +1,7 @@
 package live.ioteatime.frontservice.service;
 
+import live.ioteatime.frontservice.adaptor.ModbusSensorAdaptor;
+import live.ioteatime.frontservice.adaptor.PlaceAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.ChannelDto;
 import live.ioteatime.frontservice.dto.DailyElectricitiesDto;
@@ -21,19 +23,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DailyReportService {
     private final UserAdaptor userAdaptor;
+    private final PlaceAdaptor placeAdaptor;
+    private final ModbusSensorAdaptor modbusSensorAdaptor;
 
     public void initDailyReport(Model model) {
         OrganizationResponse organizationResponse = userAdaptor.getOrganization().getBody();
         if (Objects.isNull(organizationResponse)) {
             throw new UnauthorizedAccessException("organization not found");
         }
-        List<PlaceDto> placeDtos = userAdaptor.getPlacesByOrganizationId(organizationResponse.getId()).getBody();
+        List<PlaceDto> placeDtos = placeAdaptor.getPlacesByOrganizationId(organizationResponse.getId()).getBody();
 
         Map<Integer, List<ChannelDto>> placeDtoListMap = new HashMap<>();
 
         assert placeDtos != null;
         for (PlaceDto p : placeDtos) {
-            List<ChannelDto> channelDtos = userAdaptor.getChannelsByPlaceId(p.getId()).getBody();
+            List<ChannelDto> channelDtos = modbusSensorAdaptor.getChannelsByPlaceId(p.getId()).getBody();
             placeDtoListMap.put(p.getId(), channelDtos);
         }
 

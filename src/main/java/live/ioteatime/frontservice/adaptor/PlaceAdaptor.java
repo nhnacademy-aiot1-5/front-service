@@ -10,7 +10,7 @@ import java.util.List;
 @FeignClient(value = "gateway-service", contextId = "place-adaptor")
 public interface PlaceAdaptor {
     @GetMapping("/api/places")
-    ResponseEntity<List<PlaceDto>> getPlaces(@RequestParam int organizationId);
+    ResponseEntity<List<PlaceDto>> getPlacesByOrganizationId(@RequestParam int organizationId);
 
     @PostMapping("/api/place")
     ResponseEntity<String> createPlace(@RequestBody PlaceDto placeDto);

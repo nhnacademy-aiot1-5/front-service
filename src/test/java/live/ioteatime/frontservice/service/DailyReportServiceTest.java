@@ -1,5 +1,7 @@
 package live.ioteatime.frontservice.service;
 
+import live.ioteatime.frontservice.adaptor.ModbusSensorAdaptor;
+import live.ioteatime.frontservice.adaptor.PlaceAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class DailyReportServiceTest {
     @Mock
     private UserAdaptor userAdaptor;
+    @Mock
+    private PlaceAdaptor placeAdaptor;
+    @Mock
+    private ModbusSensorAdaptor modbusSensorAdaptor;
 
     @Mock
     Model model;
@@ -28,7 +34,7 @@ public class DailyReportServiceTest {
 
     @BeforeEach
     void setup() {
-        dailyReportService = new DailyReportService(userAdaptor);
+        dailyReportService = new DailyReportService(userAdaptor, placeAdaptor, modbusSensorAdaptor);
     }
 
     @Test
@@ -38,7 +44,7 @@ public class DailyReportServiceTest {
                 new OrganizationResponse(1, "nhn", 3000L, "1588");
 
         Mockito.when(userAdaptor.getOrganization()).thenReturn(ResponseEntity.ok(organizationResponse));
-        Mockito.when(userAdaptor.getPlacesByOrganizationId(organizationResponse.getId())).thenReturn(null);
+        Mockito.when(placeAdaptor.getPlacesByOrganizationId(organizationResponse.getId())).thenReturn(null);
 
         assertThrows(NullPointerException.class, () -> dailyReportService.initDailyReport(model));
     }
