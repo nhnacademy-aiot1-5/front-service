@@ -1,6 +1,8 @@
 package live.ioteatime.frontservice.service;
 
 import feign.FeignException;
+import live.ioteatime.frontservice.adaptor.ModbusSensorAdaptor;
+import live.ioteatime.frontservice.adaptor.PlaceAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.*;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
@@ -18,6 +20,8 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class MonthlyReportService {
     private final UserAdaptor userAdaptor;
+    private final PlaceAdaptor placeAdaptor;
+    private final ModbusSensorAdaptor modbusSensorAdaptor;
 
     public void initMonthlyReport(Model model) {
         OrganizationResponse organization = getOrganization();
@@ -133,7 +137,7 @@ public class MonthlyReportService {
 
     private List<PlaceDto> getPlacesByOrganizationId() {
         OrganizationResponse organizationResponse = getOrganization();
-        List<PlaceDto> placeDtos = userAdaptor.getPlacesByOrganizationId(organizationResponse.getId()).getBody();
+        List<PlaceDto> placeDtos = placeAdaptor.getPlacesByOrganizationId(organizationResponse.getId()).getBody();
         if (Objects.isNull(placeDtos)) {
             throw new NullPointerException("couldn't find places");
         }
@@ -146,7 +150,7 @@ public class MonthlyReportService {
         placeDtos.stream()
                 .map(PlaceDto::getId)
                 .forEach(integer -> {
-                    List<ChannelDto> channelDtos = userAdaptor.getChannelsByPlaceId(integer).getBody();
+                    List<ChannelDto> channelDtos = modbusSensorAdaptor.getChannelsByPlaceId(integer).getBody();
                     if (Objects.isNull(channelDtos)) {
                         throw new NullPointerException("couldn't find channels");
                     }

@@ -27,6 +27,8 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/sensors")
 public class SensorController {
+    public static final String REDIRECT_SENSORS_MODBUS = "redirect:/sensors/modbus/";
+    public static final String REDIRECT_SENSORS_MQTT = "redirect:/sensors/mqtt/";
     private final UserAdaptor userAdaptor;
     private final ModbusSensorAdaptor modbusSensorAdaptor;
     private final MqttSensorAdaptor mqttSensorAdaptor;
@@ -35,6 +37,7 @@ public class SensorController {
 
     /**
      * 센서 관리 페이지 기본페이지
+     *
      * @param model
      * @return
      */
@@ -49,6 +52,7 @@ public class SensorController {
 
     /**
      * MODBUS 센서 관리 페이지
+     *
      * @param model
      * @return
      */
@@ -59,6 +63,7 @@ public class SensorController {
 
     /**
      * MODBUS 센서의 채널들을 확인하는 페이지
+     *
      * @param model
      * @param sensorId 센서의 아이디
      * @return
@@ -66,7 +71,7 @@ public class SensorController {
     @GetMapping("/modbus/{sensorId}")
     public String getModbusSensorDetail(Model model, @PathVariable("sensorId") int sensorId) {
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        List<PlaceDto> placeList = placeAdaptor.getPlaces(userInfo.getOrganization().getId()).getBody();
+        List<PlaceDto> placeList = placeAdaptor.getPlacesByOrganizationId(userInfo.getOrganization().getId()).getBody();
         model.addAttribute("placeList", placeList);
 
         //modbus 센서 상세 채널 불러오기
@@ -79,6 +84,7 @@ public class SensorController {
 
     /**
      * 장소에 따른 채널들을 불러옵니다.
+     *
      * @param model
      * @param placeId 장소 아이디입니다.
      * @return
@@ -94,6 +100,7 @@ public class SensorController {
 
     /**
      * MODBUS 센서를 추가하는 페이지를 불러옵니다.
+     *
      * @param model
      * @return
      */
@@ -107,6 +114,7 @@ public class SensorController {
 
     /**
      * MODBUS 센서의 채널을 추가하는 페이지를 로딩합니다.
+     *
      * @param model
      * @param sensorId
      * @return
@@ -114,7 +122,7 @@ public class SensorController {
     @GetMapping("/modbus/{sensorId}/add")
     public String createModbusSensorChannel(Model model, @PathVariable("sensorId") int sensorId) {
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
-        List<PlaceDto> placeList = placeAdaptor.getPlaces(userInfo.getOrganization().getId()).getBody();
+        List<PlaceDto> placeList = placeAdaptor.getPlacesByOrganizationId(userInfo.getOrganization().getId()).getBody();
         model.addAttribute("placeList", placeList);
 
         model.addAttribute("sensorId", sensorId);
@@ -123,17 +131,19 @@ public class SensorController {
 
     /**
      * MODBUS 센서를 추가합니다.
+     *
      * @param createModbusRequest 센서의 정보를 담는 리퀘스트입니다.
      * @return
      */
     @PostMapping("/modbus")
     public String createModbusSensor(@ModelAttribute ModbusSensorRequest createModbusRequest) {
         modbusSensorAdaptor.createModbusSensor(createModbusRequest);
-        return "redirect:/sensors/modbus";
+        return REDIRECT_SENSORS_MODBUS;
     }
 
     /**
      * MODBUS 센서 아이디에 해당하는 센서에 채널을 추가합니다.
+     *
      * @param sensorId   채널을 추가할 센서 아이디입니다.
      * @param channelDto 추가할 채널의 정보입니다.
      * @return
@@ -141,11 +151,12 @@ public class SensorController {
     @PostMapping("/modbus/{sensorId}/channels")
     public String createModbusChannel(@PathVariable("sensorId") int sensorId, @ModelAttribute ChannelDto channelDto) {
         modbusSensorAdaptor.createModbusChannel(sensorId, channelDto);
-        return "redirect:/sensors/modbus/" + sensorId;
+        return REDIRECT_SENSORS_MODBUS + sensorId;
     }
 
     /**
      * MODBUS 센서의 정보를 수정합니다.
+     *
      * @param sensorId            수정할 센서 아이디입니다.
      * @param updateModbusRequest 수정할 정보가 담겨있는 Request입니다.
      * @return
@@ -153,11 +164,12 @@ public class SensorController {
     @PutMapping("/modbus/{sensorId}")
     public String updateModbusSensor(@PathVariable("sensorId") int sensorId, @ModelAttribute ModbusSensorRequest updateModbusRequest) {
         modbusSensorAdaptor.updateModbusSensor(sensorId, updateModbusRequest);
-        return "redirect:/sensors/modbus";
+        return REDIRECT_SENSORS_MODBUS;
     }
 
     /**
      * MODBUS 채널의 장소를 변경합니다.
+     *
      * @param channelId
      * @param channelPlace
      * @return
@@ -165,62 +177,65 @@ public class SensorController {
     @PutMapping("/modbus/{channelId}/change-place")
     public String changeChannelPlace(@PathVariable("channelId") int channelId, @RequestParam String channelPlace) {
         int sensorId = modbusSensorAdaptor.changeChannelPlace(channelId, channelPlace).getBody();
-        return "redirect:/sensors/modbus/" + sensorId;
+        return REDIRECT_SENSORS_MODBUS + sensorId;
     }
 
 
     /**
      * MODBUS의 채널의 이름을 변경합니다.
-     * @param channelId 변경할 채널의 ID입니다.
+     *
+     * @param channelId   변경할 채널의 ID입니다.
      * @param channelName 변경할 채널의 이름입니다.
      * @return
      */
     @PutMapping("/modbus/{channelId}/change-name")
     public String changeChannelName(@PathVariable("channelId") int channelId, @RequestParam String channelName) {
         int sensorId = modbusSensorAdaptor.changeChannelName(channelId, channelName).getBody();
-        return "redirect:/sensors/modbus/" + sensorId;
+        return REDIRECT_SENSORS_MODBUS + sensorId;
     }
 
     /**
      * MODBUS 채널의 Address, Quantity, Function-Code를 변경합니다.
-     * @param channelId 변경할 채널의 ID입니다.
+     *
+     * @param channelId  변경할 채널의 ID입니다.
      * @param channelDto Address, Quantity, Function-Code 값이 있는 DTO입니다.
      * @return
      */
     @PutMapping("/modbus/{channelId}/change-info")
     public String changeChannelInfo(@PathVariable("channelId") int channelId, @ModelAttribute ChannelDto channelDto) {
         int sensorId = modbusSensorAdaptor.changeChannelInfo(channelId, channelDto).getBody();
-        return "redirect:/sensors/modbus/" + sensorId;
+        return REDIRECT_SENSORS_MODBUS + sensorId;
     }
 
     /**
      * Modbus 채널의 동작 상태를 변경합니다.
+     *
      * @param sensorId 동작 상태를 변경할 센서의 아이디입니다.
      * @return
      */
     @PutMapping("/modbus/work/{sensorId}")
     public String changeWork(@PathVariable("sensorId") int sensorId) {
         modbusSensorAdaptor.changeWork(sensorId);
-        return "redirect:/sensors/modbus";
+        return REDIRECT_SENSORS_MODBUS;
     }
 
 
     @DeleteMapping("/modbus/{sensorId}")
     public String deleteSensor(@PathVariable("sensorId") int sensorId, RedirectAttributes redirectAttributes) {
         boolean exist = modbusSensorAdaptor.existChannelCheck(sensorId).getBody();
-        if(exist){
+        if (exist) {
             redirectAttributes.addFlashAttribute("alertMessage", "센서에 소속된 채널이 있어 센서를 삭제할 수 없습니다.");
-            return "redirect:/sensors/modbus";
-        }
-        else {
+            return REDIRECT_SENSORS_MODBUS;
+        } else {
             modbusSensorAdaptor.deleteSensor(sensorId);
             redirectAttributes.addFlashAttribute("alertMessage", "센서를 삭제했습니다.");
-            return "redirect:/sensors/modbus";
+            return REDIRECT_SENSORS_MODBUS;
         }
     }
 
     /**
      * 아이디에 해당하는 센서의 채널번호에 해당하는 채널을 지우는 컨트롤러입니다.
+     *
      * @param sensorId
      * @param channelId
      * @return
@@ -228,12 +243,13 @@ public class SensorController {
     @DeleteMapping("/modbus/{sensorId}/channels/{channelId}")
     public String deleteChannel(@PathVariable("sensorId") int sensorId, @PathVariable("channelId") int channelId) {
         modbusSensorAdaptor.deleteChannel(sensorId, channelId);
-        return "redirect:/sensors/modbus/" + sensorId;
+        return REDIRECT_SENSORS_MODBUS + sensorId;
     }
 
 
     /**
      * Mqtt 센서 관리 페이지
+     *
      * @param model
      * @return
      */
@@ -247,6 +263,7 @@ public class SensorController {
 
     /**
      * Mqtt 센서 등록 페이지
+     *
      * @param model
      * @return
      */
@@ -257,7 +274,7 @@ public class SensorController {
         List<GetMqttSensorResponse> supportedSensorList = mqttSensorAdaptor.getSupportedMqttSensors().getBody();
         model.addAttribute("supportedSensorList", supportedSensorList);
 
-        List<PlaceDto> placeList = placeAdaptor.getPlaces(userInfo.getOrganization().getId()).getBody();
+        List<PlaceDto> placeList = placeAdaptor.getPlacesByOrganizationId(userInfo.getOrganization().getId()).getBody();
         model.addAttribute("placeList", placeList);
 
         return "/sensor/mqtt-add-form";
@@ -265,6 +282,7 @@ public class SensorController {
 
     /**
      * Mqtt 센서 등록 요청
+     *
      * @param addMqttSensorRequest
      * @return
      */
@@ -276,8 +294,9 @@ public class SensorController {
 
     /**
      * Mqtt 센서 상세 조회 및 수정, 토픽 관리 페이지
+     *
      * @param sensorId 센서아이디
-     * @param model 센서정보, 토픽정보, 조직 장소 목록을 모델에 넣어줍니다
+     * @param model    센서정보, 토픽정보, 조직 장소 목록을 모델에 넣어줍니다
      * @return 센서 상세 페이지
      */
     @GetMapping("/mqtt/{sensorId}")
@@ -285,7 +304,7 @@ public class SensorController {
         //사이드바 전용
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
 
-        List<PlaceDto> placeList = placeAdaptor.getPlaces(userInfo.getOrganization().getId()).getBody();
+        List<PlaceDto> placeList = placeAdaptor.getPlacesByOrganizationId(userInfo.getOrganization().getId()).getBody();
         model.addAttribute("placeList", placeList);
         GetMqttSensorResponse mqttSensor = mqttSensorAdaptor.getMqttSensor(sensorId).getBody();
         model.addAttribute("sensorInfo", mqttSensor);
@@ -297,18 +316,20 @@ public class SensorController {
 
     /**
      * Mqtt 센서 정보 수정
+     *
      * @param sensorId 센서아이디
-     * @param request 수정 요청 폼 데이터
+     * @param request  수정 요청 폼 데이터
      * @return 센서 단일 조회 페이지 리다이렉트
      */
     @PutMapping("/mqtt/{sensorId}")
     public String updateMqttSensor(@PathVariable("sensorId") int sensorId, @ModelAttribute MqttSensorRequest request) {
         mqttSensorAdaptor.updateMqttSensor(sensorId, request);
-        return "redirect:/sensors/mqtt/" + sensorId;
+        return REDIRECT_SENSORS_MQTT + sensorId;
     }
 
     /**
      * 샌서 삭제
+     *
      * @param sensorId 센서아이디
      * @return mqtt 센서 목록 페이지 리다이렉트
      */
@@ -320,6 +341,7 @@ public class SensorController {
 
     /**
      * 토픽 추가
+     *
      * @param sensorId
      * @param topicRequest
      * @return
@@ -327,14 +349,15 @@ public class SensorController {
     @PostMapping("/mqtt/{sensorId}/topics")
     public String addTopic(@PathVariable("sensorId") int sensorId, @ModelAttribute TopicRequest topicRequest) {
         mqttSensorAdaptor.addTopic(sensorId, topicRequest);
-        return "redirect:/sensors/mqtt/" + sensorId;
+        return REDIRECT_SENSORS_MQTT + sensorId;
     }
 
 
     /**
      * Mqtt 센서 토픽 수정
+     *
      * @param sensorId 센서아이디
-     * @param topicId 토픽아이디
+     * @param topicId  토픽아이디
      * @return 센서 상세 페이지
      */
     @PutMapping("/mqtt/{sensorId}/topics/{topicId}")
@@ -342,11 +365,12 @@ public class SensorController {
                               @ModelAttribute TopicRequest request) {
         log.info("update topic request- topic:{}, description:{}", request.getTopic(), request.getDescription());
         mqttSensorAdaptor.updateTopic(sensorId, topicId, request);
-        return "redirect:/sensors/mqtt/" + sensorId;
+        return REDIRECT_SENSORS_MQTT + sensorId;
     }
 
     /**
      * Mqtt 센서 토픽 삭제
+     *
      * @param sensorId
      * @param topicId
      * @return
@@ -354,7 +378,7 @@ public class SensorController {
     @DeleteMapping("/mqtt/{sensorId}/topics/{topicId}")
     public String deleteTopic(@PathVariable("sensorId") int sensorId, @PathVariable("topicId") int topicId) {
         mqttSensorAdaptor.deleteTopic(sensorId, topicId);
-        return "redirect:/sensors/mqtt/" + sensorId;
+        return REDIRECT_SENSORS_MQTT + sensorId;
     }
 
 }
