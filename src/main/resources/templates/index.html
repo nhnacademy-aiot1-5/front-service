@@ -73,10 +73,24 @@
                                                     <h5 class="fw-semibold">실시간 전력 사용량</h5>
                                                 </div>
                                             </div>
-                                            <div class="d-sm-flex d-block align-items-center justify-content-between">
+                                            <div class="row">
 
-                                                <div id="realtime-total"></div>
+                                                <div class="col-lg-6">
+
+                                                    <div class="d-sm-flex d-block align-items-center justify-content-between">
+                                                        <div id="realtime-total"></div>
+                                                        <div id="new" style="flex:1"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-6">
+                                                    <div class="d-sm-flex d-block align-items-center justify-content-between">
+                                                        <div id="daily-predict"></div>
+                                                    </div>
+                                                </div>
+
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -358,66 +372,69 @@
                 </div>
             </div>
         </div>
-        <script>
-            let options = {
-                chart: {
-                    type: 'bar',
-                    height: 250
-                },
-                plotOptions: {
-                    bar: {
-                        horizontal: true,
-                    },
-                },
-                series: [
-                    {
-                        name: 'Electricity',
-                        data: [],
-                    },
-                ],
-                xaxis: {
-                    categories: [],
-                },
-                title: {
-                    text: '실시간 전력량 Top 10',
-                    align: 'center',
-                },
-            };
+
+        <!-- 같은 코드가 두 번 들어가 있는 것 같아서 주석처리 했습니다. 확인하시고 지워주세여ㅛ -->
+<!--        <script>-->
+<!--            let options = {-->
+<!--                chart: {-->
+<!--                    type: 'bar',-->
+<!--                    height: 250-->
+<!--                },-->
+<!--                plotOptions: {-->
+<!--                    bar: {-->
+<!--                        horizontal: true,-->
+<!--                    },-->
+<!--                },-->
+<!--                series: [-->
+<!--                    {-->
+<!--                        name: 'Electricity',-->
+<!--                        data: [],-->
+<!--                    },-->
+<!--                ],-->
+<!--                xaxis: {-->
+<!--                    categories: [],-->
+<!--                },-->
+<!--                title: {-->
+<!--                    text: '실시간 전력량 Top 10',-->
+<!--                    align: 'center',-->
+<!--                },-->
+<!--            };-->
+<!--        </script>-->
 <!--모달-->
-<div class="modal fade" id="settingPriceModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">현재 설정 요금</h5>
-                        <h4 class="fw-semibold mb-3"
-                            th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">현재 설정 요금</h4>
-                    </div>
-                </div>
-                <p><br>
-                <form th:action="@{/budget}" th:method="PUT" id="resetTargetAmountForm">
-                    <div class="mb-3">
-                        <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>
-                        <div class="input-group" style="width: 70%;">
-                            <input type="number" class="form-control" id="budget" name="budget"
-                                   aria-describedby="amountAddon">
-                            <span class="input-group-text" id="amountAddon">원</span>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                <button type="submit" class="btn btn-primary" form="resetTargetAmountForm">저장</button>
-            </div>
-        </div>
-    </div>
-</div>
+<!--<div class="modal fade" id="settingPriceModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"-->
+<!--     aria-hidden="true">-->
+<!--    <div class="modal-dialog">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <div class="card mb-3">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">현재 설정 요금</h5>-->
+<!--                        <h4 class="fw-semibold mb-3"-->
+<!--                            th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">현재 설정 요금</h4>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <p><br>-->
+<!--                <form th:action="@{/budget}" th:method="PUT" id="resetTargetAmountForm">-->
+<!--                    <div class="mb-3">-->
+<!--                        <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>-->
+<!--                        <div class="input-group" style="width: 70%;">-->
+<!--                            <input type="number" class="form-control" id="budget" name="budget"-->
+<!--                                   aria-describedby="amountAddon">-->
+<!--                            <span class="input-group-text" id="amountAddon">원</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>-->
+<!--                <button type="submit" class="btn btn-primary" form="resetTargetAmountForm">저장</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 <script>
     let options = {
         chart: {
@@ -613,6 +630,62 @@
         });
 
         </script>
+
+    <script>
+
+
+        var dailyPredictOptions = {
+            series: [{
+                name: 'Sales',
+                data: [4, 3, 10, 9, 29, 19, 22, 9, 12, 7, 19, 5, 13, 9, 17, 2, 7, 5]
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+            },
+            forecastDataPoints: {
+                count: 7
+            },
+            stroke: {
+                width: 5,
+                curve: 'smooth'
+            },
+            xaxis: {
+                type: 'datetime',
+                categories: ['1/11/2000', '2/11/2000', '3/11/2000', '4/11/2000', '5/11/2000', '6/11/2000', '7/11/2000', '8/11/2000', '9/11/2000', '10/11/2000', '11/11/2000', '12/11/2000', '1/11/2001', '2/11/2001', '3/11/2001','4/11/2001' ,'5/11/2001' ,'6/11/2001'],
+                tickAmount: 10,
+                labels: {
+                    formatter: function(value, timestamp, opts) {
+                        return opts.dateFormatter(new Date(timestamp), 'dd MMM')
+                    }
+                }
+            },
+            title: {
+                text: 'Forecast',
+                align: 'left',
+                style: {
+                    fontSize: "16px",
+                    color: '#666'
+                }
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'dark',
+                    gradientToColors: [ '#FDD835'],
+                    shadeIntensity: 1,
+                    type: 'horizontal',
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    stops: [0, 100, 100, 100]
+                },
+            }
+        };
+
+        var dailyPredictChart = new ApexCharts(document.querySelector("#daily-predict"), dailyPredictOptions);
+        dailyPredictChart.render();
+
+    </script>
     </body>
 
 </html>
