@@ -7,6 +7,7 @@ import live.ioteatime.frontservice.domain.Role;
 import live.ioteatime.frontservice.dto.RealtimeElectricityResponseDto;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
+import live.ioteatime.frontservice.dto.response.PreciseElectricitiesDto;
 import live.ioteatime.frontservice.service.ElectricityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,4 +60,14 @@ public class IndexController {
     public List<RealtimeElectricityResponseDto> getTop10(){
         return electricityService.getTop10Electricity();
     }
+
+    @GetMapping("/total")
+    @ResponseBody
+    public List<PreciseElectricitiesDto> getOneHourTotalElectricities(){
+        int organizationId = userAdaptor.getUser().getBody().getOrganization().getId();
+        return electricityAdaptor.getOneHourTotalElectricties(organizationId).getBody();
+    }
+
+
+
 }

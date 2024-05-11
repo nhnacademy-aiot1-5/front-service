@@ -64,37 +64,25 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- 실시간 사용량 그래프 -->
                                     <div class="card w-100">
                                         <div class="card-body">
-                                            <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                                                <div class="overflow-hidden me-6 mb-3">
-
-                                                    <br></br>
-                                                    <h5 class="fw-semibold mb-0 fs-5">실시간 전력량 그래프</h5>
+                                            <div class="d-sm-flex d-block align-items-center justify-content-between mb-3">
+                                                <div class="overflow-hidden me-6">
+                                                    <h5 class="fw-semibold">실시간 전력 사용량</h5>
                                                 </div>
                                             </div>
-                                            <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                                                <h2 class="mt-0 mb-0 fw-semibold fs-8 d-flex align-content-center">실시간
-                                                    그래프
-                                                    (세연)</h2>
+                                            <div class="d-sm-flex d-block align-items-center justify-content-between">
+
+                                                <div id="realtime-total"></div>
                                             </div>
-                                            <!--                                        <div class="d-flex align-items-center">-->
-                                            <!--                                            <div class="border-end pe-4 border-muted border-opacity-10">-->
-                                            <!--                                                <p class="mb-0 text-dark">이번 달 전기 사용량 5,200 kWh-->
-                                            <!--                                                    <i class="bi bi-arrow-up-right-circle-fill"-->
-                                            <!--                                                       style="font-size: 1rem;"></i>-->
-                                            <!--                                                </p>-->
-                                            <!--                                            </div>-->
-                                            <!--                                            <div class="ps-4">-->
-                                            <!--                                                <p class="mb-0 text-dark">이번 달 전기료 ₩ 2,340-->
-                                            <!--                                                    <i class="bi bi-arrow-up-right-circle-fill"-->
-                                            <!--                                                       style="font-size: 1rem;"></i>-->
-                                            <!--                                                </p>-->
-                                            <!--                                            </div>-->
-                                            <!--                                        </div>-->
                                         </div>
                                     </div>
                                 </div>
+
+
+
                             </div>
                             <div class="col-lg-4">
                                 <!-- 요금 게이지 바 -->
@@ -270,93 +258,6 @@
                     <!---총평 박스 끝---->
 
 
-                    <!--  대시보드 -->
-                    <div class="row">
-                        <div class="col-lg-8 d-flex align-items-strech">
-                            <div class="card w-100">
-                                <div class="card-body">
-                                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                                        <div class="mb-3 mb-sm-0">
-                                            <h5 class="card-title fw-semibold">이번 달 전기 사용 내역</h5>
-                                        </div>
-                                    </div>
-                                    <!-- 차트 -->
-                                    <div id="chart"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4">
-                            <div class="row">
-
-                                <!-- 사용 요금 -->
-                                <div class="col-lg-12">
-                                    <div class="card overflow-hidden">
-                                        <div class="card-body p-4">
-                                            <h5 class="card-title mb-9 fw-semibold">사용 요금</h5>
-                                            <div class="row align-items-center">
-                                                <div class="col-8">
-                                                    <h2 class="fw-semibold mb-3">₩ 136,358</h2>
-                                                    <div class="d-flex align-items-center mb-3">
-                                                        <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
-                                                           style="font-size: 1.5rem;"></i>
-                                                        <p class="me-1 fs-5 mb-0">+9%</p>
-                                                        <p class="fs-5 mb-0">지난 달</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- 설정 요금 -->
-                                <div class="col-lg-12" id="update-fee" th:data-role="${userInfo.role}"
-                                     onclick="checkRoleAndOpenModal()">
-                                    <div class="card overflow-hidden">
-                                        <div class="card-body p-4">
-                                            <h5 class="card-title mb-9 fw-semibold">설정 요금</h5>
-                                            <div class="row align-items-center">
-                                                <div class="col-8">
-                                                    <h2 class="fw-semibold mb-3"
-                                                        th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">
-                                                        현재 설정 요금</h2>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                        <!-- 차액 -->
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row alig n-items-start">
-                                        <div class="col-8">
-                                            <h5 class="card-title mb-9 fw-semibold"> 차액 </h5>
-                                            <h2 class="fw-semibold mb-3">₩ 16,358</h2>
-                                            <div class="d-flex align-items-center mb-3">
-                                                <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
-                                                   style="font-size: 1.5rem;"></i>
-                                                <p class="me-1 fs-5 mb-0">-9%</p>
-                                                <p class="fs-5 mb-0">지난 달</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="d-flex justify-content-end">
-                                                <div
-                                                        class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
-                                                    <i class="ti ti-currency-dollar fs-6"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="row">
 
                 <!-- 그래프 -->
@@ -451,6 +352,7 @@
     let options = {
         chart: {
             type: 'bar',
+            height:250
         },
         plotOptions: {
             bar: {
@@ -517,25 +419,106 @@
     }
 </script>
 
-<script>
-    var options2 = {
-        chart: {
-            type: 'line'
-        },
-        series: [{
-            name: 'sales',
-            data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
-        }],
-        xaxis: {
-            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
+
+    <script>
+
+        var realtimeTotalOptions = {
+            series: [{
+                name: "kwh",
+                data: []
+            }],
+            chart: {
+                id: 'realtime',
+                height: 350,
+                type: 'bar',
+                zoom: {
+                    enabled: false
+                },
+                animations: {
+                    enabled: true,
+                    easing: 'linear',
+                    dynamicAnimation: {
+                        speed: 1000
+                    }
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            title: {
+                text: '5분간 총 소비량',
+                align: 'left'
+            },
+            grid: {
+                row: {
+                    colors: ['#f3f3f3'],
+                    opacity: 0.5
+                },
+            },
+            xaxis: {
+                type: 'datetime',
+                tickAmount: 12,
+                labels: {
+                    format: 'HH:mm'
+                }
+            },
+            yaxis: {
+                tickAmount: 4,
+                labels: {
+                    formatter: function (val) {
+                        return val.toFixed(1);
+                    }
+                }
+            },
+            tooltip: {
+                x: {
+                    format: 'HH:mm'
+                }
+            }
+        };
+
+        var realtimeTotalChart = new ApexCharts(document.querySelector("#realtime-total"), realtimeTotalOptions);
+        realtimeTotalChart.render();
+
+        function fetchOneHourTotalData() {
+            fetch('/total?organizationId=1')
+                .then(response => response.json())
+                .then(data => {
+                    if (!Array.isArray(data)) {
+                        console.error('Expected an array of data but got:', data);
+                        return;
+                    }
+                    var seriesData = data.map(item => {
+                        const dateArray = item.time;
+                        const year = dateArray[0];
+                        const month = dateArray[1] - 1;
+                        const day = dateArray[2];
+                        const hour = dateArray[3];
+                        const minute = dateArray[4];
+                        const second = dateArray[5];
+
+                        const time = new Date(Date.UTC(year, month, day, hour, minute, second));
+
+                        return {
+                            x: time.getTime(),
+                            y: item.kwh
+                        };
+                    });
+
+                    seriesData.sort((a, b) => a.x - b.x);
+                    realtimeTotalChart.updateSeries([{
+                        data: seriesData
+                    }]);
+                })
+                .catch(error => console.error('Error fetching data:', error));
         }
-    }
 
-    var chart2 = new ApexCharts(document.querySelector("#chart"), options2);
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchOneHourTotalData();
+            setInterval(fetchOneHourTotalData, 300000);
+        });
 
-    chart2.render();
-
-</script>
+    </script>
 </body>
 
 </html>
