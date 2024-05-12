@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
 
@@ -26,6 +27,7 @@ public class MonthlyReportController {
     }
 
     @GetMapping("/monthly-electricity/{localdate}")
+    @ResponseBody
     public ResponseEntity<MonthlyElectricitiesDto> getElectricityByMonth(
             @PathVariable(name = "localdate")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
