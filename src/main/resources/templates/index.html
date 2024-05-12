@@ -557,7 +557,7 @@
                 enabled: false
             },
             title: {
-                text: '5분간 총 소비량',
+                text: '최근 1시간 전력 소비량',
                 align: 'left'
             },
             grid: {
@@ -592,7 +592,7 @@
         realtimeTotalChart.render();
 
         function fetchOneHourTotalData() {
-            fetch('/total?organizationId=1')
+            fetch('/total')
                 .then(response => response.json())
                 .then(data => {
                     if (!Array.isArray(data)) {
@@ -600,22 +600,12 @@
                         return;
                     }
                     var seriesData = data.map(item => {
-                        const dateArray = item.time;
-                        const year = dateArray[0];
-                        const month = dateArray[1] - 1;
-                        const day = dateArray[2];
-                        const hour = dateArray[3];
-                        const minute = dateArray[4];
-                        const second = dateArray[5];
-
-                        const time = new Date(Date.UTC(year, month, day, hour, minute, second));
-
+                        const time = new Date(item.time);
                         return {
                             x: time.getTime(),
                             y: item.kwh
                         };
                     });
-
                     seriesData.sort((a, b) => a.x - b.x);
                     realtimeTotalChart.updateSeries([{
                         data: seriesData
@@ -625,26 +615,76 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            function scheduleFetch() {
+                const now = new Date();
+                const delay = 300000 - (now % 300000);
+                setTimeout(function() {
+                    fetchOneHourTotalData();
+                    scheduleFetch();
+                }, delay);
+            }
             fetchOneHourTotalData();
-            setInterval(fetchOneHourTotalData, 300000);
+            scheduleFetch();
         });
-
-        </script>
+    </script>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const fetchCurrentMonthData = async () => {
+            try {
+                const response = await fetch('/daily/electricity/current-month');
+                if (!response.ok) throw new Error('Failed to fetch current month data');
+                return response.json();
+            } catch (error) {
+                console.error('Error fetching current month data:', error);
+                return [];
+            }
+        };
 
+        const fetchPredictedData = async () => {
+            try {
+                const response = await fetch('/monthly-predict');
+                if (!response.ok) throw new Error('Failed to fetch predicted data');
+                return response.json();
+            } catch (error) {
+                console.error('Error fetching predicted data:', error);
+                return [];
+            }
+        };
 
-        var dailyPredictOptions = {
+        const prepareChartData = (data) => {
+            return data.map(item => ({
+            x: new Date(item.time).getTime(),
+            y: item.kwh
+            }));
+        };
+
+        const initdailyPredictChart = async () => {
+        const currentMonthData = await fetchCurrentMonthData();
+        const predictedData = await fetchPredictedData();
+        console.log(currentMonthData);
+        console.log(predictedData);
+
+        const fullData = prepareChartData(currentMonthData).concat(prepareChartData(predictedData));
+        fullData.sort((a, b) => a.x - b.x);
+
+        const today = new Date();
+        const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        const forecastCount = endOfMonth.getDate() - today.getDate() - 1;
+
+        console.log(forecastCount)
+
+        const chartOptions = {
             series: [{
-                name: 'Sales',
-                data: [4, 3, 10, 9, 29, 19, 22, 9, 12, 7, 19, 5, 13, 9, 17, 2, 7, 5]
+                data: fullData,
+                name: 'kwh'
             }],
             chart: {
                 height: 350,
                 type: 'line',
             },
             forecastDataPoints: {
-                count: 7
+                count: forecastCount
             },
             stroke: {
                 width: 5,
@@ -652,40 +692,42 @@
             },
             xaxis: {
                 type: 'datetime',
-                categories: ['1/11/2000', '2/11/2000', '3/11/2000', '4/11/2000', '5/11/2000', '6/11/2000', '7/11/2000', '8/11/2000', '9/11/2000', '10/11/2000', '11/11/2000', '12/11/2000', '1/11/2001', '2/11/2001', '3/11/2001','4/11/2001' ,'5/11/2001' ,'6/11/2001'],
                 tickAmount: 10,
                 labels: {
-                    formatter: function(value, timestamp, opts) {
-                        return opts.dateFormatter(new Date(timestamp), 'dd MMM')
-                    }
+                    formatter: function(value, timestamp) {
+                    return new Date(timestamp).toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
                 }
+            }
             },
             title: {
-                text: 'Forecast',
+                text: '이번 달 전력 소비량',
                 align: 'left',
                 style: {
-                    fontSize: "16px",
-                    color: '#666'
-                }
+                fontSize: "14px",
+                color: '#666'
+            }
             },
             fill: {
                 type: 'gradient',
                 gradient: {
-                    shade: 'dark',
-                    gradientToColors: [ '#FDD835'],
-                    shadeIntensity: 1,
-                    type: 'horizontal',
-                    opacityFrom: 1,
-                    opacityTo: 1,
-                    stops: [0, 100, 100, 100]
+                shade: 'dark',
+                gradientToColors: ['#FDD835'],
+                shadeIntensity: 1,
+                type: 'horizontal',
+                opacityFrom: 1,
+                opacityTo: 1,
+                stops: [0, 100, 100, 100]
                 },
             }
         };
 
-        var dailyPredictChart = new ApexCharts(document.querySelector("#daily-predict"), dailyPredictOptions);
+        var dailyPredictChart = new ApexCharts(document.querySelector("#daily-predict"), chartOptions);
         dailyPredictChart.render();
+        };
 
-    </script>
+        initdailyPredictChart();
+        });
+        </script>
     </body>
 
 </html>
