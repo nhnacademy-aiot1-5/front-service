@@ -4,10 +4,12 @@ import live.ioteatime.frontservice.adaptor.AdminAdaptor;
 import live.ioteatime.frontservice.adaptor.ElectricityAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.domain.Role;
+import live.ioteatime.frontservice.dto.DailyElectricityDto;
 import live.ioteatime.frontservice.dto.KwhDto;
 import live.ioteatime.frontservice.dto.RealtimeElectricityResponseDto;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
+import live.ioteatime.frontservice.dto.response.PreciseElectricitiesDto;
 import live.ioteatime.frontservice.service.ElectricityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -60,6 +63,34 @@ public class IndexController {
     @ResponseBody
     public List<RealtimeElectricityResponseDto> getTop10(){
         return electricityService.getTop10Electricity();
+    }
+
+    @GetMapping("/total")
+    @ResponseBody
+    public List<PreciseElectricitiesDto> getOneHourTotalElectricities(){
+        int organizationId = userAdaptor.getUser().getBody().getOrganization().getId();
+        return electricityAdaptor.getOneHourTotalElectricties(organizationId).getBody();
+    }
+
+    /**
+     * 이번 달 1일부터 요청일까지의 일별 전력 소비량 리스트를 반환합니다.
+     * @return 일별 전력 소비량 리스트
+     */
+    @GetMapping("/daily/electricity/current-month")
+    @ResponseBody
+    public List<DailyElectricityDto> getCurrentMonthDailyTotalElectricities(){
+        int organizationId = userAdaptor.getUser().getBody().getOrganization().getId();
+        return electricityAdaptor.getMontlyTotalElectricities(LocalDateTime.now(), organizationId).getBody();
+    }
+
+    /**
+     * 요청일부터 이번 달 마지막 날까지의 일별 전력 소비 예측량 리스트를 반환합니다.
+     * @return 일별 전력 소비 예측량 리스트
+     */
+    @GetMapping("/monthly-predict")
+    @ResponseBody
+    public List<PreciseElectricitiesDto> getMontlyPredictedElectricities() {
+        return electricityAdaptor.getMonthlyPredictedValues(LocalDateTime.now()).getBody();
     }
 
     @GetMapping("/kwh")
