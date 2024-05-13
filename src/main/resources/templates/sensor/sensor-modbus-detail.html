@@ -97,7 +97,7 @@
                                             <button type="submit" class="btn btn-primary" th:onclick="'openUpdateChannelInfoModal(' + ${channel.id} + ');'">정보 수정</button>
                                         </td>
                                         <td>
-                                            <form th:method="DELETE" th:action="@{/sensors/modbus/{sensorId}/channels/{channelId}(sensorId=${sensorId}, channelId=${channel.id})}">
+                                            <form th:method="DELETE" th:action="@{/sensors/modbus/{sensorId}/channels/{channelId}(sensorId=${sensorId}, channelId=${channel.id})}" onsubmit="return confirmDelete()">
                                                 <button type="submit" class="btn btn-primary">삭제</button>
                                             </form>
                                         </td>
@@ -284,6 +284,10 @@
             event.preventDefault();
         }
     });
+
+    function confirmDelete() {
+        return confirm('채널을 삭제하시겠습니까?');
+    }
 </script>
 </body>
 </html>
