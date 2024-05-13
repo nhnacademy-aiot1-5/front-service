@@ -108,92 +108,125 @@
                                                 <div class="col-12">
                                                     <div id="gauge-chart"></div>
                                                     <script th:inline="javascript">
-                                                        var billPercentage = [[${budget}]];
-                                                        console.log(billPercentage.electricity_budget)
-                                                        // 차액 * 100 / 설정 요금
-                                                        var options1 = {
-                                                            series: [70],
-                                                            chart: {
-                                                                height: 200,
-                                                                type: 'radialBar',
-                                                                toolbar: {
-                                                                    show: true
-                                                                }
-                                                            },
-                                                            plotOptions: {
-                                                                radialBar: {
-                                                                    startAngle: -135,
-                                                                    endAngle: 225,
-                                                                    hollow: {
-                                                                        margin: 0,
-                                                                        size: '60%',
-                                                                        background: '#fff',
-                                                                        image: undefined,
-                                                                        imageOffsetX: 0,
-                                                                        imageOffsetY: 0,
-                                                                        position: 'front',
-                                                                        dropShadow: {
-                                                                            enabled: true,
-                                                                            top: 3,
-                                                                            left: 0,
-                                                                            blur: 4,
-                                                                            opacity: 0.24
-                                                                        }
-                                                                    },
-                                                                    track: {
-                                                                        background: '#fff',
-                                                                        strokeWidth: '0%',
-                                                                        margin: 0, // margin is in pixels
-                                                                        dropShadow: {
-                                                                            enabled: true,
-                                                                            top: 0,
-                                                                            left: 0,
-                                                                            blur: 4,
-                                                                            opacity: 0.35
-                                                                        }
-                                                                    },
+                                                        function addAllBills(dailyElectricities) {
+                                                            let sum = 0;
+                                                            dailyElectricities.forEach(dto => {
+                                                                sum = sum + dto.bill;
+                                                            });
+                                                            return sum;
+                                                        }
 
-                                                                    dataLabels: {
-                                                                        show: true,
-                                                                        name: {
-                                                                            offsetY: -10,
-                                                                            show: true,
-                                                                            color: '#888',
-                                                                            fontSize: '16px'
-                                                                        },
-                                                                        value: {
-                                                                            formatter: function (val) {
-                                                                                return parseInt(val) + '%';
+                                                        function getPercentage(dailyElectricities) {
+                                                            if (dailyElectricities.length < 2) {
+                                                                return 0; // 데이터가 1개 이하인 경우 비교할 수 없으므로 0을 반환
+                                                            }
+                                                            const last = dailyElectricities[dailyElectricities.length - 1].bill;
+                                                            const secondLast = dailyElectricities[dailyElectricities.length - 2].bill;
+                                                            return (last - secondLast) / secondLast * 100;
+                                                        }
+
+                                                        const date = new Date();
+                                                        console.log(date.toISOString().slice(0, 10) + 'T00:00:00');
+                                                        const localDate = date.toISOString().slice(0, 10) + 'T00:00:00'
+                                                        var bill = 0;
+                                                        var budget = [[${budget}]].electricity_budget;
+
+                                                        fetch(`/monthly-electricity/${localDate}`)
+                                                            .then(response => response.json())
+                                                            .then(data => {
+                                                                const dailyElectricities = data.dailyElectricityDtos;
+                                                                bill = addAllBills(dailyElectricities);
+                                                                var percentage = (budget - bill) * 100 / budget;
+                                                                console.log(bill);
+                                                                document.getElementById("bill").textContent = bill.toString();
+                                                                document.getElementById("remain-budget").textContent =
+                                                                    '₩ ' + (budget - bill).toString();
+                                                                let billPercentage = getPercentage(dailyElectricities);
+                                                                document.getElementById("bill-percentage").textContent =
+                                                                    billPercentage >= 0 ? '+' + billPercentage + '%' : billPercentage + '%';
+                                                                var options1 = {
+                                                                    series: [percentage],
+                                                                    chart: {
+                                                                        height: 200,
+                                                                        type: 'radialBar',
+                                                                        toolbar: {
+                                                                            show: true
+                                                                        }
+                                                                    },
+                                                                    plotOptions: {
+                                                                        radialBar: {
+                                                                            startAngle: -135,
+                                                                            endAngle: 225,
+                                                                            hollow: {
+                                                                                margin: 0,
+                                                                                size: '60%',
+                                                                                background: '#fff',
+                                                                                image: undefined,
+                                                                                imageOffsetX: 0,
+                                                                                imageOffsetY: 0,
+                                                                                position: 'front',
+                                                                                dropShadow: {
+                                                                                    enabled: true,
+                                                                                    top: 3,
+                                                                                    left: 0,
+                                                                                    blur: 4,
+                                                                                    opacity: 0.24
+                                                                                }
                                                                             },
-                                                                            color: '#111',
-                                                                            fontSize: '20px',
-                                                                            show: true,
+                                                                            track: {
+                                                                                background: '#fff',
+                                                                                strokeWidth: '0%',
+                                                                                margin: 0, // margin is in pixels
+                                                                                dropShadow: {
+                                                                                    enabled: true,
+                                                                                    top: 0,
+                                                                                    left: 0,
+                                                                                    blur: 4,
+                                                                                    opacity: 0.35
+                                                                                }
+                                                                            },
+
+                                                                            dataLabels: {
+                                                                                show: true,
+                                                                                name: {
+                                                                                    offsetY: -10,
+                                                                                    show: true,
+                                                                                    color: '#888',
+                                                                                    fontSize: '16px'
+                                                                                },
+                                                                                value: {
+                                                                                    formatter: function (val) {
+                                                                                        return parseInt(val) + '%';
+                                                                                    },
+                                                                                    color: '#111',
+                                                                                    fontSize: '20px',
+                                                                                    show: true,
+                                                                                }
+                                                                            }
                                                                         }
-                                                                    }
-                                                                }
-                                                            },
-                                                            fill: {
-                                                                type: 'gradient',
-                                                                gradient: {
-                                                                    shade: 'dark',
-                                                                    type: 'horizontal',
-                                                                    shadeIntensity: 0.5,
-                                                                    gradientToColors: ['#ABE5A1'],
-                                                                    inverseColors: true,
-                                                                    opacityFrom: 1,
-                                                                    opacityTo: 1,
-                                                                    stops: [0, 100]
-                                                                }
-                                                            },
-                                                            stroke: {
-                                                                lineCap: 'round'
-                                                            },
-                                                            labels: ['Percent'],
-                                                        };
+                                                                    },
+                                                                    fill: {
+                                                                        type: 'gradient',
+                                                                        gradient: {
+                                                                            shade: 'dark',
+                                                                            type: 'horizontal',
+                                                                            shadeIntensity: 0.5,
+                                                                            gradientToColors: ['#ABE5A1'],
+                                                                            inverseColors: true,
+                                                                            opacityFrom: 1,
+                                                                            opacityTo: 1,
+                                                                            stops: [0, 100]
+                                                                        }
+                                                                    },
+                                                                    stroke: {
+                                                                        lineCap: 'round'
+                                                                    },
+                                                                    labels: ['Percent'],
+                                                                };
 
-                                                        var chart1 = new ApexCharts(document.querySelector("#gauge-chart"), options1);
-                                                        chart1.render();
-
+                                                                var chart1 = new ApexCharts(document.querySelector("#gauge-chart"), options1);
+                                                                chart1.render();
+                                                            })
                                                     </script>
                                                 </div>
                                             </div>
@@ -209,13 +242,13 @@
                                                     <h5 class="card-title mb-9 fw-semibold">사용 요금</h5>
                                                     <div class="row align-items-center">
                                                         <div class="col-20">
-                                                            <h2 class="fs-2 fw-semibold mb-3 text-nowrap">₩
+                                                            <h2 class="fs-2 fw-semibold mb-3 text-nowrap" id="bill">₩
                                                                 112,136,358</h2>
                                                             <div class="d-flex align-items-center mb-3">
                                                                 <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
                                                                    style="font-size: 0.5rem;"></i>
-                                                                <p class="me-1 fs-2 mb-0">+9%</p>
-                                                                <p class="fs-1 mb-0">지난 달</p>
+                                                                <p class="me-1 fs-2 mb-0" id="bill-percentage">+9%</p>
+                                                                <p class="fs-1 mb-0">작일</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -251,12 +284,14 @@
                                                     <h5 class="card-title mb-9 fw-semibold">요금 차액</h5>
                                                     <div class="row align-items-center">
                                                         <div class="col-20">
-                                                            <h2 class="fs-2 fw-semibold mb-3 text-nowrap">₩ 136,358</h2>
+                                                            <h2 class="fs-2 fw-semibold mb-3 text-nowrap"
+                                                                id="remain-budget">₩ 136,358</h2>
                                                             <div class="d-flex align-items-center mb-3">
                                                                 <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
                                                                    style="font-size: 0.5rem;"></i>
-                                                                <p class="me-1 fs-2 mb-0">+9%</p>
-                                                                <p class="fs-1 mb-0">지난 달</p>
+                                                                <p class="me-1 fs-2 mb-0" id="remain-budget-percentage">
+                                                                    남은</p>
+                                                                <p class="fs-2 mb-0"> 금액</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -270,6 +305,7 @@
                     </div>
                     <!--                    </div>-->
                     <!---총평 박스 끝---->
+
 
 
             <div class="row">
