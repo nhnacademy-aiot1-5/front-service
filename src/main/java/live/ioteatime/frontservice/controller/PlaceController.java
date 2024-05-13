@@ -27,7 +27,7 @@ public class PlaceController {
         assert userInfo != null;
         List<PlaceDto> placeList = placeAdaptor.getPlacesByOrganizationId(userInfo.getOrganization().getId()).getBody();
         model.addAttribute("placeList", placeList);
-        return "/sensor/sensor-place";
+        return "sensor/sensor-place";
     }
 
     @PostMapping
