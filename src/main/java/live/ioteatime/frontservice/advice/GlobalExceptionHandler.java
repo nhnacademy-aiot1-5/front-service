@@ -12,9 +12,24 @@ public class GlobalExceptionHandler {
         return "redirect:/login";
     }
 
+    @ExceptionHandler(FeignException.BadRequest.class)
+    public String handleBadRequest() {
+        return "error/400";
+    }
+
     @ExceptionHandler(FeignException.Unauthorized.class)
     public String handleFeignUnauthorizedException() {
         return "error/401";
+    }
+
+    @ExceptionHandler(FeignException.Forbidden.class)
+    public String handleFeignForbiddenException() {
+        return "error/403";
+    }
+
+    @ExceptionHandler(FeignException.NotFound.class)
+    public String handleFeignNotFoundException() {
+        return "error/404";
     }
 
     @ExceptionHandler(FeignException.MethodNotAllowed.class)
@@ -22,9 +37,14 @@ public class GlobalExceptionHandler {
         return "error/405";
     }
 
-    @ExceptionHandler(FeignException.Forbidden.class)
-    public String handleFeignForbiddenException() {
-        return "error/403";
+    @ExceptionHandler(FeignException.InternalServerError.class)
+    public String handleFeignInternalServerError() {
+        return "error/500";
+    }
+
+    @ExceptionHandler(FeignException.ServiceUnavailable.class)
+    public String handleFeignServiceUnavailableException() {
+        return "error/503";
     }
 
 }
