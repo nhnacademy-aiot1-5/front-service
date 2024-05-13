@@ -222,13 +222,12 @@
                                             <h5 class="card-title mb-9 fw-semibold">사용 요금</h5>
                                             <div class="row align-items-center">
                                                 <div class="col-20">
-                                                    <h2 class="fs-2 fw-semibold mb-3 text-nowrap" id="bill">₩
-                                                        112,136,358</h2>
+                                                    <h2 class="fs-2 fw-semibold mb-3 text-nowrap" id="bill">아무도 날 막을 수 없으셈 ㅋㅋ</h2>
                                                     <div class="d-flex align-items-center mb-3">
                                                         <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
                                                            style="font-size: 0.5rem;"></i>
                                                         <p class="me-1 fs-2 mb-0" id="bill-percentage">+9%</p>
-                                                        <p class="fs-1 mb-0">작일</p>
+                                                        <p class="fs-1 mb-0">1일 전</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -245,9 +244,13 @@
                                                     <h2 class="fs-2 fw-semibold mb-3 text-nowrap"
                                                         th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">
                                                         현재 설정 요금</h2>
-                                                    <div class="d-flex align-items-center mb-3">
+                                                    <div class="d-flex align-items-center mb-3" th:if="${userInfo.role.name() == 'ADMIN'}">
                                                         <p class="me-1 fs-2 mb-0">클릭 시</p>
                                                         <p class="fs-2 mb-0">수정</p>
+                                                    </div>
+                                                    <div class="d-flex align-items-center mb-3" th:unless="${userInfo.role.name() == 'ADMIN'}">
+                                                        <p class="me-1 fs-2 mb-0">🌱🌱</p>
+                                                        <p class="fs-2 mb-0">🌱🌱</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -261,7 +264,7 @@
                                             <div class="row align-items-center">
                                                 <div class="col-20">
                                                     <h2 class="fs-2 fw-semibold mb-3 text-nowrap"
-                                                        id="remain-budget">₩ 136,358</h2>
+                                                        id="remain-budget">1972년 11월 21일 김두한은 오렌지병으로 쓰러졌다.</h2>
                                                     <div class="d-flex align-items-center mb-3">
                                                         <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
                                                            style="font-size: 0.5rem;"></i>
