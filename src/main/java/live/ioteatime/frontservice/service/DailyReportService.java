@@ -41,12 +41,14 @@ public class DailyReportService {
         for (PlaceDto p : placeDtos) {
             List<ChannelDto> channelDtos = modbusSensorAdaptor.getChannelsByPlaceId(p.getId()).getBody();
 
-            for (ChannelDto channelDto : channelDtos) {
-                if (channelDto.getChannelName().equals("main")) {
-                    mainChannelDtos.add(channelDto);
+            if (channelDtos != null && !channelDtos.isEmpty()) {
+                for (ChannelDto channelDto : channelDtos) {
+                    if ("main".equals(channelDto.getChannelName())) {
+                        mainChannelDtos.add(channelDto);
+                    }
                 }
+                placeDtoListMap.put(p.getId(), channelDtos);
             }
-            placeDtoListMap.put(p.getId(), channelDtos);
         }
 
         model.addAttribute("budget", organizationResponse.getElectricityBudget());
@@ -65,7 +67,8 @@ public class DailyReportService {
             if (mainDailyElectricityDtos.isEmpty()) {
                 mainDailyElectricityDtos.addAll(dailyElectricityDtos);
             } else {
-                for (int i = 0; i < mainDailyElectricityDtos.size(); i++) {
+                int size = Math.min(mainDailyElectricityDtos.size(), dailyElectricityDtos.size());
+                for (int i = 0; i < size; i++) {
                     mainDailyElectricityDtos.get(i).setKwh(mainDailyElectricityDtos.get(i).getKwh() + dailyElectricityDtos.get(i).getKwh());
                     mainDailyElectricityDtos.get(i).setBill(mainDailyElectricityDtos.get(i).getBill() + dailyElectricityDtos.get(i).getBill());
                 }
@@ -77,7 +80,8 @@ public class DailyReportService {
             if (mainHourlyElectricityDtos.isEmpty()) {
                 mainHourlyElectricityDtos.addAll(hourlyElectricityDtos);
             } else {
-                for (int i = 0; i < hourlyElectricityDtos.size(); i++) {
+                int size = Math.min(mainHourlyElectricityDtos.size(), hourlyElectricityDtos.size());
+                for (int i = 0; i < size; i++) {
                     mainHourlyElectricityDtos.get(i).setKwh(mainHourlyElectricityDtos.get(i).getKwh() + hourlyElectricityDtos.get(i).getKwh());
                     mainHourlyElectricityDtos.get(i).setBill(mainHourlyElectricityDtos.get(i).getBill() + hourlyElectricityDtos.get(i).getBill());
                 }
