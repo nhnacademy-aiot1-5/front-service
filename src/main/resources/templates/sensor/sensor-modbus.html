@@ -141,9 +141,8 @@
                         </div>
                         <br>
                         <h4>IP</h4>
-                        <div class="input-group" style="width: 100%;">
-                            <input type="text" class="form-control" id="ip" name="ip"
-                                   aria-describedby="amountAddon" placeholder="IP" required>
+                        <div class="d-flex align-items-center">
+                            <input type="text" class="form-control" id="ip" name="ip" pattern="^(\d{1,3}\.){3}\d{1,3}$" title="IP 주소 형식에 맞게 입력하세요. 예: 192.168.1.1">
                         </div>
                         <br>
                         <h4>PORT</h4>
@@ -176,6 +175,15 @@
         });
         myModal.show();
     }
+
+    document.getElementById('ip').addEventListener('input', function(e) {
+        var ipPattern = /^(\d{1,3}\.){3}\d{1,3}$/;
+        if (!ipPattern.test(this.value)) {
+            this.setCustomValidity('올바른 IP 주소 형식이 아닙니다. 예: 192.168.1.1');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
 
     function confirmRequest() {
         return confirm("센서 상태를 바꾸시겠습니까?");
