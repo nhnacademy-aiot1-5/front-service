@@ -35,9 +35,17 @@ public class DailyReportService {
 
         Map<Integer, List<ChannelDto>> placeDtoListMap = new HashMap<>();
 
+        List<ChannelDto> mainChannelDtos = new ArrayList<>();
+
         assert placeDtos != null;
         for (PlaceDto p : placeDtos) {
             List<ChannelDto> channelDtos = modbusSensorAdaptor.getChannelsByPlaceId(p.getId()).getBody();
+
+            for (ChannelDto channelDto : channelDtos) {
+                if (channelDto.getChannelName().equals("main")) {
+                    mainChannelDtos.add(channelDto);
+                }
+            }
             placeDtoListMap.put(p.getId(), channelDtos);
         }
 
@@ -45,7 +53,43 @@ public class DailyReportService {
         model.addAttribute("places", placeDtos);
         model.addAttribute("placeMap", placeDtoListMap);
 
-        this.getDailyElectricites(1, model);
+
+        List<DailyElectricityDto> mainDailyElectricityDtos = new ArrayList<>();
+        List<DailyElectricityDto> mainHourlyElectricityDtos = new ArrayList<>();
+
+        for (ChannelDto channelDto : mainChannelDtos) {
+            List<DailyElectricityDto> dailyElectricityDtos = userAdaptor.getDailyElectricities(
+                    LocalDateTime.now().toLocalDate().atTime(LocalTime.MIDNIGHT),
+                    channelDto.getId()
+            ).getBody();
+            if (mainDailyElectricityDtos.isEmpty()) {
+                mainDailyElectricityDtos.addAll(dailyElectricityDtos);
+            } else {
+                for (int i = 0; i < mainDailyElectricityDtos.size(); i++) {
+                    mainDailyElectricityDtos.get(i).setKwh(mainDailyElectricityDtos.get(i).getKwh() + dailyElectricityDtos.get(i).getKwh());
+                    mainDailyElectricityDtos.get(i).setBill(mainDailyElectricityDtos.get(i).getBill() + dailyElectricityDtos.get(i).getBill());
+                }
+            }
+
+            List<DailyElectricityDto> hourlyElectricityDtos = userAdaptor.getDailyElectricities(
+                    LocalDateTime.now().withSecond(0).truncatedTo(ChronoUnit.SECONDS),
+                    channelDto.getId()).getBody();
+            if (mainHourlyElectricityDtos.isEmpty()) {
+                mainHourlyElectricityDtos.addAll(hourlyElectricityDtos);
+            } else {
+                for (int i = 0; i < hourlyElectricityDtos.size(); i++) {
+                    mainHourlyElectricityDtos.get(i).setKwh(mainHourlyElectricityDtos.get(i).getKwh() + hourlyElectricityDtos.get(i).getKwh());
+                    mainHourlyElectricityDtos.get(i).setBill(mainHourlyElectricityDtos.get(i).getBill() + hourlyElectricityDtos.get(i).getBill());
+                }
+            }
+        }
+
+        mainDailyElectricityDtos = mainDailyElectricityDtos.stream()
+                .filter(dailyElectricityDto -> dailyElectricityDto.getTime().isAfter(LocalDateTime.now().minusDays(8)))
+                .collect(Collectors.toList());
+
+        model.addAttribute("recent7DaysElectricities", mainDailyElectricityDtos);
+        model.addAttribute("recent24HoursElectricites", mainHourlyElectricityDtos);
     }
 
     public DailyElectricitiesDto getDailyElectricites(int channelId, Model model) {
