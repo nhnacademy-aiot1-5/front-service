@@ -11,18 +11,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@SpringBootTest(webEnvironment =  SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class PageTest {
     @Autowired
     MockMvc mockMvc;
 
     @Test
-    @DisplayName("회원가입 페이지 테스트")
+    @DisplayName("로그인 페이지 redirection 테스트")
     void mainPageTest() throws Exception {
         mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("index"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/login"));
     }
 
     @Test
