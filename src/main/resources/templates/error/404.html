@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>해당하는 페이지를 찾을 수 없음</title>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+<img id="errorImage" src="" class="mx-auto d-block" alt="404 이미지"/>
+<p class="text-center">찾으시는 페이지를 찾을 수 없습니다.</p>
+
+<form action="/" method="get">
+    <button type="submit" class="btn btn-info mx-auto d-block">홈으로 돌아가기</button>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 사용 가능한 이미지 파일 경로 배열
+        var images = [
+            "/images/error/cat/404.jpg",
+            "/images/error/kejang/404.png"
+        ];
+
+        // 랜덤 인덱스 생성
+        var randomIndex = Math.floor(Math.random() * images.length);
+
+        // 이미지 태그 찾기
+        var imgElement = document.getElementById('errorImage');
+
+        // 랜덤 이미지로 설정
+        imgElement.src = images[randomIndex];
+    });
+</script>
+</body>
+</html>

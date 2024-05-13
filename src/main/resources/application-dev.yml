@@ -2,3 +2,4 @@ discovery:
   id: test
   password: test
   ip: localhost
+

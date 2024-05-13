@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>어드민 페이지</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css"/>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+</head>
+<body>
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
+     data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <th:block th:replace="side-bar :: sidebar"></th:block>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+        <!--  Header Start -->
+        <th:block th:replace="header :: header"></th:block>
+        <div class="container-fluid">
+            <div>
+                <h1>어드민 관리 페이지</h1>
+                <br/>
+            </div>
+            <!--  Header End -->
+            <div class="row">
+                <div class="col-2 mb-4">
+                    <button class="btn btn-primary"
+                            style="font-size: 14px; padding: 10px 20px;"
+                            onclick="location.href='/admin/roleup'">
+                        게스트 유저 관리
+                    </button>
+                </div>
+                <div class="col-2 mb-4">
+                    <button class="btn btn-primary"
+                            style="font-size: 14px; padding: 10px 20px;"
+                            onclick="location.href='/admin/users'">
+                        유저 관리
+                    </button>
+                </div>
+                <div class="col-2 mb-4">
+                    <button class="btn btn-primary"
+                            style="font-size: 14px; padding: 10px 20px;"
+                            onclick="location.href='/admin/budget'">
+                        요금 설정
+                    </button>
+                </div>
+                <div class="col-2 mb-4">
+                    <button class="btn btn-primary"
+                            style="font-size: 14px; padding: 10px 20px;"
+                            onclick="changePassword()">
+                        사용 기기 관리
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 mb-4">
+
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">보유 센서 목록</h5>
+                                    <div class="col-2 mb-4">
+                                        <button class="btn btn-primary"
+                                                style="font-size: 14px; padding: 10px 20px;"
+                                                onclick="showModal()">
+                                            새 장치 등록
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                    <div class="card-body">
+                        <table id="table" class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>이름</th>
+                                <th>모델명</th>
+                                <th>채널 개수</th>
+                                <th>host</th>
+                                <th>state</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="sensor : ${sensorList}">
+                                <td th:text="${sensor.name}"></td>
+                                <td th:text="${sensor.modelName}"></td>
+                                <td th:text="${sensor.channel}"></td>
+                                <td th:text="${sensor.ip}+':'+${sensor.port}"></td>
+                                <td th:text="${sensor.alive}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+</div>
+
+
+<!-- 센서 등록 모달 -->
+<div id="editUserModal" class="modal" style="width: 50%; height: 50%;">
+    <div class="modal-content" style="border: none; padding: 0; margin: 0;">
+        <div class="modal-header" style="border-bottom: 1px solid #e9ecef; padding: 10px;">
+            <h5 class="modal-title">MQTT 센서 등록</h5>
+            <button type="button" class="close" onclick="closeEditModal()" aria-label="Close" style="border: none; background: transparent; font-size: 20px; color: #000; padding: 0; margin: 0;">
+                &times;
+            </button>
+        </div>
+        <div class="modal-body" style="padding: 10px;">
+            <form method="post" action="/add-sensor">
+
+                <div class="mb-3 d-flex align-items-center">
+                    <div class="fw-semibold me-3" style="min-width: 70px;">모델</div>
+                    <select class="form-control" id="sensorModel" name="model" onchange="updateChannels()">
+                        <option value="">Select a Model</option>
+                        <!-- Options will be populated here through JavaScript -->
+                    </select>
+                </div>
+
+                <div class="mb-3 d-flex align-items-center">
+                    <div class="fw-semibold me-3" style="min-width: 70px;">이름</div>
+                    <input type="text" class="form-control" name="id">
+                </div>
+
+                <div class="mb-3 d-flex align-items-center">
+                    <div class="fw-semibold me-3" style="min-width: 70px;">채널 개수</div>
+                    <select class="form-control" id="channel" name="channel">
+                        <!-- Options will be populated based on model selection -->
+                    </select>
+                </div>
+
+                <div class="mb-3 d-flex align-items-center">
+                    <div class="fw-semibold me-3" style="min-width: 70px;">ip</div>
+                    <input type="text" class="form-control" name="ip">
+                </div>
+                <div class="mb-3 d-flex align-items-center">
+                    <div class="fw-semibold me-3" style="min-width: 70px;">port</div>
+                    <input type="text" class="form-control" name="port">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">저장</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    let table = new DataTable('#table', {
+        responsive: true,
+        pageLength : 5
+    });
+
+    function showModal() {
+
+        document.getElementById('editUserModal').style.display = 'block';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const sensors = ${supportedSensorList};  // Replace this with actual data injection logic
+        const modelDropdown = document.getElementById('sensorModel');
+        const channelDropdown = document.getElementById('channel');
+
+        sensors.forEach(sensor => {
+            const option = document.createElement('option');
+            option.value = sensor.id;
+            option.textContent = sensor.modelName;
+            modelDropdown.appendChild(option);
+        });
+
+        function updateChannels() {
+            const selectedModel = sensors.find(sensor => sensor.id === parseInt(modelDropdown.value));
+            channelDropdown.innerHTML = '';  // Clear existing options
+
+            if (selectedModel) {
+                for (let i = 1; i <= selectedModel.channel; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    channelDropdown.appendChild(option);
+                }
+            }
+        }
+
+        modelDropdown.addEventListener('change', updateChannels);
+    });
+
+</script>
+</html>

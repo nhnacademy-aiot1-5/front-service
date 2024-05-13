@@ -1,542 +1,769 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>아이오티타임</title>
-  <link rel="shortcut icon" type="image/png" href="/images/logos/favicon.png" />
-  <link rel="stylesheet" href="/css/styles.min.css" />
-</head>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>IOTEATIME</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+        <script src="https://fastly.jsdelivr.net/npm/apexcharts"></script>
+        <script src="https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </head>
 
-<body>
-  <!--  Body Wrapper -->
-  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-    data-sidebar-position="fixed" data-header-position="fixed">
-    <!-- Sidebar Start -->
-    <aside class="left-sidebar">
-      <!-- Sidebar scroll-->
-      <div>
-        <div class="brand-logo d-flex align-items-center justify-content-between">
-          <a href="#" class="text-nowrap logo-img">
-            <h1 class="display-6">IOTEATIME</h1>
-<!--            <img src="/images/logos/dark-logo.svg" width="180" alt="" />-->
-          </a>
-          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
-            <i class="ti ti-x fs-8"></i>
-          </div>
-        </div>
-        <!-- Sidebar navigation-->
-        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
-          <ul id="sidebarnav">
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Home</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./index.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-layout-dashboard"></i>
-                </span>
-                <span class="hide-menu">Dashboard</span>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">UI COMPONENTS</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="ui-buttons.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-article"></i>
-                </span>
-                <span class="hide-menu">Buttons</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="ui-alerts.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-alert-circle"></i>
-                </span>
-                <span class="hide-menu">Alerts</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="ui-card.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-cards"></i>
-                </span>
-                <span class="hide-menu">Card</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="ui-forms.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-file-description"></i>
-                </span>
-                <span class="hide-menu">Forms</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="ui-typography.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-typography"></i>
-                </span>
-                <span class="hide-menu">Typography</span>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">AUTH</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/login" aria-expanded="false">
-                <span>
-                  <i class="ti ti-login"></i>
-                </span>
-                <span class="hide-menu">Login</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/register" aria-expanded="false">
-                <span>
-                  <i class="ti ti-user-plus"></i>
-                </span>
-                <span class="hide-menu">Register</span>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">EXTRA</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="icon-tabler.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-mood-happy"></i>
-                </span>
-                <span class="hide-menu">Icons</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="sample-page.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-aperture"></i>
-                </span>
-                <span class="hide-menu">Sample Page</span>
-              </a>
-            </li>
-          </ul>
+    <body>
+        <!--  Body Wrapper -->
+        <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+             data-sidebar-position="fixed" data-header-position="fixed">
+            <!-- Sidebar Start -->
+            <th:block th:replace="side-bar :: sidebar"></th:block>
+            <!--  Sidebar End -->
 
-        </nav>
-        <!-- End Sidebar navigation -->
-      </div>
-      <!-- End Sidebar scroll-->
-    </aside>
-    <!--  Sidebar End -->
-    <!--  Main wrapper -->
-    <div class="body-wrapper">
-      <!--  Header Start -->
-      <header class="app-header">
-        <nav class="navbar navbar-expand-lg navbar-light">
-          <ul class="navbar-nav">
-            <li class="nav-item d-block d-xl-none">
-              <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
-                <i class="ti ti-menu-2"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                <i class="ti ti-bell-ringing"></i>
-                <div class="notification bg-primary rounded-circle"></div>
-              </a>
-            </li>
-          </ul>
-          <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-            <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-              <a href="#" target="_blank" class="btn btn-primary">로그인</a>
-              <li class="nav-item dropdown">
-                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
-                  aria-expanded="false">
-                  <img src="/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
-                </a>
-                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
-                  <div class="message-body">
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3">My Profile</p>
-                    </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-mail fs-6"></i>
-                      <p class="mb-0 fs-3">My Account</p>
-                    </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-list-check fs-6"></i>
-                      <p class="mb-0 fs-3">My Task</p>
-                    </a>
-                    <a href="authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </header>
-      <!--  Header End -->
-      <div class="container-fluid">
-        <!--  Row 1 -->
-        <div class="row">
-          <div class="col-lg-8 d-flex align-items-strech">
-            <div class="card w-100">
-              <div class="card-body">
-                <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                  <div class="mb-3 mb-sm-0">
-                    <h5 class="card-title fw-semibold">Sales Overview</h5>
-                  </div>
-                  <div>
-                    <select class="form-select">
-                      <option value="1">March 2023</option>
-                      <option value="2">April 2023</option>
-                      <option value="3">May 2023</option>
-                      <option value="4">June 2023</option>
-                    </select>
-                  </div>
-                </div>
-                <div id="chart"></div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4">
+            <!--  Main wrapper -->
+            <div class="body-wrapper">
+                <!--  Header Start -->
+                <th:block th:replace="header :: header"></th:block>
+                <!--  Header End -->
+
+                <div class="container-fluid">
+                    <!--                    <div class="card overflow-hidden">-->
+                    <div class="card-body position-relative">
+                        <div class="row">
+                            <div class="col-lg-8 d-flex align-items-strech">
+                                <div class="row">
+                                    <div class="card w-100 mb-2">
+                                        <div class="card-body">
+                                            <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                                                <div class="overflow-hidden me-6 ">
+                                                    <!--                                                <img src="/images/backgrounds/rocket.png" alt="modernize-img" width="40"-->
+                                                    <!--                                                     height="40"-->
+                                                    <!--                                                     class="me-1">-->
+                                                    <!--                                                <br></br>-->
+                                                    <h5 class="fw-semibold mb-0 fs-5">⚡️이번 달 총평⚡️</h5>
+                                                </div>
+                                            </div>
+                                            <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                                                <h2 class="mt-0 mb-0 fw-semibold fs-8 d-flex align-content-center">전기 좀
+                                                    아껴쓰세요.
+                                                    🌱</h2>
+                                                <p></p>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <div class="border-end pe-4 border-muted border-opacity-10">
+                                                    <p class="mb-0 text-dark">이번 달 전기 사용량 5,200 kWh
+                                                        <i class="bi bi-arrow-up-right-circle-fill"
+                                                           style="font-size: 1rem;"></i>
+                                                    </p>
+                                                </div>
+                                                <div class="ps-4">
+                                                    <p class="mb-0 text-dark">이번 달 전기료 ₩ 2,340
+                                                        <i class="bi bi-arrow-up-right-circle-fill"
+                                                           style="font-size: 1rem;"></i>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 실시간 사용량 그래프 -->
+                                    <div class="card w-100">
+                                        <div class="card-body">
+                                            <div class="d-sm-flex d-block align-items-center justify-content-between mb-3">
+                                                <div class="overflow-hidden me-6">
+                                                    <h5 class="fw-semibold">실시간 전력 사용량</h5>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col-lg-6">
+
+                                                    <div class="d-sm-flex d-block align-items-center justify-content-between">
+                                                        <div id="realtime-total"></div>
+                                                        <div id="new" style="flex:1"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-6">
+                                                    <div class="d-sm-flex d-block align-items-center justify-content-between">
+                                                        <div id="daily-predict"></div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div class="col-lg-4">
+                                <!-- 요금 게이지 바 -->
+                                <div class="col-lg-12">
+                                    <div class="card overflow-hidden mb-2">
+                                        <div class="card-body p-3">
+                                            <h5 class="card-title mb-9 fw-semibold">테스트 요금</h5>
+                                            <div class="row align-items-center">
+                                                <div class="col-12">
+                                                    <div id="gauge-chart"></div>
+                                                    <script th:inline="javascript">
+                                                        function addAllBills(dailyElectricities) {
+                                                            let sum = 0;
+                                                            dailyElectricities.forEach(dto => {
+                                                                sum = sum + dto.bill;
+                                                            });
+                                                            return sum;
+                                                        }
+
+                                                        function getPercentage(dailyElectricities) {
+                                                            if (dailyElectricities.length < 2) {
+                                                                return 0; // 데이터가 1개 이하인 경우 비교할 수 없으므로 0을 반환
+                                                            }
+                                                            const last = dailyElectricities[dailyElectricities.length - 1].bill;
+                                                            const secondLast = dailyElectricities[dailyElectricities.length - 2].bill;
+                                                            return (last - secondLast) / secondLast * 100;
+                                                        }
+
+                                                        const date = new Date();
+                                                        console.log(date.toISOString().slice(0, 10) + 'T00:00:00');
+                                                        const localDate = date.toISOString().slice(0, 10) + 'T00:00:00'
+                                                        var bill = 0;
+                                                        var budget = [[${budget}]].electricity_budget;
+
+                                                        fetch(`/monthly-electricity/${localDate}`)
+                                                            .then(response => response.json())
+                                                            .then(data => {
+                                                                const dailyElectricities = data.dailyElectricityDtos;
+                                                                bill = addAllBills(dailyElectricities);
+                                                                var percentage = (budget - bill) * 100 / budget;
+                                                                console.log(bill);
+                                                                document.getElementById("bill").textContent = bill.toString();
+                                                                document.getElementById("remain-budget").textContent =
+                                                                    '₩ ' + (budget - bill).toString();
+                                                                let billPercentage = getPercentage(dailyElectricities);
+                                                                document.getElementById("bill-percentage").textContent =
+                                                                    billPercentage >= 0 ? '+' + billPercentage + '%' : billPercentage + '%';
+                                                                var options1 = {
+                                                                    series: [percentage],
+                                                                    chart: {
+                                                                        height: 200,
+                                                                        type: 'radialBar',
+                                                                        toolbar: {
+                                                                            show: true
+                                                                        }
+                                                                    },
+                                                                    plotOptions: {
+                                                                        radialBar: {
+                                                                            startAngle: -135,
+                                                                            endAngle: 225,
+                                                                            hollow: {
+                                                                                margin: 0,
+                                                                                size: '60%',
+                                                                                background: '#fff',
+                                                                                image: undefined,
+                                                                                imageOffsetX: 0,
+                                                                                imageOffsetY: 0,
+                                                                                position: 'front',
+                                                                                dropShadow: {
+                                                                                    enabled: true,
+                                                                                    top: 3,
+                                                                                    left: 0,
+                                                                                    blur: 4,
+                                                                                    opacity: 0.24
+                                                                                }
+                                                                            },
+                                                                            track: {
+                                                                                background: '#fff',
+                                                                                strokeWidth: '0%',
+                                                                                margin: 0, // margin is in pixels
+                                                                                dropShadow: {
+                                                                                    enabled: true,
+                                                                                    top: 0,
+                                                                                    left: 0,
+                                                                                    blur: 4,
+                                                                                    opacity: 0.35
+                                                                                }
+                                                                            },
+
+                                                                            dataLabels: {
+                                                                                show: true,
+                                                                                name: {
+                                                                                    offsetY: -10,
+                                                                                    show: true,
+                                                                                    color: '#888',
+                                                                                    fontSize: '16px'
+                                                                                },
+                                                                                value: {
+                                                                                    formatter: function (val) {
+                                                                                        return parseInt(val) + '%';
+                                                                                    },
+                                                                                    color: '#111',
+                                                                                    fontSize: '20px',
+                                                                                    show: true,
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    fill: {
+                                                                        type: 'gradient',
+                                                                        gradient: {
+                                                                            shade: 'dark',
+                                                                            type: 'horizontal',
+                                                                            shadeIntensity: 0.5,
+                                                                            gradientToColors: ['#ABE5A1'],
+                                                                            inverseColors: true,
+                                                                            opacityFrom: 1,
+                                                                            opacityTo: 1,
+                                                                            stops: [0, 100]
+                                                                        }
+                                                                    },
+                                                                    stroke: {
+                                                                        lineCap: 'round'
+                                                                    },
+                                                                    labels: ['Percent'],
+                                                                };
+
+                                                                var chart1 = new ApexCharts(document.querySelector("#gauge-chart"), options1);
+                                                                chart1.render();
+                                                            })
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        <!-- 사용 요금 -->
+                                        <div class="col-lg-4 ">
+                                            <div class="card overflow-hidden">
+                                                <div class="card-body p-3">
+                                                    <h5 class="card-title mb-9 fw-semibold">사용 요금</h5>
+                                                    <div class="row align-items-center">
+                                                        <div class="col-20">
+                                                            <h2 class="fs-2 fw-semibold mb-3 text-nowrap" id="bill">₩
+                                                                112,136,358</h2>
+                                                            <div class="d-flex align-items-center mb-3">
+                                                                <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
+                                                                   style="font-size: 0.5rem;"></i>
+                                                                <p class="me-1 fs-2 mb-0" id="bill-percentage">+9%</p>
+                                                                <p class="fs-1 mb-0">작일</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- 설정 요금 -->
+                                        <div class="col-lg-4" id="update-fee" th:data-role="${userInfo.role}"
+                                             onclick="checkRoleAndOpenModal()">
+                                            <div class="card overflow-hidden">
+                                                <div class="card-body p-3">
+                                                    <h5 class="card-title mb-9 fw-semibold">설정 요금</h5>
+                                                    <div class="row align-items-center">
+                                                        <div class="col-20">
+                                                            <h2 class="fs-2 fw-semibold mb-3 text-nowrap"
+                                                                th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">
+                                                                현재 설정 요금</h2>
+                                                            <div class="d-flex align-items-center mb-3">
+                                                                <p class="me-1 fs-2 mb-0">클릭 시</p>
+                                                                <p class="fs-2 mb-0">수정</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <!-- 차액 -->
+                                        <div class="col-lg-4 ">
+                                            <div class="card overflow-hidden">
+                                                <div class="card-body p-3">
+                                                    <h5 class="card-title mb-9 fw-semibold">요금 차액</h5>
+                                                    <div class="row align-items-center">
+                                                        <div class="col-20">
+                                                            <h2 class="fs-2 fw-semibold mb-3 text-nowrap"
+                                                                id="remain-budget">₩ 136,358</h2>
+                                                            <div class="d-flex align-items-center mb-3">
+                                                                <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
+                                                                   style="font-size: 0.5rem;"></i>
+                                                                <p class="me-1 fs-2 mb-0" id="remain-budget-percentage">
+                                                                    남은</p>
+                                                                <p class="fs-2 mb-0"> 금액</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--                    </div>-->
+                    <!---총평 박스 끝---->
+
+
+
             <div class="row">
-              <div class="col-lg-12">
-                <!-- Yearly Breakup -->
-                <div class="card overflow-hidden">
-                  <div class="card-body p-4">
-                    <h5 class="card-title mb-9 fw-semibold">Yearly Breakup</h5>
-                    <div class="row align-items-center">
-                      <div class="col-8">
-                        <h4 class="fw-semibold mb-3">$36,358</h4>
-                        <div class="d-flex align-items-center mb-3">
-                          <span
-                            class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-arrow-up-left text-success"></i>
-                          </span>
-                          <p class="text-dark me-1 fs-3 mb-0">+9%</p>
-                          <p class="fs-3 mb-0">last year</p>
+
+                        <!-- 그래프 -->
+                        <div class="col-lg-9 d-flex align-items-strech">
+                            <div class="card w-100">
+                                <div class="card-body">
+                                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                                        <div class="mb-3 mb-sm-0">
+                                            <h5 class="card-title fw-semibold">실시간 전력량</h5>
+                                        </div>
+                                    </div>
+                                    <!-- 차트 -->
+                                    <div id="realtimeChart"></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="d-flex align-items-center">
-                          <div class="me-4">
-                            <span class="round-8 bg-primary rounded-circle me-2 d-inline-block"></span>
-                            <span class="fs-2">2023</span>
-                          </div>
-                          <div>
-                            <span class="round-8 bg-light-primary rounded-circle me-2 d-inline-block"></span>
-                            <span class="fs-2">2023</span>
-                          </div>
+
+                <!-- 사용 전력량 -->
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>
+                                    전일 사용 전력량
+                                    <i class="ti ti-bolt fs-6 text-warning"></i>
+                                </h5>
+                                <h4 id="yesterdayKwh">67.12 kWh</h4>
+                            </div>
                         </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="d-flex justify-content-center">
-                          <div id="breakup"></div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>
+                                    금일 사용 전력량
+                                    <i class="ti ti-bolt fs-6 text-warning"></i>
+                                </h5>
+                                <h4 id="todayKwh">54.50 kWh</h4>
+                            </div>
                         </div>
-                      </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>
+                                    전월 사용 전력량
+                                    <i class="ti ti-bolt fs-6 text-warning"></i>
+                                </h5>
+                                <h4 id="lastMonth">5,596.70 kWh</h4>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>
+                                    금월 사용 전력량
+                                    <i class="ti ti-bolt fs-6 text-warning"></i>
+                                </h5>
+                                <h4 id="thisMonthKwh">1,257.60 kWh</h4>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
-              <div class="col-lg-12">
-                <!-- Monthly Earnings -->
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row alig n-items-start">
-                      <div class="col-8">
-                        <h5 class="card-title mb-9 fw-semibold"> Monthly Earnings </h5>
-                        <h4 class="fw-semibold mb-3">$6,820</h4>
-                        <div class="d-flex align-items-center pb-1">
-                          <span
-                            class="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-arrow-down-right text-danger"></i>
-                          </span>
-                          <p class="text-dark me-1 fs-3 mb-0">+9%</p>
-                          <p class="fs-3 mb-0">last year</p>
-                        </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="d-flex justify-content-end">
-                          <div
-                            class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-currency-dollar fs-6"></i>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="earning"></div>
-                </div>
-              </div>
             </div>
-          </div>
         </div>
-        <div class="row">
-          <div class="col-lg-4 d-flex align-items-stretch">
-            <div class="card w-100">
-              <div class="card-body p-4">
-                <div class="mb-4">
-                  <h5 class="card-title fw-semibold">Recent Transactions</h5>
-                </div>
-                <ul class="timeline-widget mb-0 position-relative mb-n5">
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">09:30</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1">Payment received from John Doe of $385.90</div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">10:00 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-info flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New sale recorded <a
-                        href="javascript:void(0)" class="text-primary d-block fw-normal">#ML-3467</a>
-                    </div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">12:00 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1">Payment was made of $64.95 to Michael</div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">09:30 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New sale recorded <a
-                        href="javascript:void(0)" class="text-primary d-block fw-normal">#ML-3467</a>
-                    </div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">09:30 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-danger flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New arrival recorded
-                    </div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">12:00 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1">Payment Done</div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-8 d-flex align-items-stretch">
-            <div class="card w-100">
-              <div class="card-body p-4">
-                <h5 class="card-title fw-semibold mb-4">Recent Transactions</h5>
-                <div class="table-responsive">
-                  <table class="table text-nowrap mb-0 align-middle">
-                    <thead class="text-dark fs-4">
-                      <tr>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Id</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Assigned</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Name</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Priority</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Budget</h6>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td class="border-bottom-0"><h6 class="fw-semibold mb-0">1</h6></td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-1">Sunil Joshi</h6>
-                            <span class="fw-normal">Web Designer</span>
-                        </td>
-                        <td class="border-bottom-0">
-                          <p class="mb-0 fw-normal">Elite Admin</p>
-                        </td>
-                        <td class="border-bottom-0">
-                          <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-primary rounded-3 fw-semibold">Low</span>
-                          </div>
-                        </td>
-                        <td class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0 fs-4">$3.9</h6>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="border-bottom-0"><h6 class="fw-semibold mb-0">2</h6></td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-1">Andrew McDownland</h6>
-                            <span class="fw-normal">Project Manager</span>
-                        </td>
-                        <td class="border-bottom-0">
-                          <p class="mb-0 fw-normal">Real Homes WP Theme</p>
-                        </td>
-                        <td class="border-bottom-0">
-                          <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-secondary rounded-3 fw-semibold">Medium</span>
-                          </div>
-                        </td>
-                        <td class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0 fs-4">$24.5k</h6>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="border-bottom-0"><h6 class="fw-semibold mb-0">3</h6></td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-1">Christopher Jamil</h6>
-                            <span class="fw-normal">Project Manager</span>
-                        </td>
-                        <td class="border-bottom-0">
-                          <p class="mb-0 fw-normal">MedicalPro WP Theme</p>
-                        </td>
-                        <td class="border-bottom-0">
-                          <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-danger rounded-3 fw-semibold">High</span>
-                          </div>
-                        </td>
-                        <td class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0 fs-4">$12.8k</h6>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="border-bottom-0"><h6 class="fw-semibold mb-0">4</h6></td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-1">Nirav Joshi</h6>
-                            <span class="fw-normal">Frontend Engineer</span>
-                        </td>
-                        <td class="border-bottom-0">
-                          <p class="mb-0 fw-normal">Hosting Press HTML</p>
-                        </td>
-                        <td class="border-bottom-0">
-                          <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-success rounded-3 fw-semibold">Critical</span>
-                          </div>
-                        </td>
-                        <td class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0 fs-4">$2.4k</h6>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-6 col-xl-3">
-            <div class="card overflow-hidden rounded-2">
-              <div class="position-relative">
-                <a href="javascript:void(0)"><img src="/images/products/s4.jpg" class="card-img-top rounded-0" alt="..."></a>
-                <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>                      </div>
-              <div class="card-body pt-3 p-4">
-                <h6 class="fw-semibold fs-4">Boat Headphone</h6>
-                <div class="d-flex align-items-center justify-content-between">
-                  <h6 class="fw-semibold fs-4 mb-0">$50 <span class="ms-2 fw-normal text-muted fs-3"><del>$65</del></span></h6>
-                  <ul class="list-unstyled d-flex align-items-center mb-0">
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-xl-3">
-            <div class="card overflow-hidden rounded-2">
-              <div class="position-relative">
-                <a href="javascript:void(0)"><img src="/images/products/s5.jpg" class="card-img-top rounded-0" alt="..."></a>
-                <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>                      </div>
-              <div class="card-body pt-3 p-4">
-                <h6 class="fw-semibold fs-4">MacBook Air Pro</h6>
-                <div class="d-flex align-items-center justify-content-between">
-                  <h6 class="fw-semibold fs-4 mb-0">$650 <span class="ms-2 fw-normal text-muted fs-3"><del>$900</del></span></h6>
-                  <ul class="list-unstyled d-flex align-items-center mb-0">
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-xl-3">
-            <div class="card overflow-hidden rounded-2">
-              <div class="position-relative">
-                <a href="javascript:void(0)"><img src="/images/products/s7.jpg" class="card-img-top rounded-0" alt="..."></a>
-                <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>                      </div>
-              <div class="card-body pt-3 p-4">
-                <h6 class="fw-semibold fs-4">Red Valvet Dress</h6>
-                <div class="d-flex align-items-center justify-content-between">
-                  <h6 class="fw-semibold fs-4 mb-0">$150 <span class="ms-2 fw-normal text-muted fs-3"><del>$200</del></span></h6>
-                  <ul class="list-unstyled d-flex align-items-center mb-0">
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-xl-3">
-            <div class="card overflow-hidden rounded-2">
-              <div class="position-relative">
-                <a href="javascript:void(0)"><img src="/images/products/s11.jpg" class="card-img-top rounded-0" alt="..."></a>
-                <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>                      </div>
-              <div class="card-body pt-3 p-4">
-                <h6 class="fw-semibold fs-4">Cute Soft Teddybear</h6>
-                <div class="d-flex align-items-center justify-content-between">
-                  <h6 class="fw-semibold fs-4 mb-0">$285 <span class="ms-2 fw-normal text-muted fs-3"><del>$345</del></span></h6>
-                  <ul class="list-unstyled d-flex align-items-center mb-0">
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                    <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
-  <script src="/libs/jquery/dist/jquery.min.js"></script>
-  <script src="/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/js/sidebarmenu.js"></script>
-  <script src="/js/app.min.js"></script>
-  <script src="/libs/apexcharts/dist/apexcharts.min.js"></script>
-  <script src="/libs/simplebar/dist/simplebar.js"></script>
-  <script src="/js/dashboard.js"></script>
-</body>
+</div>
+
+
+        <!--모달-->
+        <div class="modal fade" id="settingPriceModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">현재 설정 요금</h5>
+                                <h4 class="fw-semibold mb-3"
+                                    th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">현재 설정
+                                    요금</h4>
+                            </div>
+                        </div>
+                        <p><br>
+                        <form th:action="@{/budget}" th:method="PUT" id="resetTargetAmountForm">
+                            <div class="mb-3">
+                                <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>
+                                <div class="input-group" style="width: 70%;">
+                                    <input type="number" class="form-control" id="budget" name="budget"
+                                           aria-describedby="amountAddon">
+                                    <span class="input-group-text" id="amountAddon">원</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="submit" class="btn btn-primary" form="resetTargetAmountForm">저장</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 같은 코드가 두 번 들어가 있는 것 같아서 주석처리 했습니다. 확인하시고 지워주세여ㅛ -->
+<!--        <script>-->
+<!--            let options = {-->
+<!--                chart: {-->
+<!--                    type: 'bar',-->
+<!--                    height: 250-->
+<!--                },-->
+<!--                plotOptions: {-->
+<!--                    bar: {-->
+<!--                        horizontal: true,-->
+<!--                    },-->
+<!--                },-->
+<!--                series: [-->
+<!--                    {-->
+<!--                        name: 'Electricity',-->
+<!--                        data: [],-->
+<!--                    },-->
+<!--                ],-->
+<!--                xaxis: {-->
+<!--                    categories: [],-->
+<!--                },-->
+<!--                title: {-->
+<!--                    text: '실시간 전력량 Top 10',-->
+<!--                    align: 'center',-->
+<!--                },-->
+<!--            };-->
+<!--        </script>-->
+<!--모달-->
+<!--<div class="modal fade" id="settingPriceModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"-->
+<!--     aria-hidden="true">-->
+<!--    <div class="modal-dialog">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <div class="card mb-3">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">현재 설정 요금</h5>-->
+<!--                        <h4 class="fw-semibold mb-3"-->
+<!--                            th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">현재 설정 요금</h4>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <p><br>-->
+<!--                <form th:action="@{/budget}" th:method="PUT" id="resetTargetAmountForm">-->
+<!--                    <div class="mb-3">-->
+<!--                        <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>-->
+<!--                        <div class="input-group" style="width: 70%;">-->
+<!--                            <input type="number" class="form-control" id="budget" name="budget"-->
+<!--                                   aria-describedby="amountAddon">-->
+<!--                            <span class="input-group-text" id="amountAddon">원</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>-->
+<!--                <button type="submit" class="btn btn-primary" form="resetTargetAmountForm">저장</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<script>
+    let options = {
+        chart: {
+            type: 'bar',
+            height:250
+        },
+        plotOptions: {
+            bar: {
+                horizontal: true,
+            },
+        },
+        series: [
+            {
+                name: 'Electricity',
+                data: [],
+            },
+        ],
+        xaxis: {
+            categories: [],
+        },
+        title: {
+            text: '실시간 전력량 Top 10',
+            align: 'center',
+        },
+    };
+
+            let chart = new ApexCharts(document.querySelector('#realtimeChart'), options);
+
+            chart.render();
+
+            function fetchDataAndUpdateChart() {
+                fetch('/top10')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        chart.updateSeries([
+                            {
+                                name: 'Electricity',
+                                data: data.map((item) => item.w),
+                            },
+                        ]);
+
+                        chart.updateOptions({
+                            xaxis: {
+                                categories: data.map((item) => `${item.place}\n${item.channel}`),
+                            },
+                        });
+                    });
+            }
+
+            fetchDataAndUpdateChart();
+
+            setInterval(fetchDataAndUpdateChart, 60000);
+        </script>
+
+        <script>
+            function checkRoleAndOpenModal() {
+                var updateFeeDiv = document.getElementById('update-fee');
+                var role = updateFeeDiv.getAttribute('data-role');
+                if (role === 'ADMIN') {
+                    openSetBudgetModal();
+                }
+            }
+
+    function openSetBudgetModal() {
+        var myModal = new bootstrap.Modal(document.getElementById('settingPriceModal'), {
+            keyboard: false
+        });
+        myModal.show();
+    }
+</script>
+
+<script>
+    setInterval(fetchDataAndUpdateUsage, 60000);
+
+    function fetchDataAndUpdateUsage() {
+        $.ajax({
+            url : "/kwh",
+            type : "GET",
+            success : function(result){
+                $('#lastMonth').text(result.lastMonthKwh + ' kwh');
+                $('#todayKwh').text(result.todayKwh + ' kwh');
+                $('#yesterdayKwh').text(result.yesterdayKwh + ' kwh');
+                $('#thisMonthKwh').text(result.thisMonthKwh + ' kwh');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        fetchDataAndUpdateUsage();
+    });
+</script>
+
+
+    <script>
+
+        var realtimeTotalOptions = {
+            series: [{
+                name: "kwh",
+                data: []
+            }],
+            chart: {
+                id: 'realtime',
+                height: 350,
+                type: 'bar',
+                zoom: {
+                    enabled: false
+                },
+                animations: {
+                    enabled: true,
+                    easing: 'linear',
+                    dynamicAnimation: {
+                        speed: 1000
+                    }
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            title: {
+                text: '최근 1시간 전력 소비량',
+                align: 'left'
+            },
+            grid: {
+                row: {
+                    colors: ['#f3f3f3'],
+                    opacity: 0.5
+                },
+            },
+            xaxis: {
+                type: 'datetime',
+                tickAmount: 12,
+                labels: {
+                    format: 'HH:mm'
+                }
+            },
+            yaxis: {
+                tickAmount: 4,
+                labels: {
+                    formatter: function (val) {
+                        return val.toFixed(1);
+                    }
+                }
+            },
+            tooltip: {
+                x: {
+                    format: 'HH:mm'
+                }
+            }
+        };
+
+        var realtimeTotalChart = new ApexCharts(document.querySelector("#realtime-total"), realtimeTotalOptions);
+        realtimeTotalChart.render();
+
+        function fetchOneHourTotalData() {
+            fetch('/total')
+                .then(response => response.json())
+                .then(data => {
+                    if (!Array.isArray(data)) {
+                        console.error('Expected an array of data but got:', data);
+                        return;
+                    }
+                    var seriesData = data.map(item => {
+                        const time = new Date(item.time);
+                        return {
+                            x: time.getTime(),
+                            y: item.kwh
+                        };
+                    });
+                    seriesData.sort((a, b) => a.x - b.x);
+                    realtimeTotalChart.updateSeries([{
+                        data: seriesData
+                    }]);
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            function scheduleFetch() {
+                const now = new Date();
+                const delay = 300000 - (now % 300000);
+                setTimeout(function() {
+                    fetchOneHourTotalData();
+                    scheduleFetch();
+                }, delay);
+            }
+            fetchOneHourTotalData();
+            scheduleFetch();
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const fetchCurrentMonthData = async () => {
+            try {
+                const response = await fetch('/daily/electricity/current-month');
+                if (!response.ok) throw new Error('Failed to fetch current month data');
+                return response.json();
+            } catch (error) {
+                console.error('Error fetching current month data:', error);
+                return [];
+            }
+        };
+
+        const fetchPredictedData = async () => {
+            try {
+                const response = await fetch('/monthly-predict');
+                if (!response.ok) throw new Error('Failed to fetch predicted data');
+                return response.json();
+            } catch (error) {
+                console.error('Error fetching predicted data:', error);
+                return [];
+            }
+        };
+
+        const prepareChartData = (data) => {
+            return data.map(item => ({
+            x: new Date(item.time).getTime(),
+            y: item.kwh
+            }));
+        };
+
+        const initdailyPredictChart = async () => {
+        const currentMonthData = await fetchCurrentMonthData();
+        const predictedData = await fetchPredictedData();
+        console.log(currentMonthData);
+        console.log(predictedData);
+
+        const fullData = prepareChartData(currentMonthData).concat(prepareChartData(predictedData));
+        fullData.sort((a, b) => a.x - b.x);
+
+        const today = new Date();
+        const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        const forecastCount = endOfMonth.getDate() - today.getDate() - 1;
+
+        console.log(forecastCount)
+
+        const chartOptions = {
+            series: [{
+                data: fullData,
+                name: 'kwh'
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+            },
+            forecastDataPoints: {
+                count: forecastCount
+            },
+            stroke: {
+                width: 5,
+                curve: 'smooth'
+            },
+            xaxis: {
+                type: 'datetime',
+                tickAmount: 10,
+                labels: {
+                    formatter: function(value, timestamp) {
+                    return new Date(timestamp).toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
+                }
+            }
+            },
+            title: {
+                text: '이번 달 전력 소비량',
+                align: 'left',
+                style: {
+                fontSize: "14px",
+                color: '#666'
+            }
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                shade: 'dark',
+                gradientToColors: ['#FDD835'],
+                shadeIntensity: 1,
+                type: 'horizontal',
+                opacityFrom: 1,
+                opacityTo: 1,
+                stops: [0, 100, 100, 100]
+                },
+            }
+        };
+
+        var dailyPredictChart = new ApexCharts(document.querySelector("#daily-predict"), chartOptions);
+        dailyPredictChart.render();
+        };
+
+        initdailyPredictChart();
+        });
+        </script>
+    </body>
 
 </html>

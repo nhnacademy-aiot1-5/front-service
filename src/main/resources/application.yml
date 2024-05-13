@@ -17,3 +17,12 @@ spring:
     active: dev
   application:
     name: front-service
+  thymeleaf:
+    cache: false
+  jackson:
+    default-property-inclusion: non_null
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true

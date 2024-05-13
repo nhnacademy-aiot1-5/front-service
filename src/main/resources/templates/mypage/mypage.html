@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지</title>
+    <!-- 부트스트랩 CSS 파일 -->
+    <link rel="stylesheet" href="/css/style.css">
+
+
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            var message = [[${message}]];
+            if (message) {
+                alert(message);
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
+     data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <th:block th:replace="side-bar :: sidebar"></th:block>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+        <!--  Header Start -->
+        <th:block th:replace="header :: header"></th:block>
+        <div class="container-fluid">
+
+            <!--  Header End -->
+
+
+            <div class="row">
+                <div class="col-6 mb-4">
+                    <div class="rounded-lg border bg-white text-dark shadow-sm">
+                        <div class="p-4">
+                            <h2 class="text-lg fw-bold">회원 정보</h2>
+                            <div style="height: 20px;"></div>
+                            <div class="mb-3 d-flex align-items-center">
+                                <div class="fw-semibold me-3" style="min-width: 70px;">아이디</div>
+                                <div class="text-muted text-start" th:text="${userInfo.id}" id="user_id">userId</div>
+                            </div>
+                            <div class="mb-3 d-flex align-items-center">
+                                <div class="fw-semibold me-3" style="min-width: 70px;">이름</div>
+                                <div class="text-muted text-start" th:text="${userInfo.name}" id="user_name">userName
+                                </div>
+                            </div>
+                            <div class="mb-3 d-flex align-items-center">
+                                <div class="fw-semibold me-3" style="min-width: 70px;">생성일</div>
+                                <div class="text-muted text-start" th:text="${userInfo.createdAt}" id="user_created_at">
+                                    2023-10-01 14:25:00
+                                </div>
+                            </div>
+                            <div class="mb-3 d-flex align-items-center">
+                                <div class="fw-semibold me-3" style="min-width: 70px;">권한</div>
+                                <div class="text-muted text-start" th:text="${userInfo.role}" id="user_role">userRole
+                                </div>
+                            </div>
+                            <div class="mb-3 d-flex align-items-center">
+                                <div class="fw-semibold me-3" style="min-width: 70px;">소속 조직</div>
+                                <div class="text-muted text-start" th:text="${userInfo.organization.name}" id="user_org">
+                                    userOrganization
+                                </div>
+                            </div>
+                            <div style="height: 20px;"></div>
+
+                            <button class="btn btn-primary"
+                                    style="font-size: 14px; padding: 6px 12px;"
+                                    onclick="showModal()">
+                                수정
+                            </button>
+                            <div style="height: 20px;"></div>
+                            <form action="change-password" method="get">
+                                <button class="btn btn-primary"
+                                        style="font-size: 14px; padding: 6px 12px;">
+                                    비밀번호 변경
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 조직 정보 -->
+                <div class="col-6 mb-4" th:if="${userInfo.role.name() != 'GUEST'}">
+                    <div class="rounded-lg border bg-white text-dark shadow-sm">
+                        <div class="p-4">
+                            <h2 class="text-lg fw-bold">조직 정보</h2>
+                            <div style="height: 20px;"></div>
+                            <div class="mb-3 d-flex align-items-center">
+                                <div class="fw-semibold me-3 col-4" style="min-width: 70px;">조직 이름</div>
+                                <div class="text-muted text-start" th:text="${organizationInfo.name}">조직이름</div>
+                            </div>
+                            <div class="mb-3 d-flex align-items-center">
+                                <div class="fw-semibold me-3 col-4" style="min-width: 70px;">이번 달 목표 금액</div>
+                                <div class="text-muted text-start"
+                                     th:text="${#numbers.formatInteger(organizationInfo.electricityBudget, 3, 'COMMA')} + ' 원'">
+                                    한달 예산
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 회원 정보 수정 모달 -->
+    <div id="editUserModal" class="modal" style="width: 50%; height: 50%;">
+        <div class="modal-content" style="border: none; padding: 0; margin: 0;">
+            <div class="modal-header" style="border-bottom: 1px solid #e9ecef; padding: 10px;">
+                <h5 class="modal-title">회원 정보 수정</h5>
+                <button type="button" class="close" onclick="closeEditModal()" aria-label="Close"
+                        style="border: none; background: transparent; font-size: 20px; color: #000; padding: 0; margin: 0;">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 10px;">
+                <form id="editUserForm" method="post" action="/update-user">
+                    <div class="mb-3 d-flex align-items-center">
+                        <div class="fw-semibold me-3" style="min-width: 70px;">아이디</div>
+                        <input type="text" class="form-control" id="userId" name="id" readonly>
+                    </div>
+                    <div class="mb-3 d-flex align-items-center">
+                        <div class="fw-semibold me-3" style="min-width: 70px;">이름</div>
+                        <input type="text" class="form-control" id="userName" name="name">
+                    </div>
+                    <div class="mb-3 d-flex align-items-center">
+                        <div class="fw-semibold me-3" style="min-width: 70px;">가입일</div>
+                        <input type="text" class="form-control" id="userCreatedAt" name="createdAt" readonly>
+                    </div>
+                    <div class="mb-3 d-flex align-items-center">
+                        <div class="fw-semibold me-3" style="min-width: 70px;">권한</div>
+                        <input type="text" class="form-control" id="userRole" name="role" readonly>
+                    </div>
+                    <div class="mb-3 d-flex align-items-center">
+                        <div class="fw-semibold me-3" style="min-width: 70px;">소속 조직</div>
+                        <input type="text" class="form-control" id="userOrg" name="organizationName" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">저장</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+
+    function showModal() {
+
+        var userId = document.getElementById("user_id").textContent;
+        var userName = document.getElementById("user_name").textContent;
+        var userCreatedAt = document.getElementById("user_created_at").textContent;
+        var userRole = document.getElementById("user_role").textContent;
+        var userOrg = document.getElementById("user_org").textContent;
+        document.getElementById('userId').value = userId.trim();
+        document.getElementById('userName').value = userName.trim();
+        document.getElementById('userCreatedAt').value = userCreatedAt.trim();
+        document.getElementById('userRole').value = userRole.trim();
+        document.getElementById('userOrg').value = userOrg.trim();
+
+        document.getElementById('editUserModal').style.display = 'block';
+    }
+
+    function closeEditModal() {
+        document.getElementById('editUserModal').style.display = 'none';
+    }
+
+</script>
+
+</html>

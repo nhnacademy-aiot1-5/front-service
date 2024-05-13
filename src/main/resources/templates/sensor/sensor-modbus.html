@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>어드민 페이지</title>
+    <!-- 부트스트랩 CSS 파일 -->
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css"/>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
+     data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <th:block th:replace="side-bar :: sidebar"></th:block>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+        <!--  Header Start -->
+        <th:block th:replace="header :: header"></th:block>
+        <div class="container-fluid">
+            <div>
+                <h1>센서관리 페이지</h1>
+                <br/>
+            </div>
+            <!--  Header End -->
+            <table>
+                <tr>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/places'">
+                            장소 관리
+                        </button>
+                    </td>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/sensors/modbus'">
+                            MODBUS 센서 관리
+                        </button>
+                    </td>
+                    <td class="mb-4" style="padding: 10px;">
+                        <button class="btn btn-primary"
+                                style="font-size: 14px; padding: 10px 20px;"
+                                onclick="location.href='/sensors/mqtt'">
+                            MQTT 센서 관리
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            <div class="row">
+                <div class="col-12 mb-4"> <!-- 멤버 리스트 -->
+                    <div class="rounded-lg border bg-white text-dark shadow-sm">
+                        <div class="card">
+                            <div class="card-header">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <h2 class="card-title">MODBUS 센서 관리</h2>
+                                    <button type="submit" class="btn btn-primary" onclick="location.href='/sensors/modbus/add'">센서 등록</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table id="table" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>센서명</th>
+                                        <th>센서 모델</th>
+                                        <th>IP</th>
+                                        <th>PORT</th>
+                                        <th>채널 수</th>
+                                        <th>상태</th>
+                                        <th>동작</th>
+                                        <th>센서 상세</th>
+                                        <th>센서 수정</th>
+                                        <th>센서 삭제</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="sensor : ${modbusSensorInfo}">
+                                        <td th:text="${sensor.sensorName}"></td>
+                                        <td th:text="${sensor.modelName}"></td>
+                                        <td th:text="${sensor.ip}"></td>
+                                        <td th:text="${sensor.port}"></td>
+                                        <td th:text="${sensor.channelCount}"></td>
+                                        <td th:text="${sensor.alive}"></td>
+                                        <td>
+                                            <form th:action="@{/sensors/modbus/work/{sensorId}(sensorId=${sensor.id})}"
+                                                  th:method="PUT" onsubmit="return confirmRequest();">
+                                                <button type="submit" class="btn btn-primary"
+                                                        th:text="${sensor.alive.name() == 'UP' ? '중지' : '동작'}">권한 변경
+                                                </button>
+
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form th:action="@{/sensors/modbus/{sensorId}(sensorId=${sensor.id})}"
+                                                  th:method="GET">
+                                                <button type="submit" class="btn btn-primary">상세 보기</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <button type="submit" class="btn btn-primary" th:onclick="'openUpdateSensorModal(' + ${sensor.id} + ');'">센서 수정</button>
+                                        </td>
+                                        <td>
+                                            <form th:action="@{/sensors/modbus/{sensorId}(sensorId=${sensor.id})}" th:method="DELETE" onsubmit="return confirmDelete();">
+                                                <button type="submit" class="btn btn-primary">삭제</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--센서 정보 수정 모달-->
+<div class="modal fade" id="sensorUpdateModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center align-items-center">
+                <form th:method="PUT" id="sensorUpdateForm" style="width: 90%;">
+                    <div class="mb-3">
+                        <h4>센서명</h4>
+                        <div class="input-group" style="width: 100%;">
+                            <input type="text" class="form-control" id="sensorName" name="sensorName"
+                                   aria-describedby="amountAddon" placeholder="센서명" required>
+                        </div>
+                        <br>
+                        <h4>IP</h4>
+                        <div class="d-flex align-items-center">
+                            <input type="text" class="form-control" id="ip" name="ip" pattern="^(\d{1,3}\.){3}\d{1,3}$" title="IP 주소 형식에 맞게 입력하세요. 예: 192.168.1.1">
+                        </div>
+                        <br>
+                        <h4>PORT</h4>
+                        <div class="input-group" style="width: 100%;">
+                            <input type="number" class="form-control" id="port" name="port"
+                                   aria-describedby="amountAddon" placeholder="PORT" required min="1" max="65535">
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="submit" class="btn btn-primary" form="sensorUpdateForm">저장</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let table = new DataTable('#table', {
+        responsive: true
+    });
+
+    function openUpdateSensorModal(sensorId) {
+        let updateForm = document.getElementById('sensorUpdateForm');
+        updateForm.action = '/sensors/modbus/' + sensorId
+        // 모달을 열기
+        let myModal = new bootstrap.Modal(document.getElementById('sensorUpdateModal'), {
+            keyboard: false
+        });
+        myModal.show();
+    }
+
+    document.getElementById('ip').addEventListener('input', function(e) {
+        var ipPattern = /^(\d{1,3}\.){3}\d{1,3}$/;
+        if (!ipPattern.test(this.value)) {
+            this.setCustomValidity('올바른 IP 주소 형식이 아닙니다. 예: 192.168.1.1');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+
+    function confirmRequest() {
+        return confirm("센서 상태를 바꾸시겠습니까?");
+    }
+
+    function confirmDelete() {
+        return confirm("정말로 이 센서를 삭제하시겠습니까?");
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        let alertMessage = "[[${alertMessage}]]";
+        if (alertMessage) {
+            alert(alertMessage);
+        }
+    });
+</script>
+</body>
+</html>

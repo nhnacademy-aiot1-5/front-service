@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<th:block th:fragment="sidebar">
+
+    <aside class="left-sidebar">
+        <div>
+            <div class="brand-logo d-flex align-items-center justify-content-between">
+                <a href="/" class="container-fluid d-flex justify-content-center">
+                    <img class="img-fluid mx-auto" th:src="@{/images/logos/ioteatime-long.png}"
+                         alt="Logo" style="object-fit: cover;">
+                </a>
+
+                <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer"
+                     id="sidebarCollapse">
+                    <i class="ti ti-x fs-8"></i>
+                </div>
+            </div>
+
+            <div class="fixed-profile p-3 mx-4 mb-2 bg-secondary-subtle rounded mt-3">
+                <div class="hstack gap-3">
+                    <div class="john-img">
+                        <img src="/images/profile/guest_image.png" class="rounded-circle" width="40"
+                             height="40" alt="modernize-img">
+                    </div>
+
+                    <div class="john-title" th:if="${userInfo}">
+                        <h6 class="mb-0 fs-4 fw-semibold" th:text="${userInfo.id}+' 님'">유저내용</h6>
+                        <span class="fs-2" th:text="${userInfo.role}">userRole</span></div>
+
+                    <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0"
+                            type="button" aria-label="logout" data-bs-toggle="tooltip"
+                            data-bs-placement="top" th:if="${userInfo}" data-bs-title="logout"
+                            onclick="location.href='/logout'">
+                        <i class="ti ti-power fs-6"></i>
+                    </button>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+                <ul id="sidebarnav">
+                    <li class="nav-small-cap">
+                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        <span class="hide-menu">Home</span>
+                    </li>
+                    <li class="sidebar-item" th:if="${userInfo.role.name() != 'GUEST'}">
+                        <a class="sidebar-link" href="/" aria-expanded="false">
+                            <span>
+                              <i class="ti ti-layout-dashboard"></i>
+                            </span>
+                            <span class="hide-menu">대시 보드</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/mypage" aria-expanded="false">
+                            <span>
+                              <i class="ti ti-layout-dashboard"></i>
+                            </span>
+                            <span class="hide-menu">마이 페이지</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-small-cap" th:if="${userInfo.role.name() == 'ADMIN'}">
+                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        <span class="hide-menu">ADMIN</span>
+                    </li>
+                    <li class="sidebar-item" th:if="${userInfo.role.name() == 'ADMIN'}">
+                        <a class="sidebar-link" href="/admin" aria-expanded="false">
+                            <span>
+                              <i class="ti ti-layout-dashboard"></i>
+                            </span>
+                            <span class="hide-menu">관리자 페이지</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item" th:if="${userInfo.role.name() == 'ADMIN'}">
+                        <a class="sidebar-link" href="/sensors" aria-expanded="false">
+                            <span>
+                              <i class="ti ti-layout-dashboard"></i>
+                            </span>
+                            <span class="hide-menu">센서관리 페이지</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-small-cap" th:if="${userInfo.role.name() !='GUEST'}">
+                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        <span class="hide-menu">보고서</span>
+                    </li>
+
+                    <li class="sidebar-item" th:if="${userInfo.role.name() !='GUEST'}">
+                        <a class="sidebar-link" href="/daily-report" aria-expanded="false">
+                            <span>
+                              <i class="ti ti-alert-circle"></i>
+                            </span>
+                            <span class="hide-menu">일 별 리포트</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item" th:if="${userInfo.role.name() !='GUEST'}">
+                        <a class="sidebar-link" href="/monthly-report" aria-expanded="false">
+                            <span>
+                              <i class="ti ti-cards"></i>
+                            </span>
+                            <span class="hide-menu">월 별 리포트</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item" th:if="${userInfo.role.name() !='GUEST'}">
+                        <a class="sidebar-link" href="#" aria-expanded="false">
+                            <span>
+                              <i class="ti ti-file-description"></i>
+                            </span>
+                            <span class="hide-menu">누적 리포트</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
+    </aside>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"></script>
+    <script src="/js/app.min.js"></script>
+</th:block>
+</body>
+</html>

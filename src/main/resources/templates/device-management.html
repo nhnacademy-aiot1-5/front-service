@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+
+        <script src="https://code.jquery.com/jquery-3.7.1.js"
+                integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css"/>
+        <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+        <link rel="stylesheet" href="/css/style.css"/>
+    </head>
+    <body>
+        <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+             data-sidebar-position="fixed" data-header-position="fixed">
+            <!-- Sidebar Start -->
+            <th:block th:replace="side-bar :: sidebar"></th:block>
+            <!--  Sidebar End -->
+            <!--  Main wrapper -->
+            <div class="body-wrapper">
+                <!--  Header Start -->
+                <th:block th:replace="header :: header"></th:block>
+                <!--  Header End -->
+                <div class="container-fluid">
+                    <div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
+                        <div class="card-body px-4 py-3">
+                            <div class="row align-items-center">
+                                <div class="col-9">
+                                    <h4 class="fw-semibold mb-8">센서 관리</h4>
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item">
+                                                <a class="text-muted text-decoration-none" href="../main/index.html">Home</a>
+                                            </li>
+                                            <li class="breadcrumb-item" aria-current="page">센서 관리</li>
+                                        </ol>
+                                    </nav>
+                                </div>
+                                <div class="col-3">
+                                    <div class="text-center mb-n5">
+                                        <img src="../images/sensor/sensor.png" alt="modernize-img"
+                                             class="img-fluid mb-n4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="datatables">
+                        <!-- start Zero Configuration -->
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">장비 센서 관리</h4>
+                                <p class="card-subtitle mb-3">
+                                    장비 센서들을 관리하기 위한 페이지입니다.
+                                </p>
+                                <div class="table-responsive">
+                                    <div id="zero_config_wrapper" class="dataTables_wrapper">
+                                        <!--                                        <div class="dataTables_length" id="zero_config_length"><label>Show <select-->
+                                        <!--                                                name="zero_config_length" aria-controls="zero_config" class="">-->
+                                        <!--                                            <option value="10">10</option>-->
+                                        <!--                                            <option value="25">25</option>-->
+                                        <!--                                            <option value="50">50</option>-->
+                                        <!--                                            <option value="100">100</option>-->
+                                        <!--                                        </select> entries</label></div>-->
+                                        <!--                                        <div id="zero_config_filter" class="dataTables_filter"><label>Search:<input-->
+                                        <!--                                                type="search" class="" placeholder=""-->
+                                        <!--                                                aria-controls="zero_config"></label></div>-->
+                                        <table id="zero_config"
+                                               class="table table-striped table-bordered text-nowrap align-middle dataTable"
+                                               aria-describedby="zero_config_info">
+                                            <thead>
+                                                <!-- start row -->
+                                                <tr>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="zero_config" rowspan="1" colspan="1"
+                                                        aria-sort="ascending"
+                                                        aria-label="Name: activate to sort column descending"
+                                                        style="width: 223.734px;">센서명
+                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="zero_config"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Position: activate to sort column ascending"
+                                                        style="width: 250.516px;">지원 정보
+                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="zero_config"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Office: activate to sort column ascending"
+                                                        style="width: 112.062px;">전원
+                                                    </th>
+                                                    <!--                                                    <th class="sorting" tabindex="0" aria-controls="zero_config"-->
+                                                    <!--                                                        rowspan="1" colspan="1"-->
+                                                    <!--                                                        aria-label="Age: activate to sort column ascending"-->
+                                                    <!--                                                        style="width: 44.0781px;">Age-->
+                                                    <!--                                                    </th>-->
+                                                    <!--                                                    <th class="sorting" tabindex="0" aria-controls="zero_config"-->
+                                                    <!--                                                        rowspan="1" colspan="1"-->
+                                                    <!--                                                        aria-label="Start date: activate to sort column ascending"-->
+                                                    <!--                                                        style="width: 103.531px;">Start date-->
+                                                    <!--                                                    </th>-->
+                                                    <!--                                                    <th class="sorting" tabindex="0" aria-controls="zero_config"-->
+                                                    <!--                                                        rowspan="1" colspan="1"-->
+                                                    <!--                                                        aria-label="Salary: activate to sort column ascending"-->
+                                                    <!--                                                        style="width: 99.0781px;">Salary-->
+                                                    <!--                                                    </th>-->
+                                                </tr>
+                                                <!-- end row -->
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="device, stat : ${devices}"
+                                                    th:classappend="${stat.even} ? 'even' : 'odd'">
+                                                    <td class="sorting_1">
+                                                        <div class="d-flex align-items-center gap-6">
+                                                            <img th:src="@{${device.userImageUrl}}" width="45"
+                                                                 class="rounded-circle">
+                                                            <h6 class="mb-0" th:text="${device.userName}">Airi
+                                                                Satou</h6>
+                                                        </div>
+                                                    </td>
+                                                    <td th:text="${device.position}"></td>
+                                                    <td th:text="${device.location}"></td>
+                                                </tr>
+                                                <tr class="odd">
+                                                    <td class="sorting_1">
+                                                        <div class="d-flex align-items-center gap-6">
+                                                            <img src="../images/sensor/sensor.png" width="45"
+                                                                 class="rounded-circle">
+                                                            <h6 class="mb-0">EM320-TH-389818</h6>
+                                                        </div>
+                                                    </td>
+                                                    <td>온도, 습도, 배터리 레벨</td>
+                                                    <td>off</td>
+                                                    <!--                                                    <td>33</td>-->
+                                                    <!--                                                    <td>2008/11/28</td>-->
+                                                    <!--                                                    <td>$162,700</td>-->
+                                                </tr>
+                                                <tr class="even">
+                                                    <td class="sorting_1">
+                                                        <div class="d-flex align-items-center gap-6">
+                                                            <img src="../images/sensor/sensor.png" width="45"
+                                                                 class="rounded-circle">
+                                                            <h6 class="mb-0">AM107-067999</h6>
+                                                        </div>
+                                                    </td>
+                                                    <td>적외선, 이산화탄소, 압력, 밝기, 대기오염물질, 온도, 습도</td>
+                                                    <td>off</td>
+                                                    <!--                                                    <td>66</td>-->
+                                                    <!--                                                    <td>2009/01/12</td>-->
+                                                    <!--                                                    <td>$86,000</td>-->
+                                                </tr>
+                                                <!--                                                <tr class="odd">-->
+                                                <!--                                                    <td class="sorting_1">-->
+                                                <!--                                                        <div class="d-flex align-items-center gap-6">-->
+                                                <!--                                                            <img src="../assets/images/profile/user-1.jpg" width="45"-->
+                                                <!--                                                                 class="rounded-circle">-->
+                                                <!--                                                            <h6 class="mb-0"> Brielle Williamson</h6>-->
+                                                <!--                                                        </div>-->
+                                                <!--                                                    </td>-->
+                                                <!--                                                    <td>Integration Specialist</td>-->
+                                                <!--                                                    <td>New York</td>-->
+                                                <!--                                                    <td>61</td>-->
+                                                <!--                                                    <td>2012/12/02</td>-->
+                                                <!--                                                    <td>$372,000</td>-->
+                                                <!--                                                </tr>-->
+                                                <!--                                                <tr class="even">-->
+                                                <!--                                                    <td class="sorting_1">-->
+                                                <!--                                                        <div class="d-flex align-items-center gap-6">-->
+                                                <!--                                                            <img src="../assets/images/profile/user-1.jpg" width="45"-->
+                                                <!--                                                                 class="rounded-circle">-->
+                                                <!--                                                            <h6 class="mb-0"> Cedric Kelly</h6>-->
+                                                <!--                                                        </div>-->
+                                                <!--                                                    </td>-->
+                                                <!--                                                    <td>Senior Javascript Developer</td>-->
+                                                <!--                                                    <td>Edinburgh</td>-->
+                                                <!--                                                    <td>22</td>-->
+                                                <!--                                                    <td>2012/03/29</td>-->
+                                                <!--                                                    <td>$433,060</td>-->
+                                                <!--                                                </tr>-->
+                                                <!--                                                <tr class="odd">-->
+                                                <!--                                                    <td class="sorting_1">-->
+                                                <!--                                                        <div class="d-flex align-items-center gap-6">-->
+                                                <!--                                                            <img src="../assets/images/profile/user-1.jpg" width="45"-->
+                                                <!--                                                                 class="rounded-circle">-->
+                                                <!--                                                            <h6 class="mb-0"> Garrett Winters</h6>-->
+                                                <!--                                                        </div>-->
+                                                <!--                                                    </td>-->
+                                                <!--                                                    <td>Accountant</td>-->
+                                                <!--                                                    <td>Tokyo</td>-->
+                                                <!--                                                    <td>63</td>-->
+                                                <!--                                                    <td>2011/07/25</td>-->
+                                                <!--                                                    <td>$170,750</td>-->
+                                                <!--                                                </tr>-->
+                                                <!--                                                <tr class="even">-->
+                                                <!--                                                    <td class="sorting_1">-->
+                                                <!--                                                        <div class="d-flex align-items-center gap-6">-->
+                                                <!--                                                            <img src="../assets/images/profile/user-1.jpg" width="45"-->
+                                                <!--                                                                 class="rounded-circle">-->
+                                                <!--                                                            <h6 class="mb-0"> Herrod Chandler</h6>-->
+                                                <!--                                                        </div>-->
+                                                <!--                                                    </td>-->
+                                                <!--                                                    <td>Sales Assistant</td>-->
+                                                <!--                                                    <td>San Francisco</td>-->
+                                                <!--                                                    <td>59</td>-->
+                                                <!--                                                    <td>2012/08/06</td>-->
+                                                <!--                                                    <td>$137,500</td>-->
+                                                <!--                                                </tr>-->
+                                                <!--                                                <tr class="odd">-->
+                                                <!--                                                    <td class="sorting_1">-->
+                                                <!--                                                        <div class="d-flex align-items-center gap-6">-->
+                                                <!--                                                            <img src="../assets/images/profile/user-1.jpg" width="45"-->
+                                                <!--                                                                 class="rounded-circle">-->
+                                                <!--                                                            <h6 class="mb-0"> Tiger Nixon</h6>-->
+                                                <!--                                                        </div>-->
+
+                                                <!--                                                    </td>-->
+                                                <!--                                                    <td>System Architect</td>-->
+                                                <!--                                                    <td>Edinburgh</td>-->
+                                                <!--                                                    <td>61</td>-->
+                                                <!--                                                    <td>2011/04/25</td>-->
+                                                <!--                                                    <td>$320,800</td>-->
+                                                <!--                                                </tr>-->
+                                                <!--                                                <tr class="even">-->
+                                                <!--                                                    <td class="sorting_1">-->
+                                                <!--                                                        <div class="d-flex align-items-center gap-6">-->
+                                                <!--                                                            <img src="../assets/images/profile/user-1.jpg" width="45"-->
+                                                <!--                                                                 class="rounded-circle">-->
+                                                <!--                                                            <h6 class="mb-0">Angelica Ramos</h6>-->
+                                                <!--                                                        </div>-->
+                                                <!--                                                    </td>-->
+                                                <!--                                                    <td>Chief Executive Officer (CEO)</td>-->
+                                                <!--                                                    <td>London</td>-->
+                                                <!--                                                    <td>47</td>-->
+                                                <!--                                                    <td>2009/10/09</td>-->
+                                                <!--                                                    <td>$1,200,000</td>-->
+                                                <!--                                                </tr>-->
+                                                <!--                                                <tr class="odd">-->
+                                                <!--                                                    <td class="sorting_1">-->
+                                                <!--                                                        <div class="d-flex align-items-center gap-6">-->
+                                                <!--                                                            <img src="../assets/images/profile/user-1.jpg" width="45"-->
+                                                <!--                                                                 class="rounded-circle">-->
+                                                <!--                                                            <h6 class="mb-0">Bradley Greer</h6>-->
+                                                <!--                                                        </div>-->
+                                                <!--                                                    </td>-->
+                                                <!--                                                    <td>Software Engineer</td>-->
+                                                <!--                                                    <td>London</td>-->
+                                                <!--                                                    <td>41</td>-->
+                                                <!--                                                    <td>2012/10/13</td>-->
+                                                <!--                                                    <td>$132,000</td>-->
+                                                <!--                                                </tr>-->
+                                                <!--                                                <tr class="even">-->
+                                                <!--                                                    <td class="sorting_1">-->
+                                                <!--                                                        <div class="d-flex align-items-center gap-6">-->
+                                                <!--                                                            <img src="../assets/images/profile/user-1.jpg" width="45"-->
+                                                <!--                                                                 class="rounded-circle">-->
+                                                <!--                                                            <h6 class="mb-0">Brenden Wagner</h6>-->
+                                                <!--                                                        </div>-->
+                                                <!--                                                    </td>-->
+                                                <!--                                                    <td>Software Engineer</td>-->
+                                                <!--                                                    <td>San Francisco</td>-->
+                                                <!--                                                    <td>28</td>-->
+                                                <!--                                                    <td>2011/06/07</td>-->
+                                                <!--                                                    <td>$206,850</td>-->
+                                                <!--                                                </tr>-->
+                                            </tbody>
+                                            <tfoot>
+                                                <!-- start row -->
+                                                <tr>
+                                                    <th rowspan="1" colspan="1">Name</th>
+                                                    <th rowspan="1" colspan="1">Support</th>
+                                                    <th rowspan="1" colspan="1">Status</th>
+                                                    <!--                                                    <th rowspan="1" colspan="1">Age</th>-->
+                                                    <!--                                                    <th rowspan="1" colspan="1">Start date</th>-->
+                                                    <!--                                                    <th rowspan="1" colspan="1">Salary</th>-->
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            let table = new DataTable('#zero_config', {
+                responsive: true
+            });
+        </script>
+    </body>
+</html>
