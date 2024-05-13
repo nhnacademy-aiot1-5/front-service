@@ -44,14 +44,14 @@ public class UserController {
         log.info("userId={}, userRole={}", userInfo.getId(), userInfo.getRole());
 
         if(userInfo.getRole().equals(Role.GUEST)){
-            return "/mypage/mypage";
+            return "mypage/mypage";
         }
 
         OrganizationResponse organizationInfo = userAdaptor.getOrganization().getBody();
         model.addAttribute("organizationInfo", organizationInfo);
         log.info("organization_name={}, electricity_montly_budget={}",organizationInfo.getName(), organizationInfo.getElectricityBudget());
 
-        return "/mypage/mypage";
+        return "mypage/mypage";
 
     }
 
@@ -97,7 +97,7 @@ public class UserController {
     @GetMapping("/change-password")
     public String changePasswordPage(Model model){
 
-        return "/authentication/change-password";
+        return "authentication/change-password";
     }
 
 }

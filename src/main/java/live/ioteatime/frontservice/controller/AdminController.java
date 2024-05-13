@@ -38,7 +38,7 @@ public class AdminController {
         List<GetUserResponse> userList = adminAdaptor.requestGuestUsers().getBody();
         model.addAttribute("userList", userList);
 
-        return "/admin/admin-authority";
+        return "admin/admin-authority";
     }
 
     /**
@@ -63,7 +63,7 @@ public class AdminController {
         List<GetUserResponse> userList = adminAdaptor.requestUsers().getBody();
         model.addAttribute("userList", userList);
 
-        return "/admin/admin-user";
+        return "admin/admin-user";
     }
 
     /**
@@ -78,7 +78,7 @@ public class AdminController {
         OrganizationResponse budget = userAdaptor.requestBudget().getBody();
         model.addAttribute("budget", budget);
 
-        return "/admin/admin-budget";
+        return "admin/admin-budget";
     }
 
     /**
@@ -93,7 +93,7 @@ public class AdminController {
         List<BudgetHistoryResponse> budgetHistory = adminAdaptor.requestBudgetHistory().getBody();
         model.addAttribute("budgetHistory", budgetHistory);
 
-        return "/admin/admin-budget-history";
+        return "admin/admin-budget-history";
     }
 
     /**
@@ -108,7 +108,7 @@ public class AdminController {
         OrganizationResponse organization = adminAdaptor.requestOrganization().getBody();
         model.addAttribute("organization", organization);
 
-        return "/admin/admin-organization";
+        return "admin/admin-organization";
     }
 
     @GetMapping("/checkcode")

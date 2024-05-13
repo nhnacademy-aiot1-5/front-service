@@ -260,11 +260,9 @@
             });
 
             function updateChartData(dailyData) {
-                console.log(dailyData);
                 const kwhData2 = dailyData.map(dto => dto.kwh);
                 const dates2 = dailyData.map(dto => dto.time);
 
-                console.log(dates2);
                 chart2.updateOptions({
                     series: [{
                         name: 'KWh',
@@ -289,6 +287,5 @@
                 table.draw(); // 모든 데이터가 추가된 후 테이블을 다시 그림
             }
         </script>
-
     </body>
 </html>

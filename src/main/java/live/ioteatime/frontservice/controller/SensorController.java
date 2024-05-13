@@ -47,7 +47,7 @@ public class SensorController {
         List<ModbusSensorResponse> modbusSensorInfo = modbusSensorAdaptor.getSensors().getBody();
         model.addAttribute("modbusSensorInfo", modbusSensorInfo);
 
-        return "/sensor/sensor-modbus";
+        return "sensor/sensor-modbus";
     }
 
     /**
@@ -79,7 +79,7 @@ public class SensorController {
         model.addAttribute("modbusChannelInfo", modbusChannelInfo);
 
         model.addAttribute("sensorId", sensorId);
-        return "/sensor/sensor-modbus-detail";
+        return "sensor/sensor-modbus-detail";
     }
 
     /**
@@ -95,7 +95,7 @@ public class SensorController {
 
         model.addAttribute("modbusChannelInfo", modbusChannelInfo);
 
-        return "/sensor/sensor-modbus-place-channel";
+        return "sensor/sensor-modbus-place-channel";
     }
 
     /**
@@ -109,7 +109,7 @@ public class SensorController {
         List<ModbusSensorResponse> supportedModbusSensorInfo = modbusSensorAdaptor.getSupportedModbusSensors().getBody();
         model.addAttribute("supportedModbusSensorInfo", supportedModbusSensorInfo);
 
-        return "/sensor/modbus-add-form";
+        return "sensor/modbus-add-form";
     }
 
     /**
@@ -126,7 +126,7 @@ public class SensorController {
         model.addAttribute("placeList", placeList);
 
         model.addAttribute("sensorId", sensorId);
-        return "/sensor/modbus-channel-add-form";
+        return "sensor/modbus-channel-add-form";
     }
 
     /**
@@ -258,7 +258,7 @@ public class SensorController {
         List<GetMqttSensorResponse> mqttSensorInfo = mqttSensorAdaptor.getUserOrganizationMqttSensors().getBody();
         model.addAttribute("mqttSensorInfo", mqttSensorInfo);
 
-        return "/sensor/sensor-mqtt";
+        return "sensor/sensor-mqtt";
     }
 
     /**
@@ -277,7 +277,7 @@ public class SensorController {
         List<PlaceDto> placeList = placeAdaptor.getPlacesByOrganizationId(userInfo.getOrganization().getId()).getBody();
         model.addAttribute("placeList", placeList);
 
-        return "/sensor/mqtt-add-form";
+        return "sensor/mqtt-add-form";
     }
 
     /**
