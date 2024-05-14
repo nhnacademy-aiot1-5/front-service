@@ -27,7 +27,6 @@ public class MonthlyReportController {
     }
 
     @GetMapping("/monthly-electricity/{localdate}")
-    @ResponseBody
     public ResponseEntity<MonthlyElectricitiesDto> getElectricityByMonth(
             @PathVariable(name = "localdate")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
