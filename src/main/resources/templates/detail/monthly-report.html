@@ -69,21 +69,24 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h6 class="text-end">설정 요금</h6>
-                                    <h3 class="mb-0 text-end" th:text="${budget}+'원'"></h3>
+                                    <h3 class="mb-0 text-end" th:text="'₩ '+${#numbers.formatInteger(budget, 0, 'COMMA')}"></h3>
                                 </div>
                             </div>
                             <div class="card">
                                 <div class="card-body">
                                     <h6 class="text-end">사용 요금</h6>
-                                    <h3 class="mb-0 text-end">원</h3>
+                                    <h3 class="mb-0 text-end" id="bill"> - </h3>
                                 </div>
                             </div>
                             <div class="card">
                                 <div class="card-body">
                                     <h6 class="text-end">남은 요금</h6>
-                                    <h3 class="mb-0 text-primary text-end">원</h3>
+                                    <h3 class="mb-0 text-primary text-end" id="remain-budget"> - </h3>
                                 </div>
                             </div>
+                            <script>
+
+                            </script>
                         </div>
                     </div>
                     <div class="row">
@@ -220,6 +223,14 @@
                 responsive: true
             });
 
+            function addAllBills(dailyElectricities) {
+                let sum = 0;
+                dailyElectricities.forEach(dto => {
+                    sum = sum + dto.bill;
+                });
+                return sum;
+            }
+
             document.getElementById('monthSelect').addEventListener('change', function () {
                 const selectedMonth = this.value;
                 const year = new Date().getFullYear();  // 현재 연도를 가져옴
@@ -251,8 +262,14 @@
                                 } else {
                                     document.getElementById('electricitySlogan').textContent = "전기 좀 아껴 쓰세요. 🌱";
                                 }
-                                updateChartData(currentMonthData.dailyElectricityDtos);
-                                updateDataTable(currentMonthData.dailyElectricityDtos);
+                                const dailyElectricities = currentMonthData.dailyElectricityDtos;
+                                var bill = addAllBills(dailyElectricities);
+                                var budget = [[${budget}]];
+                                document.getElementById("bill").textContent = '₩ ' + bill.toLocaleString('ko-KR');
+                                document.getElementById("remain-budget").textContent =
+                                    '₩ ' + (budget - bill).toLocaleString('ko-KR');
+                                updateChartData(dailyElectricities);
+                                updateDataTable(dailyElectricities);
                             })
                             .catch(error => console.error('Error fetching current month data: ', error));
                     })
