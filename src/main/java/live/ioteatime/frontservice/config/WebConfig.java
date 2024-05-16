@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
@@ -33,5 +34,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new UserInfoInterceptor(userAdaptor))
                 .addPathPatterns(List.of("/admin", "/admin/**", "/sensors/**", "/change-password",
                         "/daily-report/**", "/monthly-report/**", "/places/**"));
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addRedirectViewController("/sensors", "/sensors/modbus");
     }
 }
