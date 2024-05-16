@@ -161,18 +161,18 @@ public class ModbusSensorController {
     }
 
 
-    /**
-     * MODBUS의 채널의 이름을 변경합니다.
-     *
-     * @param channelId   변경할 채널의 ID입니다.
-     * @param channelName 변경할 채널의 이름입니다.
-     * @return
-     */
-    @PutMapping("/{channelId}/change-name")
-    public String changeChannelName(@PathVariable("channelId") int channelId, @RequestParam String channelName) {
-        int sensorId = modbusSensorAdaptor.changeChannelName(channelId, channelName).getBody();
-        return REDIRECT_SENSORS_MODBUS + sensorId;
-    }
+//    /**
+//     * MODBUS의 채널의 이름을 변경합니다.
+//     *
+//     * @param channelId   변경할 채널의 ID입니다.
+//     * @param channelName 변경할 채널의 이름입니다.
+//     * @return
+//     */
+//    @PutMapping("/{channelId}/change-name")
+//    public String changeChannelName(@PathVariable("channelId") int channelId, @RequestParam String channelName) {
+//        int sensorId = modbusSensorAdaptor.changeChannelName(channelId, channelName).getBody();
+//        return REDIRECT_SENSORS_MODBUS + sensorId;
+//    }
 
     /**
      * MODBUS 채널의 Address, Quantity, Function-Code를 변경합니다.
