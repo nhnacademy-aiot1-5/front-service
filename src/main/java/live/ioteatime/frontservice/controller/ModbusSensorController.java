@@ -37,7 +37,6 @@ public class ModbusSensorController {
     public String sensorPage(Model model) {
         List<ModbusSensorResponse> modbusSensorInfo = modbusSensorAdaptor.getSensors().getBody();
         model.addAttribute("modbusSensorInfo", modbusSensorInfo);
-
         return "sensor/sensor-modbus";
     }
 
@@ -72,9 +71,7 @@ public class ModbusSensorController {
     @GetMapping("/channels/{placeId}")
     public String getChannelsByPlace(Model model, @PathVariable("placeId") int placeId) {
         List<ChannelDto> modbusChannelInfo = modbusSensorAdaptor.getChannelsByPlaceId(placeId).getBody();
-
         model.addAttribute("modbusChannelInfo", modbusChannelInfo);
-
         return "sensor/sensor-modbus-place-channel";
     }
 
@@ -88,7 +85,6 @@ public class ModbusSensorController {
     public String createModbusSensor(Model model) {
         List<ModbusSensorResponse> supportedModbusSensorInfo = modbusSensorAdaptor.getSupportedModbusSensors().getBody();
         model.addAttribute("supportedModbusSensorInfo", supportedModbusSensorInfo);
-
         return "sensor/modbus-add-form";
     }
 
@@ -104,7 +100,6 @@ public class ModbusSensorController {
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
         List<PlaceDto> placeList = placeAdaptor.getPlacesByOrganizationId(userInfo.getOrganization().getId()).getBody();
         model.addAttribute("placeList", placeList);
-
         model.addAttribute("sensorId", sensorId);
         return "sensor/modbus-channel-add-form";
     }
@@ -160,20 +155,6 @@ public class ModbusSensorController {
         return REDIRECT_SENSORS_MODBUS + sensorId;
     }
 
-
-//    /**
-//     * MODBUS의 채널의 이름을 변경합니다.
-//     *
-//     * @param channelId   변경할 채널의 ID입니다.
-//     * @param channelName 변경할 채널의 이름입니다.
-//     * @return
-//     */
-//    @PutMapping("/{channelId}/change-name")
-//    public String changeChannelName(@PathVariable("channelId") int channelId, @RequestParam String channelName) {
-//        int sensorId = modbusSensorAdaptor.changeChannelName(channelId, channelName).getBody();
-//        return REDIRECT_SENSORS_MODBUS + sensorId;
-//    }
-
     /**
      * MODBUS 채널의 Address, Quantity, Function-Code를 변경합니다.
      *
@@ -198,7 +179,6 @@ public class ModbusSensorController {
         modbusSensorAdaptor.changeWork(sensorId);
         return REDIRECT_SENSORS_MODBUS;
     }
-
 
     @DeleteMapping("/{sensorId}")
     public String deleteSensor(@PathVariable("sensorId") int sensorId, RedirectAttributes redirectAttributes) {

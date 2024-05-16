@@ -10,9 +10,9 @@
 </head>
 <script th:inline="javascript">
   document.addEventListener("DOMContentLoaded", function() {
-    var welcomeMessage = [[${message}]];
-    if (welcomeMessage) {
-      alert(welcomeMessage);
+    var message = [[${message}]];
+    if (message) {
+      alert(message);
     }
   });
 </script>

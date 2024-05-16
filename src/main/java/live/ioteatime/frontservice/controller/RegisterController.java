@@ -16,6 +16,7 @@ import javax.validation.Valid;
 
 /**
  * 회원가입 요청을 처리하는 컨트롤러입니다.
+ *
  * @author 임세연
  */
 @Slf4j
@@ -23,50 +24,44 @@ import javax.validation.Valid;
 @RequestMapping("/register")
 @RequiredArgsConstructor
 public class RegisterController {
-
     private final UserAdaptor userAdaptor;
 
     /**
      * 회원가입 요청을 처리하는 핸들러 메서드
-     * @param registerRequest 폼으로부터 입력받은 회원가입 정보
-     * @param bindingResult 폼 입력값 validation을 위해 사용
+     *
+     * @param registerRequest    폼으로부터 입력받은 회원가입 정보
+     * @param bindingResult      폼 입력값 validation을 위해 사용
      * @param redirectAttributes 사용자 입력이 잘못되었을 경우, 에러 메시지를 담아 회원가입 페이지로 리다이렉트합니다.
      * @return 회원가입 성공시, 성공 메시지를 담아 로그인 페이지로 리다이렉트합니다.
      */
     @PostMapping
-    public String register(@Valid RegisterRequest registerRequest,BindingResult bindingResult, RedirectAttributes redirectAttributes){
-
-        if (bindingResult.hasFieldErrors()){
+    public String register(@Valid RegisterRequest registerRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasFieldErrors()) {
             redirectAttributes.addFlashAttribute("message", "모든 항목을 입력해주세요.");
             return "redirect:/register";
         }
-
-        if(!registerRequest.getPassword().equals(registerRequest.getPasswordCheck())){
+        if (!registerRequest.getPassword().equals(registerRequest.getPasswordCheck())) {
             redirectAttributes.addFlashAttribute("message", "비밀번호가 일치하지 않습니다.");
             return "redirect:/register";
         }
-
         try {
             userAdaptor.createUser(registerRequest);
-        } catch (FeignException.BadRequest exception){
+        } catch (FeignException.BadRequest exception) {
             redirectAttributes.addFlashAttribute("message", "이미 존재하는 아이디입니다.");
             return "redirect:/register";
         } catch (FeignException.Unauthorized exception) {
             redirectAttributes.addFlashAttribute("message", "조직이 존재하지 않거나 조직 코드가 일치하지 않습니다.");
             return "redirect:/register";
         }
-
         redirectAttributes.addFlashAttribute("message", "IOTEATIME에 오신 것을 환영합니다.");
         return "redirect:/login";
     }
 
     /**
-     *
      * @return 회원가입 페이지
      */
     @GetMapping
-    public String register(){
+    public String register() {
         return "authentication/register";
     }
-
 }

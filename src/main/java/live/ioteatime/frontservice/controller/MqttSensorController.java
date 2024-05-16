@@ -37,7 +37,6 @@ public class MqttSensorController {
     public String getMqttSensorPage(Model model) {
         List<GetMqttSensorResponse> mqttSensorInfo = mqttSensorAdaptor.getUserOrganizationMqttSensors().getBody();
         model.addAttribute("mqttSensorInfo", mqttSensorInfo);
-
         return "sensor/sensor-mqtt";
     }
 
@@ -50,13 +49,15 @@ public class MqttSensorController {
     @GetMapping("/add")
     public String addMqttSensorPage(Model model) {
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
+        if (userInfo == null) {
+            return "redirect:/login";
+        }
 
         List<GetMqttSensorResponse> supportedSensorList = mqttSensorAdaptor.getSupportedMqttSensors().getBody();
         model.addAttribute("supportedSensorList", supportedSensorList);
 
         List<PlaceDto> placeList = placeAdaptor.getPlacesByOrganizationId(userInfo.getOrganization().getId()).getBody();
         model.addAttribute("placeList", placeList);
-
         return "sensor/mqtt-add-form";
     }
 
@@ -82,6 +83,9 @@ public class MqttSensorController {
     @GetMapping("/{sensorId}")
     public String mqttSensorDetailsPage(@PathVariable("sensorId") int sensorId, Model model) {
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
+        if (userInfo == null) {
+            return "redirect:/login";
+        }
 
         List<PlaceDto> placeList = placeAdaptor.getPlacesByOrganizationId(userInfo.getOrganization().getId()).getBody();
         model.addAttribute("placeList", placeList);
