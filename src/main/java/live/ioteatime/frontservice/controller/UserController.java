@@ -22,48 +22,46 @@ import javax.validation.Valid;
 
 /**
  * GUEST, USER 유저 마이페이지 컨트롤러입니다.
+ *
  * @author 임세연
  */
 @Slf4j
 @Controller
 @RequiredArgsConstructor
 public class UserController {
-
     private final UserAdaptor userAdaptor;
 
     /**
-     *
      * @param model 권한에 따라서 GUEST에게는 userInfo, USER에게는 userInfo와 organizationInfo를 담아줍니다.
      * @return 마이페이지 뷰
      */
     @GetMapping("/mypage")
-    public String userMypage(Model model){
-
+    public String userMypage(Model model) {
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
+        if (userInfo == null) {
+            return "redirect:/login";
+        }
         model.addAttribute("userInfo", userInfo);
-        log.info("userId={}, userRole={}", userInfo.getId(), userInfo.getRole());
 
-        if(userInfo.getRole().equals(Role.GUEST)){
+        log.info("userId={}, userRole={}", userInfo.getId(), userInfo.getRole());
+        if (userInfo.getRole().equals(Role.GUEST)) {
             return "mypage/mypage";
         }
 
         OrganizationResponse organizationInfo = userAdaptor.getOrganization().getBody();
         model.addAttribute("organizationInfo", organizationInfo);
-        log.info("organization_name={}, electricity_montly_budget={}",organizationInfo.getName(), organizationInfo.getElectricityBudget());
-
+        log.info("organization_name={}, electricity_montly_budget={}", organizationInfo.getName(), organizationInfo.getElectricityBudget());
         return "mypage/mypage";
-
     }
-
-
 
     /**
      * 유저 정보를 수정합니다. name 필드만 수정 가능합니다.
+     *
      * @param updateUserRequest html 폼으로부터 받아온 요청 객체
      * @return 성공시, 마이페이지로 리다이렉트합니다.
      */
     @PostMapping("/update-user")
-    public String updateUserInfo(@ModelAttribute UpdateUserRequest updateUserRequest){
+    public String updateUserInfo(@ModelAttribute UpdateUserRequest updateUserRequest) {
         log.info("userName={}", updateUserRequest.getName());
         userAdaptor.updateUser(updateUserRequest);
         return "redirect:/mypage";
@@ -71,33 +69,27 @@ public class UserController {
 
     @PostMapping("/change-password")
     public String changePassword(HttpServletRequest request, RedirectAttributes redirectAttributes,
-                                 @Valid @ModelAttribute ChangePasswordRequest changePasswordRequest, BindingResult bindingResult){
-
-        if(bindingResult.hasFieldErrors()){
+                                 @Valid @ModelAttribute ChangePasswordRequest changePasswordRequest, BindingResult bindingResult) {
+        if (bindingResult.hasFieldErrors()) {
             redirectAttributes.addFlashAttribute("message", "모든 항목을 입력해주세요.");
             return "redirect:/change-password";
         }
-
-        if(! changePasswordRequest.getNewPassword().equals(changePasswordRequest.getPasswordCheck())){
+        if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getPasswordCheck())) {
             redirectAttributes.addFlashAttribute("message", "비밀번호가 일치하지 않습니다.");
             return "redirect:/change-password";
         }
-
         try {
             userAdaptor.updateUserPassword(changePasswordRequest);
-        } catch (FeignException e){
+        } catch (FeignException e) {
             redirectAttributes.addFlashAttribute("message", "비밀번호가 일치하지 않습니다.");
             return "redirect:/change-password";
         }
         redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
-
         return "redirect:/mypage";
     }
 
     @GetMapping("/change-password")
-    public String changePasswordPage(Model model){
-
+    public String changePasswordPage() {
         return "authentication/change-password";
     }
-
 }

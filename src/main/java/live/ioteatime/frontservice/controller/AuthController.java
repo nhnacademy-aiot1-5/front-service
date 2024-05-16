@@ -23,18 +23,35 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthController {
-
     private final UserAdaptor userAdaptor;
-    private final String ACCESS_TOKEN_KEY = "iotaot";
+    private static final String ACCESS_TOKEN_KEY = "iotaot";
+
+    /**
+     * 브라우저 쿠키에 유효한 access token 이 존재하면 메인 페이지로 리다이렉트하고,
+     * 존재하지 않으면 로그인 페이지로 이동합니다.
+     *
+     * @param request 브라우저 요청
+     * @return 메인 페이지 또는 로그인 페이지
+     */
+    @GetMapping("/login")
+    public String login(HttpServletRequest request) {
+        Cookie cookie = WebUtils.getCookie(request, ACCESS_TOKEN_KEY);
+        if (cookie != null) {
+            return "redirect:/";
+        }
+        return "authentication/login";
+    }
 
     /**
      * 로그인 요청을 처리합니다.
+     *
      * @param loginRequest 사용자 입력 id, pw
      * @param response
      * @return 로그인 성공 시 메인 페이지로 리다이렉트
      */
     @PostMapping("/login")
-    public String login(@ModelAttribute LoginRequest loginRequest, HttpServletResponse response, RedirectAttributes redirectAttributes){
+    public String login(@ModelAttribute LoginRequest loginRequest, HttpServletResponse response,
+                        RedirectAttributes redirectAttributes) {
         try {
             LoginResponse loginResponse = userAdaptor.login(loginRequest).getBody();
 
@@ -43,37 +60,25 @@ public class AuthController {
             Cookie cookie = new Cookie(ACCESS_TOKEN_KEY, loginResponse.getToken());
             cookie.setMaxAge(3600);
             response.addCookie(cookie);
-
         } catch (FeignException.Unauthorized exception) {
             redirectAttributes.addFlashAttribute("message", "아이디 또는 비밀번호가 일치하지 않습니다.");
             return "redirect:/login";
         }
-
-
         return "redirect:/";
-    }
-
-    @GetMapping("/login")
-    public String login(HttpServletRequest request){
-        Cookie cookie = WebUtils.getCookie(request, "iotaot");
-        if (cookie != null) {
-            return "redirect:/";
-        }
-        return "authentication/login";
     }
 
     /**
      * 로그아웃 요청을 처리합니다.
+     *
      * @param response
      * @return 로그아웃시 메인 페이지로 리다이렉트합니다.
      */
     @GetMapping("/logout")
-    public String logout(HttpServletResponse response){
+    public String logout(HttpServletResponse response) {
         Cookie cookie = new Cookie(ACCESS_TOKEN_KEY, null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
 
         return "redirect:/";
     }
-
 }

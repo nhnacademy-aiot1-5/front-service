@@ -46,6 +46,5 @@ public class GlobalExceptionHandler {
     public String handleFeignServiceUnavailableException() {
         return "error/503";
     }
-
 }
 
