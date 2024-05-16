@@ -15,7 +15,6 @@ import java.util.List;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
     private final UserAdaptor userAdaptor;
 
     public WebConfig(@Lazy UserAdaptor userAdaptor) {
@@ -34,10 +33,5 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new UserInfoInterceptor(userAdaptor))
                 .addPathPatterns(List.of("/admin", "/admin/**", "/sensors/**", "/change-password",
                         "/daily-report/**", "/monthly-report/**", "/places/**"));
-    }
-
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addRedirectViewController("/sensors", "/sensors/modbus");
     }
 }

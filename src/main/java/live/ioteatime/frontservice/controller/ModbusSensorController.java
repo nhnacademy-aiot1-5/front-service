@@ -28,7 +28,7 @@ public class ModbusSensorController {
     private final PlaceAdaptor placeAdaptor;
 
     /**
-     * 센서 관리 페이지 기본페이지 (MODBUS 센서 관리 페이지)
+     * MODBUS 센서 관리 페이지
      *
      * @param model
      * @return
