@@ -91,7 +91,8 @@ public class IndexController {
     @GetMapping("/monthly-predict")
     @ResponseBody
     public List<PreciseElectricitiesDto> getMontlyPredictedElectricities() {
-        return electricityAdaptor.getMonthlyPredictedValues(LocalDateTime.now()).getBody();
+        int organizationId = userAdaptor.getUser().getBody().getOrganization().getId();
+        return electricityAdaptor.getMonthlyPredictedValues(LocalDateTime.now(), organizationId).getBody();
     }
 
     @GetMapping("/kwh")
