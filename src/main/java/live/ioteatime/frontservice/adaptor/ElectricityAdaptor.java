@@ -62,7 +62,7 @@ public interface ElectricityAdaptor {
     @GetMapping("/api/hourly/electricities/total")
     ResponseEntity<List<PreciseElectricitiesDto>> getOneHourTotalElectricties(@RequestParam int organizationId);
 
-    /** todo 검색할 때 organizationId로 검색해야 할 것 같아요.
+    /**
      * 한달 예측값을 가져옵니다.
      * @param requestTime 검색할 시간을 RequestParam으로 받아옵니다.
      * @return (time, kwh) 리스트를 리턴합니다.
@@ -70,7 +70,8 @@ public interface ElectricityAdaptor {
     @GetMapping("/api/predicted")
     ResponseEntity<List<PreciseElectricitiesDto>> getMonthlyPredictedValues(
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            @RequestParam LocalDateTime requestTime);
+            @RequestParam LocalDateTime requestTime,
+            @RequestParam int organizationId);
 
     /**
      * 해당 조직이 한달 동안 사용한 총 전력량 리스트를 가져옵니다.
