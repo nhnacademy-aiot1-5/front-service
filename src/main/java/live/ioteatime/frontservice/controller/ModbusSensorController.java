@@ -176,7 +176,7 @@ public class ModbusSensorController {
      */
     @PutMapping("/work/{sensorId}")
     public String changeWork(@PathVariable("sensorId") int sensorId) {
-        modbusSensorAdaptor.changeWork(sensorId);
+        modbusSensorAdaptor.changeHealth(sensorId);
         return REDIRECT_SENSORS_MODBUS;
     }
 
