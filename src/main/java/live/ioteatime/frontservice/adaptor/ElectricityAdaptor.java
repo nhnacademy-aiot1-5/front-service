@@ -1,6 +1,7 @@
 package live.ioteatime.frontservice.adaptor;
 
 import live.ioteatime.frontservice.dto.DailyElectricityDto;
+import live.ioteatime.frontservice.dto.DemandCharge;
 import live.ioteatime.frontservice.dto.MonthlyElectricityDto;
 import live.ioteatime.frontservice.dto.RealtimeElectricityResponseDto;
 import live.ioteatime.frontservice.dto.response.PreciseElectricitiesDto;
@@ -8,6 +9,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
@@ -20,6 +22,7 @@ import java.util.List;
 public interface ElectricityAdaptor {
     /**
      * 지난달 사용한 전력량과 요금을 가져옵니다.
+     *
      * @return (time, kwh, bill)을 리턴합니다.
      */
     @GetMapping("/api/monthly/electricity/last")
@@ -27,6 +30,7 @@ public interface ElectricityAdaptor {
 
     /**
      * 이번달 전력 사용량과 요금을 가져옵니다.
+     *
      * @return (time, kwh, bill)을 리턴합니다.
      */
     @GetMapping("/api/monthly/electricity/current")
@@ -34,6 +38,7 @@ public interface ElectricityAdaptor {
 
     /**
      * 어제 사용한 전력량과 요금을 가져옵니다.
+     *
      * @return (time, kwh, bill)을 리턴합니다.
      */
     @GetMapping("/api/daily/electricity/last")
@@ -41,6 +46,7 @@ public interface ElectricityAdaptor {
 
     /**
      * 오늘 사용한 전력량과 요금을 가져옵니다.
+     *
      * @return (time, kwh, bill)을 리턴합니다.
      */
     @GetMapping("/api/daily/electricity/current")
@@ -48,6 +54,7 @@ public interface ElectricityAdaptor {
 
     /**
      * 채널별 실시간 사용 전력량 리스트를 가져옵니다.
+     *
      * @param organizationId
      * @return (장소명, 채널명, w) 리스트를 리턴합니다.
      */
@@ -56,6 +63,7 @@ public interface ElectricityAdaptor {
 
     /**
      * 해당 조직이 1시간 동안 사용한 총 전력량 리스트를 가져옵니다.
+     *
      * @param organizationId 검색할 조직의 id를 RequestParam으로 가져옵니다.
      * @return (time, kwh) 리스트를 리턴합니다.
      */
@@ -64,6 +72,7 @@ public interface ElectricityAdaptor {
 
     /**
      * 한달 예측값을 가져옵니다.
+     *
      * @param requestTime 검색할 시간을 RequestParam으로 받아옵니다.
      * @return (time, kwh) 리스트를 리턴합니다.
      */
@@ -73,9 +82,25 @@ public interface ElectricityAdaptor {
             @RequestParam LocalDateTime requestTime,
             @RequestParam int organizationId);
 
+    @GetMapping("/api/predicted/next-month")
+    ResponseEntity<List<PreciseElectricitiesDto>> getNextMonthlyPredictedValues(
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @RequestParam LocalDateTime requestTime,
+            @RequestParam int organizationId);
+
+    @GetMapping("/api/predicted/this-month")
+    ResponseEntity<List<PreciseElectricitiesDto>> getThisMonthlyPredictedValues(
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @RequestParam LocalDateTime requestTime,
+            @RequestParam int organizationId);
+
+    @GetMapping("/api/calculate/demand/{kwhUsage}")
+    ResponseEntity<DemandCharge> getChargeByKwh(@PathVariable(name = "kwhUsage") Double kwh);
+
     /**
      * 해당 조직이 한달 동안 사용한 총 전력량 리스트를 가져옵니다.
-     * @param localDateTime 검색할 시간을 RequestParam으로 가져옵니다.
+     *
+     * @param localDateTime  검색할 시간을 RequestParam으로 가져옵니다.
      * @param organizationId 검색할 조직의 id를 RequestParam으로 가져옵니다.
      * @return (time, kwh, bill) 리스트를 반환합니다.
      */
