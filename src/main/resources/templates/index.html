@@ -128,6 +128,9 @@
                                                     }
                                                     const last = dailyElectricities[dailyElectricities.length - 1].bill;
                                                     const secondLast = dailyElectricities[dailyElectricities.length - 2].bill;
+                                                    if (secondLast === 0){
+                                                        return 0;
+                                                    }
                                                     return (last - secondLast) / secondLast * 100;
                                                 }
 
@@ -142,12 +145,12 @@
                                                         const dailyElectricities = data.dailyElectricityDtos;
                                                         bill = addAllBills(dailyElectricities);
                                                         var percentage = (budget - bill) * 100 / budget;
-                                                        document.getElementById("bill").textContent = bill.toString();
+                                                        document.getElementById("bill").textContent = '₩ ' + bill.toLocaleString('ko-KR');
                                                         document.getElementById("remain-budget").textContent =
                                                             '₩ ' + (budget - bill).toString();
                                                         let billPercentage = getPercentage(dailyElectricities);
                                                         document.getElementById("bill-percentage").textContent =
-                                                            billPercentage >= 0 ? '+' + billPercentage + '%' : billPercentage + '%';
+                                                            billPercentage >= 0 ? '+' + billPercentage.toFixed(2) + '%' : billPercentage.toFixed(2) + '%';
                                                         var options1 = {
                                                             series: [percentage],
                                                             chart: {

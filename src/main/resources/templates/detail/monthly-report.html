@@ -300,9 +300,9 @@
                     const percentageChange = index === 0 ? "0.00" : getPercentage(previousKwh, dto.kwh);
 
                     table.row.add([
-                        dto.time,
-                        `${dto.kwh} 원`,
-                        `${dto.kwh} Wh`,
+                        dto.time.split('T')[0],
+                        `${dto.kwh.toLocaleString('ko-KR')} 원`,
+                        `${dto.kwh.toLocaleString('ko-KR')} Wh`,
                         percentageChange >= 0 ? `+${percentageChange}%` : `${percentageChange}%`
                     ]).draw(false); // 변경 사항을 테이블에 즉시 반영하지 않음
 
