@@ -105,4 +105,16 @@ public class IndexController {
 
         return new KwhDto(lastMonthKwh, thisMonthKwh, todayKwh, yesterdayKwh);
     }
+
+    @GetMapping("/bill")
+    @ResponseBody
+    public List<DailyElectricityDto> getCumulativeBills() {
+        return  electricityService.getCumulativeBills();
+    }
+
+    @GetMapping("/bill-predict")
+    @ResponseBody
+    public List<PreciseElectricitiesDto> getCumulativeBillPredictions() {
+        return electricityService.getCumulativeBillPredictions();
+    }
 }
