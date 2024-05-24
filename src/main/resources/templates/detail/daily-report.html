@@ -8,7 +8,8 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"
                 integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
                 crossorigin="anonymous"></script>
-        <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.0.7/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/datatables.min.css" rel="stylesheet">
+        <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.0.7/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/datatables.min.css"
+              rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
         <script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.0.7/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/datatables.min.js"></script>
@@ -290,9 +291,9 @@
                     const percentageChange = index === 0 ? "0.00" : getPercentage(previousKwh, dto.kwh);
 
                     table.row.add([
-                        dto.time,
-                        `${dto.kwh} 원`,
-                        `${dto.kwh} Wh`,
+                        dto.time.replace('T', ' '),
+                        `${dto.kwh.toLocaleString('ko-KR')} 원`,
+                        `${dto.kwh.toLocaleString('ko-KR')} Wh`,
                         percentageChange >= 0 ? `+${percentageChange}%` : `${percentageChange}%`
                     ]).draw(false); // 변경 사항을 테이블에 즉시 반영하지 않음
 
