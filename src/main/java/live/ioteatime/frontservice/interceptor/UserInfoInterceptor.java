@@ -18,12 +18,23 @@ import javax.servlet.http.HttpServletResponse;
 public class UserInfoInterceptor implements HandlerInterceptor {
     private final UserAdaptor userAdaptor;
 
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        GetUserResponse userInfo = userAdaptor.getUser().getBody();
+        if (userInfo == null) {
+            throw new IllegalStateException();
+        }
+        request.setAttribute("userInfo", userInfo);
+        return true;
+    }
+
     /**
      * 사이드 바에 필요한 객체를 모델에 넣어주는 인터셉터 입니다.
+     *
      * @param request
      * @param response
      * @param handler
-     * @param model 유저 정보가 담긴 모델입니다.
+     * @param model    유저 정보가 담긴 모델입니다.
      * @throws Exception 유저 정보가 없으면 IllegalStateException을 던집니다.
      */
     @Override
