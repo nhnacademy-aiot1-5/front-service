@@ -25,7 +25,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
-                            <h2 class="ps-0" th:text="${userInfo.name}+'님의 전력량'"></h2>
+                            <h2 class="ps-0" th:text="${userInfo.name}+'님의 일간 전력량 리포트 📃'"></h2>
                         </div>
                     </div>
 
@@ -132,31 +132,11 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-9">
+                        <div class="col-12">
                             <div class="card">
                                 <div class="card-body pb-2">
                                     <h4 class="card-title fw-semibold">최근 7일 전기 사용 내역</h4>
                                     <div id="chart2"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6 class="text-end">설정 전력량</h6>
-                                    <h3 class="mb-0 text-end">5,200 kWh</h3>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6 class="text-end">사용 전력량</h6>
-                                    <h3 class="mb-0 text-end">200 kWh</h3>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6 class="text-end">남은 전력량</h6>
-                                    <h3 class="mb-0 text-primary text-end">5,000 kWh</h3>
                                 </div>
                             </div>
                         </div>
@@ -262,9 +242,6 @@
             updateDataTable(dailyElectricityPerHour)
 
             document.getElementById('sensorId').addEventListener('change', function () {
-                const now = new Date();
-                const isoString = now.toISOString(); // "YYYY-MM-DDTHH:mm:ss.sssZ"
-                const isoStringWithoutMilliseconds = isoString.slice(0, -5);
                 const channelId = this.value;
                 fetch(`/daily-report/${channelId}`)
                     .then(response => response.json())
@@ -307,15 +284,25 @@
 
             function updateDataTable(dailyData) {
                 table.clear();
-                dailyData.forEach(dto => {
+                let previousKwh = 0;
+
+                dailyData.forEach((dto, index) => {
+                    const percentageChange = index === 0 ? "0.00" : getPercentage(previousKwh, dto.kwh);
+
                     table.row.add([
                         dto.time,
                         `${dto.kwh} 원`,
                         `${dto.kwh} Wh`,
-                        `+${Math.random().toFixed(2)}%`
+                        percentageChange >= 0 ? `+${percentageChange}%` : `${percentageChange}%`
                     ]).draw(false); // 변경 사항을 테이블에 즉시 반영하지 않음
+
+                    previousKwh = dto.kwh;
                 });
                 table.draw(); // 모든 데이터가 추가된 후 테이블을 다시 그림
+            }
+
+            function getPercentage(previous, current) {
+                return (((current - previous) / previous) * 100).toFixed(2);
             }
         </script>
 
