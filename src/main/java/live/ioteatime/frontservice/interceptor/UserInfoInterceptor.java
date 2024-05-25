@@ -1,5 +1,6 @@
 package live.ioteatime.frontservice.interceptor;
 
+import live.ioteatime.frontservice.adaptor.ControllerStatusAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class UserInfoInterceptor implements HandlerInterceptor {
     private final UserAdaptor userAdaptor;
+    private final ControllerStatusAdaptor controllerStatusAdaptor;
 
     /**
      * 사이드 바에 필요한 객체를 모델에 넣어주는 인터셉터 입니다.
@@ -37,5 +39,10 @@ public class UserInfoInterceptor implements HandlerInterceptor {
             throw new IllegalStateException();
         }
         model.addObject("userInfo", userInfo);
+
+        int status = controllerStatusAdaptor.getStatus("do_1").getBody();
+
+        model.addObject("status", status);
+        
     }
 }

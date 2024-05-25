@@ -2,6 +2,7 @@ package live.ioteatime.frontservice.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import live.ioteatime.frontservice.adaptor.ControllerStatusAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.interceptor.UserInfoInterceptor;
 import org.springframework.context.annotation.Bean;
@@ -18,9 +19,11 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     private final UserAdaptor userAdaptor;
+    private final ControllerStatusAdaptor controllerStatusAdaptor;
 
-    public WebConfig(@Lazy UserAdaptor userAdaptor) {
+    public WebConfig(@Lazy UserAdaptor userAdaptor, @Lazy ControllerStatusAdaptor controllerStatusAdaptor) {
         this.userAdaptor = userAdaptor;
+        this.controllerStatusAdaptor = controllerStatusAdaptor;
     }
 
     /**
@@ -46,8 +49,8 @@ public class WebConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new UserInfoInterceptor(userAdaptor))
+        registry.addInterceptor(new UserInfoInterceptor(userAdaptor, controllerStatusAdaptor))
                 .addPathPatterns(List.of("/admin", "/admin/**", "/sensors/**", "/change-password",
-                        "/daily-report/**", "/monthly-report/**", "/places/**"));
+                        "/daily-report/**", "/monthly-report/**", "/places/**", "/", "/mypage/**"));
     }
 }
