@@ -23,393 +23,378 @@
             /*        max-width: 90%;*/
             /*    }*/
             /*}*/
+            .body {
+                position: relative;
+            }
         </style>
     </head>
-
 
     <body>
         <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
              data-sidebar-position="fixed" data-header-position="fixed">
             <th:block th:replace="side-bar :: sidebar"></th:block>
-
             <div class="body-wrapper">
-                <!--        <th:block th:replace="header :: header"></th:block>-->
-
+                <!--                <th:block th:replace="header :: header"></th:block>-->
                 <div class="why">
-                    <div class="card-body position-relative">
-                        <!--첫번째 row-->
-                        <div class="row">
-                            <div class="col-lg-8 d-flex align-items-strech">
-                                <div class="card w-100 mb-2">
-                                    <div class="card-body">
-                                        <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                                            <div class="overflow-hidden me-6 ">
-                                                <h5 class="fw-semibold mb-0 fs-5">⚡️이번 달 총평⚡️</h5>
-                                            </div>
-                                        </div>
-                                        <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                                            <h2 class="mt-0 mb-0 fw-semibold fs-9 d-flex align-content-center">전기 좀
-                                                아껴쓰세요.
-                                                🌱</h2>
-                                            <p></p>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <div class="border-end pe-4 border-muted border-opacity-10 d-flex align-items-center">
-                                                <p class="mb-0 text-dark me-2"
-                                                   th:text="'이번 달 전기 사용량 '+${#numbers.formatInteger(thisMonthKwh, 0, 'COMMA')} + 'kwh'">
-                                                </p>
-                                                <i class="bi bi-arrow-up-right-circle-fill" style="font-size: 1rem;"></i>
-                                            </div>
-                                            <div id="updates"></div>
-
-                                            <script>
-                                                const eventSource = new EventSource('/sse');
-
-                                                eventSource.onmessage = function(event) {
-                                                    const updatesDiv = document.getElementById('updates');
-                                                    const newElement = document.createElement('p');
-                                                    newElement.textContent = event.data;
-                                                    updatesDiv.appendChild(newElement);
-                                                };
-                                                console.log("이거 실행됨")
-                                                eventSource.onerror = function(event) {
-                                                    console.error('Error with SSE', event);
-                                                    eventSource.close();
-                                                };
-                                            </script>
+                    <!--                    <div class="card-body">-->
+                    <!--첫번째 row-->
+                    <div class="row gx-3">
+                        <div class="col-lg-8 d-flex align-items-strech">
+                            <div class="card w-100 mb-3">
+                                <div class="card-body">
+                                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                                        <div class="overflow-hidden me-6 ">
+                                            <h5 class="fw-semibold mb-0 fs-5">⚡️이번 달 총평⚡️</h5>
                                         </div>
                                     </div>
-
-<!--                                    <div class="card w-100">-->
-                                        <!--                                <div class="card-body">-->
-                                        <!--                                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-3">-->
-                                        <!--                                        <div class="overflow-hidden me-6">-->
-                                        <!--                                            <h5 class="fw-semibold">실시간 전력 사용량</h5>-->
-                                        <!--                                        </div>-->
-                                        <!--                                    </div>-->
-                                        <!--                                    <div class="row">-->
-
-                                        <!--                                        <div class="col-lg-4">-->
-
-                                        <!--                                            <div class="d-sm-flex d-block align-items-center justify-content-between">-->
-                                        <!--                                                <div id="realtime-total"></div>-->
-                                        <!--                                                <div id="new" style="flex:1"></div>-->
-                                        <!--                                            </div>-->
-                                        <!--                                        </div>-->
-
-                                        <!--                                        <div class="col-lg-4">-->
-                                        <!--                                            <div class="d-sm-flex d-block align-items-center justify-content-between">-->
-                                        <!--                                                <div id="daily-predict"></div>-->
-                                        <!--                                            </div>-->
-                                        <!--                                        </div>-->
-
-                                        <!--                                        <div class="col-lg-4">-->
-                                        <!--                                            <div class="d-sm-flex d-block align-items-center justify-content-between">-->
-                                        <!--                                                <div id="cumulative-bill"></div>-->
-                                        <!--                                            </div>-->
-                                        <!--                                        </div>-->
-
-                                        <!--                                    </div>-->
-<!--                                    </div>-->
-                                </div>
-
-
-                            </div>
-
-                            <!-- 요금 게이지 바 -->
-                            <div class="col-lg-4">
-                                <div class="col">
-                                    <div class="card overflow-hidden mb-2">
-                                        <div class="card-body p-3">
-                                            <h5 class="card-title mb-9 fw-semibold">테스트 요금</h5>
-                                            <div class="row align-items-center">
-                                                <div class="col-12">
-                                                    <div id="gauge-chart"></div>
-                                                    <script th:inline="javascript">
-                                                        function addAllBills(dailyElectricities) {
-                                                            let sum = 0;
-                                                            dailyElectricities.forEach(dto => {
-                                                                sum = sum + dto.bill;
-                                                            });
-                                                            return sum;
-                                                        }
-
-                                                        function getPercentage(dailyElectricities) {
-                                                            if (dailyElectricities.length < 2) {
-                                                                return 0; // 데이터가 1개 이하인 경우 비교할 수 없으므로 0을 반환
-                                                            }
-                                                            const last = dailyElectricities[dailyElectricities.length - 1].bill;
-                                                            const secondLast = dailyElectricities[dailyElectricities.length - 2].bill;
-                                                            if (secondLast === 0) {
-                                                                return 0;
-                                                            }
-                                                            return (last - secondLast) / secondLast * 100;
-                                                        }
-
-                                                        const date = new Date();
-                                                        const localDate = date.toISOString().slice(0, 10) + 'T00:00:00'
-                                                        var bill = 0;
-                                                        var budget = [[${budget}]].electricity_budget;
-
-                                                        fetch(`/monthly-electricity/${localDate}`)
-                                                            .then(response => response.json())
-                                                            .then(data => {
-                                                                const dailyElectricities = data.dailyElectricityDtos;
-                                                                bill = addAllBills(dailyElectricities);
-                                                                var percentage = (budget - bill) * 100 / budget;
-                                                                document.getElementById("bill").textContent = '₩ ' + bill.toLocaleString('ko-KR');
-                                                                document.getElementById("remain-budget").textContent =
-                                                                    '₩ ' + (budget - bill).toString();
-                                                                let billPercentage = getPercentage(dailyElectricities);
-                                                                document.getElementById("bill-percentage").textContent =
-                                                                    billPercentage >= 0 ? '+' + billPercentage.toFixed(2) + '%' : billPercentage.toFixed(2) + '%';
-                                                                var options1 = {
-                                                                    series: [percentage],
-                                                                    chart: {
-                                                                        height: 200,
-                                                                        type: 'radialBar',
-                                                                        toolbar: {
-                                                                            show: true
-                                                                        }
-                                                                    },
-                                                                    plotOptions: {
-                                                                        radialBar: {
-                                                                            startAngle: -135,
-                                                                            endAngle: 225,
-                                                                            hollow: {
-                                                                                margin: 0,
-                                                                                size: '60%',
-                                                                                background: '#fff',
-                                                                                image: undefined,
-                                                                                imageOffsetX: 0,
-                                                                                imageOffsetY: 0,
-                                                                                position: 'front',
-                                                                                dropShadow: {
-                                                                                    enabled: true,
-                                                                                    top: 3,
-                                                                                    left: 0,
-                                                                                    blur: 4,
-                                                                                    opacity: 0.24
-                                                                                }
-                                                                            },
-                                                                            track: {
-                                                                                background: '#fff',
-                                                                                strokeWidth: '0%',
-                                                                                margin: 0, // margin is in pixels
-                                                                                dropShadow: {
-                                                                                    enabled: true,
-                                                                                    top: 0,
-                                                                                    left: 0,
-                                                                                    blur: 4,
-                                                                                    opacity: 0.35
-                                                                                }
-                                                                            },
-
-                                                                            dataLabels: {
-                                                                                show: true,
-                                                                                name: {
-                                                                                    offsetY: -10,
-                                                                                    show: true,
-                                                                                    color: '#888',
-                                                                                    fontSize: '16px'
-                                                                                },
-                                                                                value: {
-                                                                                    formatter: function (val) {
-                                                                                        return parseInt(val) + '%';
-                                                                                    },
-                                                                                    color: '#111',
-                                                                                    fontSize: '20px',
-                                                                                    show: true,
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    fill: {
-                                                                        type: 'gradient',
-                                                                        gradient: {
-                                                                            shade: 'dark',
-                                                                            type: 'horizontal',
-                                                                            shadeIntensity: 0.5,
-                                                                            gradientToColors: ['#ABE5A1'],
-                                                                            inverseColors: true,
-                                                                            opacityFrom: 1,
-                                                                            opacityTo: 1,
-                                                                            stops: [0, 100]
-                                                                        }
-                                                                    },
-                                                                    stroke: {
-                                                                        lineCap: 'round'
-                                                                    },
-                                                                    labels: ['Percent'],
-                                                                };
-
-                                                                var chart1 = new ApexCharts(document.querySelector("#gauge-chart"), options1);
-                                                                chart1.render();
-                                                            })
-                                                    </script>
-                                                </div>
-                                            </div>
+                                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                                        <h2 class="mt-0 mb-0 fw-semibold fs-9 d-flex align-content-center">전기 좀
+                                            아껴쓰세요.
+                                            🌱</h2>
+                                        <p></p>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="border-end pe-4 border-muted border-opacity-10 d-flex align-items-center">
+                                            <p class="mb-0 text-dark me-2"
+                                               th:text="'이번 달 전기 사용량 '+${#numbers.formatInteger(thisMonthKwh, 0, 'COMMA')} + 'kwh'">
+                                            </p>
+                                            <i class="bi bi-arrow-up-right-circle-fill"
+                                               style="font-size: 1rem;"></i>
                                         </div>
+                                        <div id="updates"></div>
+                                        <script>
+                                            const eventSource = new EventSource('/sse');
+
+                                            eventSource.onmessage = function (event) {
+                                                const updatesDiv = document.getElementById('updates');
+                                                const newElement = document.createElement('p');
+                                                newElement.textContent = event.data;
+                                                updatesDiv.appendChild(newElement);
+                                            };
+                                            console.log("이거 실행됨")
+                                            eventSource.onerror = function (event) {
+                                                console.error('Error with SSE', event);
+                                                eventSource.close();
+                                            };
+                                        </script>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- 요금 게이지 바 -->
+                        <div class="col-lg-4 d-flex align-items-strech">
+                            <!--                                <div class="col">-->
+                            <div class="card w-100 mb-3">
+                                <div class="card-body p-3">
+                                    <div class="d-flex">
+                                        <h5 class="card-title mb-9 fw-semibold mb-0 me-2">요금 잔량 : </h5>
+                                        <p class="fw-semibold mb-0 ml-2" id="remain-budget"></p>
+                                    </div>
+                                    <div class="row align-items-center">
+                                        <div class="col-12">
+                                            <div id="gauge-chart"></div>
+                                            <script th:inline="javascript">
+                                                function addAllBills(dailyElectricities) {
+                                                    let sum = 0;
+                                                    dailyElectricities.forEach(dto => {
+                                                        sum = sum + dto.bill;
+                                                    });
+                                                    return sum;
+                                                }
 
-                        <div class="card-body position-relative">
-                            <div class="card w-100">
-                                <div class="card-body">
-                                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-3">
-                                        <div class="overflow-hidden me-6">
-                                            <h5 class="fw-semibold">실시간 전력 사용량</h5>
+                                                function getPercentage(dailyElectricities) {
+                                                    if (dailyElectricities.length < 2) {
+                                                        return 0; // 데이터가 1개 이하인 경우 비교할 수 없으므로 0을 반환
+                                                    }
+                                                    const last = dailyElectricities[dailyElectricities.length - 1].bill;
+                                                    const secondLast = dailyElectricities[dailyElectricities.length - 2].bill;
+                                                    if (secondLast === 0) {
+                                                        return 0;
+                                                    }
+                                                    return (last - secondLast) / secondLast * 100;
+                                                }
+
+                                                const date = new Date();
+                                                const localDate = date.toISOString().slice(0, 10) + 'T00:00:00'
+                                                var bill = 0;
+                                                var budget = [[${budget}]].electricity_budget;
+
+                                                fetch(`/monthly-electricity/${localDate}`)
+                                                    .then(response => response.json())
+                                                    .then(data => {
+                                                        const dailyElectricities = data.dailyElectricityDtos;
+                                                        bill = addAllBills(dailyElectricities);
+                                                        var percentage = (budget - bill) * 100 / budget;
+                                                        document.getElementById("bill").textContent = '₩ ' + bill.toLocaleString('ko-KR');
+                                                        document.getElementById("remain-budget").textContent =
+                                                            '₩ ' + (budget - bill).toLocaleString('ko-KR');
+                                                        let billPercentage = getPercentage(dailyElectricities);
+                                                        document.getElementById("bill-percentage").textContent =
+                                                            billPercentage >= 0 ? '+' + billPercentage.toFixed(2) + '%' : billPercentage.toFixed(2) + '%';
+                                                        var options1 = {
+                                                            series: [percentage],
+                                                            chart: {
+                                                                height: 200,
+                                                                type: 'radialBar',
+                                                                toolbar: {
+                                                                    show: true
+                                                                }
+                                                            },
+                                                            plotOptions: {
+                                                                radialBar: {
+                                                                    startAngle: -135,
+                                                                    endAngle: 225,
+                                                                    hollow: {
+                                                                        margin: 0,
+                                                                        size: '60%',
+                                                                        background: '#fff',
+                                                                        image: undefined,
+                                                                        imageOffsetX: 0,
+                                                                        imageOffsetY: 0,
+                                                                        position: 'front',
+                                                                        dropShadow: {
+                                                                            enabled: true,
+                                                                            top: 3,
+                                                                            left: 0,
+                                                                            blur: 4,
+                                                                            opacity: 0.24
+                                                                        }
+                                                                    },
+                                                                    track: {
+                                                                        background: '#fff',
+                                                                        strokeWidth: '0%',
+                                                                        margin: 0, // margin is in pixels
+                                                                        dropShadow: {
+                                                                            enabled: true,
+                                                                            top: 0,
+                                                                            left: 0,
+                                                                            blur: 4,
+                                                                            opacity: 0.35
+                                                                        }
+                                                                    },
+
+                                                                    dataLabels: {
+                                                                        show: true,
+                                                                        name: {
+                                                                            offsetY: -10,
+                                                                            show: true,
+                                                                            color: '#888',
+                                                                            fontSize: '16px'
+                                                                        },
+                                                                        value: {
+                                                                            formatter: function (val) {
+                                                                                return parseInt(val) + '%';
+                                                                            },
+                                                                            color: '#111',
+                                                                            fontSize: '20px',
+                                                                            show: true,
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            fill: {
+                                                                type: 'gradient',
+                                                                gradient: {
+                                                                    shade: 'dark',
+                                                                    type: 'horizontal',
+                                                                    shadeIntensity: 0.5,
+                                                                    gradientToColors: ['#ABE5A1'],
+                                                                    inverseColors: true,
+                                                                    opacityFrom: 1,
+                                                                    opacityTo: 1,
+                                                                    stops: [0, 100]
+                                                                }
+                                                            },
+                                                            stroke: {
+                                                                lineCap: 'round'
+                                                            },
+                                                            labels: ['Percent'],
+                                                        };
+
+                                                        var chart1 = new ApexCharts(document.querySelector("#gauge-chart"), options1);
+                                                        chart1.render();
+                                                    })
+                                            </script>
                                         </div>
                                     </div>
-                                    <div class="row">
-
-
+                                </div>
+                            </div>
+                            <!--                                </div>-->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 d-flex align-items-strech">
+                            <div class="card w-100 mb-3">
+                                <div class="card-body">
+                                    <div class="row gx-3">
+                                        <div class="d-sm-flex mb-3">
+                                            <div class="overflow-hidden me-6">
+                                                <h5 class="fw-semibold">실시간 전력 사용량</h5>
+                                            </div>
+                                        </div>
                                         <div class="col-lg-4">
                                             <div>
                                                 <div id="daily-predict"></div>
                                             </div>
                                         </div>
-
                                         <div class="col-lg-4">
                                             <div id="realtimeChart"></div>
                                         </div>
-
                                         <div class="col-lg-4">
                                             <div>
                                                 <div id="realtime-total"></div>
                                                 <!--                        <div id="new" style="flex:1"></div>-->
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="card-body position-relative">
-                                <div class="card w-100">
-                                    <div class="card-body">
-                                        <div class="row">
-
-                                            <div class="col-8">
-                                                <div>
-                                                    <div id="cumulative-bill"></div>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="col-4">
-                                                <div class="row">
-
-                                                    <div class="d-flex justify-content-center">
-                                                        <div class="col-6 ">
-                                                            <div class="card overflow-hidden">
-                                                                <div class="card-body p-3">
-                                                                    <h5>사용 요금</h5>
-                                                                    <div class="row align-items-center">
-                                                                        <div class="col-20">
-                                                                            <h2 class="fs-2 fw-semibold mb-3 text-nowrap"
-                                                                                id="bill">아무도 날 막을 수 없으셈 ㅋㅋ</h2>
-                                                                            <div class="d-flex align-items-center mb-3">
-                                                                                <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
-                                                                                   style="font-size: 0.5rem;"></i>
-                                                                                <p class="me-1 fs-2 mb-0"
-                                                                                   id="bill-percentage">+9%</p>
-                                                                                <p class="fs-1 mb-0">1일 전</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6" id="update-fee"
-                                                             th:data-role="${userInfo.role}"
-                                                             onclick="checkRoleAndOpenModal()">
-                                                            <div class="card overflow-hidden">
-                                                                <div class="card-body cursor-pointer p-3">
-                                                                    <h5>설정 요금</h5>
-                                                                    <div class="row align-items-center">
-                                                                        <div class="col-20">
-                                                                            <h2 class="fs-2 fw-semibold mb-3 text-nowrap"
-                                                                                th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">
-                                                                                현재 설정 요금</h2>
-                                                                            <div class="d-flex align-items-center mb-3"
-                                                                                 th:if="${userInfo.role.name() == 'ADMIN'}">
-                                                                                <p class="me-1 fs-2 mb-0">클릭 시</p>
-                                                                                <p class="fs-2 mb-0">수정</p>
-                                                                            </div>
-                                                                            <div class="d-flex align-items-center mb-3"
-                                                                                 th:unless="${userInfo.role.name() == 'ADMIN'}">
-                                                                                <p class="me-1 fs-2 mb-0">🌱🌱</p>
-                                                                                <p class="fs-2 mb-0">🌱🌱</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="d-flex justify-content-center">
-                                                        <div class="col-lg-6 ">
-                                                            <div class="card overflow-hidden">
-                                                                <div class="card-body p-3">
-                                                                    <h5>전일<i class="ti ti-bolt fs-6 text-warning"></i>
-                                                                    </h5>
-                                                                    <h4 id="yesterdayKwh">-</h4>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6 ">
-                                                            <div class="card overflow-hidden">
-                                                                <div class="card-body p-3">
-                                                                    <h5>금일<i class="ti ti-bolt fs-6 text-warning"></i>
-                                                                    </h5>
-                                                                    <h4 id="todayKwh">-</h4>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="d-flex justify-content-center">
-                                                        <div class="col-lg-6 ">
-                                                            <div class="card overflow-hidden">
-                                                                <div class="card-body p-3">
-                                                                    <h5>전월<i class="ti ti-bolt fs-6 text-warning"></i>
-                                                                    </h5>
-                                                                    <h4 id="lastMonth">-</h4>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6 ">
-                                                            <div class="card overflow-hidden">
-                                                                <div class="card-body p-3">
-                                                                    <h5>금월<i class="ti ti-bolt fs-6 text-warning"></i>
-                                                                    </h5>
-                                                                    <h4 id="thisMonthKwh">-</h4>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-
                         </div>
                     </div>
 
+                    <!--                        <div class="card-body position-relative">-->
+                    <!--                            <div class="card w-100">-->
+                    <!--                                <div class="card-body">-->
+                    <!--                    <div class="d-flex flex-row">-->
+                    <div class="row gx-3">
+                        <div class="col-lg-8 d-flex flex-column">
+                            <div class="card mb-3 flex-fill">
+                                <div class="card-body p-3">
+                                    <div id="cumulative-bill"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex flex-column">
+                            <div class="row gx-3">
+                                <div class="d-flex justify-content-center">
+                                    <div class="col-6 me-2">
+                                        <div class="card mb-3 ms-2 flex-fill">
+                                            <div class="card-body p-3">
+                                                <h5>사용 요금</h5>
+                                                <h2 class="fs-2 fw-semibold mb-3 text-nowrap" id="bill"></h2>
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
+                                                       style="font-size: 0.5rem;"></i>
+                                                    <p class="me-1 fs-2 mb-0"
+                                                       id="bill-percentage">+9%</p>
+                                                    <p class="fs-1 mb-0">1일 전</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 ms-2" id="update-fee"
+                                         th:data-role="${userInfo.role}"
+                                         onclick="checkRoleAndOpenModal()">
+                                        <div class="card overflow-hidden mb-3 me-2">
+                                            <div class="card-body cursor-pointer p-3">
+                                                <h5>설정 요금</h5>
+                                                <h2 class="fs-2 fw-semibold mb-3 text-nowrap"
+                                                    th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">
+                                                    현재 설정 요금</h2>
+                                                <div class="d-flex align-items-center mb-3"
+                                                     th:if="${userInfo.role.name() == 'ADMIN'}">
+                                                    <p class="me-1 fs-2 mb-0">클릭 시</p>
+                                                    <p class="fs-2 mb-0">수정</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-3"
+                                                     th:unless="${userInfo.role.name() == 'ADMIN'}">
+                                                    <p class="me-1 fs-2 mb-0">🌱🌱</p>
+                                                    <p class="fs-2 mb-0">🌱🌱</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div class="row">
+                                <div class="d-flex justify-content-center">
+                                    <div class="col-lg-6 ">
+                                        <div class="card overflow-hidden mb-3 me-2">
+                                            <div class="card-body p-3">
+                                                <h5>전일<i class="ti ti-bolt fs-6 text-warning"></i>
+                                                </h5>
+                                                <h4 id="yesterdayKwh">-</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 ">
+                                        <div class="card overflow-hidden mb-3 ms-2">
+                                            <div class="card-body p-3">
+                                                <h5>금일<i class="ti ti-bolt fs-6 text-warning"></i>
+                                                </h5>
+                                                <h4 id="todayKwh">-</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="d-flex justify-content-center">
+                                    <div class="col-lg-6">
+                                        <div class="card overflow-hidden mb-3 me-2">
+                                            <div class="card-body p-3">
+                                                <h5>전월<i class="ti ti-bolt fs-6 text-warning"></i>
+                                                </h5>
+                                                <h4 id="lastMonth">-</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 ">
+                                        <div class="card overflow-hidden mb-3 ms-2">
+                                            <div class="card-body p-3">
+                                                <h5>금월<i class="ti ti-bolt fs-6 text-warning"></i>
+                                                </h5>
+                                                <h4 id="thisMonthKwh">-</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card overflow-hidden flex-fill">
+                                <div class="card-body p-3">
+                                    <nav id="navbar-example2"
+                                         class="navbar navbar-light bg-light p-1">
+                                        <ul class="nav nav-pills">
+                                            <li class="nav-item">
+                                                <a class="nav-link fs-1 p-1"
+                                                   href="#scrollspyHeading1">top</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                    <div data-bs-spy="scroll" data-bs-target="#navbar-example2"
+                                         data-bs-offset="0" class="scrollspy-example overflow-auto"
+                                         tabindex="0" style="max-height: 400px; overflow-y: auto;">
+
+                                        <h4 id="scrollspyHeading1">First heading</h4>
+                                        <p>...</p>
+                                        <h4 id="scrollspyHeading2">Second heading</h4>
+                                        <p>...</p>
+                                        <h4 id="scrollspyHeading3">Third heading</h4>
+                                        <p>...</p>
+                                        <h4 id="scrollspyHeading4">Fourth heading</h4>
+                                        <p>...</p>
+                                        <h4 id="scrollspyHeading6">Fifth heading</h4>
+                                        <p>...</p>
+                                        <h4 id="scrollspyHeading7">Fifth heading</h4>
+                                        <p>...</p>
+                                        <h4 id="scrollspyHeading8">Fifth heading</h4>
+                                        <p>...</p>
+                                        <h4 id="scrollspyHeading9">Fifth heading</h4>
+                                        <p>...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--                    </div>-->
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                     <!--모달-->
                     <div class="modal fade" id="settingPriceModal" tabindex="-1"
                          aria-labelledby="settingPriceModalLabel"
@@ -450,29 +435,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- 요금 차액. 위치 옮길예쩡-->
-                    <div class="col-lg-4 ">
-                        <div class="card overflow-hidden">
-                            <div class="card-body p-3">
-                                <h5 class="card-title mb-9 fw-semibold">요금 차액</h5>
-                                <div class="row align-items-center">
-                                    <div class="col-20">
-                                        <h2 class="fs-2 fw-semibold mb-3 text-nowrap"
-                                            id="remain-budget">1972년 11월 21일 김두한은 오렌지병으로 쓰러졌다.</h2>
-                                        <div class="d-flex align-items-center mb-3">
-                                            <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
-                                               style="font-size: 0.5rem;"></i>
-                                            <p class="me-1 fs-2 mb-0" id="remain-budget-percentage">
-                                                남은</p>
-                                            <p class="fs-2 mb-0"> 금액</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -529,7 +491,6 @@
 
         setInterval(fetchDataAndUpdateChart, 60000);
     </script>
-
     <script>
         function checkRoleAndOpenModal() {
             var updateFeeDiv = document.getElementById('update-fee');
@@ -546,7 +507,6 @@
             myModal.show();
         }
     </script>
-
     <script>
         setInterval(fetchDataAndUpdateUsage, 60000);
 
@@ -570,8 +530,6 @@
             fetchDataAndUpdateUsage();
         });
     </script>
-
-
     <script>
 
         var realtimeTotalOptions = {
@@ -668,7 +626,6 @@
             scheduleFetch();
         });
     </script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const fetchCurrentMonthData = async () => {
@@ -767,7 +724,6 @@
             initdailyPredictChart();
         });
     </script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const fetchCurrentMonthData = async () => {
@@ -868,6 +824,4 @@
             initdailyPredictChart();
         });
     </script>
-    <!--</body>-->
-
 </html>

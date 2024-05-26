@@ -39,7 +39,7 @@ public class SseController {
     }
 
     @PostMapping("/notify")
-    public ResponseEntity<?> notifyClients(@RequestBody Alert alert) {
+    public void notifyClients(@RequestBody Alert alert) {
         int targetOrgId = alert.getOrganizationId();
         List<String> toRemove = new ArrayList<>();
         Map<String, SseEmitter> targetEmitters = emitters.getOrDefault(targetOrgId, new ConcurrentHashMap<>());
@@ -58,7 +58,5 @@ public class SseController {
         if (targetEmitters.isEmpty()) {
             emitters.remove(targetOrgId);
         }
-
-        return ResponseEntity.ok().build();
     }
 }
