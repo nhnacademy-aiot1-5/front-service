@@ -11,6 +11,7 @@ import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
 import live.ioteatime.frontservice.dto.response.PreciseElectricitiesDto;
 import live.ioteatime.frontservice.service.ElectricityService;
+import live.ioteatime.frontservice.service.SseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,7 @@ public class IndexController {
     private final AdminAdaptor adminAdaptor;
     private final ElectricityAdaptor electricityAdaptor;
     private final ElectricityService electricityService;
+    private final SseService sseService;
 
     @GetMapping
     public String index(Model model) {
@@ -49,6 +51,7 @@ public class IndexController {
         model.addAttribute("yesterdayKwh", electricityAdaptor.getLastDayElectricity().getBody().getKwh());
         model.addAttribute("thisMonthKwh", electricityAdaptor.getcurrentMonthElectricity().getBody().getKwh());
         model.addAttribute("wTop10", electricityService.getTop10Electricity());
+        model.addAttribute("outliers", sseService.getOutliers());
         return "index";
     }
 
@@ -109,7 +112,7 @@ public class IndexController {
     @GetMapping("/bill")
     @ResponseBody
     public List<DailyElectricityDto> getCumulativeBills() {
-        return  electricityService.getCumulativeBills();
+        return electricityService.getCumulativeBills();
     }
 
     @GetMapping("/bill-predict")

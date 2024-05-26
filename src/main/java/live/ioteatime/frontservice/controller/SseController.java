@@ -1,25 +1,26 @@
 package live.ioteatime.frontservice.controller;
 
 import live.ioteatime.frontservice.dto.Alert;
+import live.ioteatime.frontservice.dto.OutlierRequest;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
+import live.ioteatime.frontservice.service.SseService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
+@RequiredArgsConstructor
 public class SseController {
-    // 조직 ID를 기준으로 Emitter 목록 관리
+    private final SseService sseService;
     private final Map<Integer, Map<String, SseEmitter>> emitters = new ConcurrentHashMap<>();
 
     @GetMapping("/sse")
@@ -33,8 +34,6 @@ public class SseController {
 
         emitter.onCompletion(() -> this.emitters.get(orgId).remove(userId));
         emitter.onTimeout(() -> this.emitters.get(orgId).remove(userId));
-
-        System.out.println("클라이언트 구독됨: " + orgId + " 내의 " + userId);
         return emitter;
     }
 
@@ -47,7 +46,7 @@ public class SseController {
         for (Map.Entry<String, SseEmitter> entry : targetEmitters.entrySet()) {
             SseEmitter emitter = entry.getValue();
             try {
-                emitter.send(SseEmitter.event().data(alert.getMessage()));
+                emitter.send(SseEmitter.event().data(sseService.getMessage(alert)));
             } catch (IOException e) {
                 toRemove.add(entry.getKey());
                 emitter.completeWithError(e);
@@ -58,5 +57,16 @@ public class SseController {
         if (targetEmitters.isEmpty()) {
             emitters.remove(targetOrgId);
         }
+    }
+
+    @PostMapping("/outlier-off")
+    public ResponseEntity<?> turnOnLight(@RequestBody OutlierRequest outlierId) {
+        sseService.turnSensorOn("light", "24E124445D189958");
+        sseService.updateOutlier(outlierId.getOutlierId(), 1);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Outlier resolved successfully");
+        response.put("outlierId", outlierId.getOutlierId());
+        return ResponseEntity.ok(response);
     }
 }
