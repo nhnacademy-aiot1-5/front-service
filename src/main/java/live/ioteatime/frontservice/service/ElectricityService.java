@@ -48,11 +48,13 @@ public class ElectricityService {
             bill += e.getBill();
             e.setBill(bill);
         }
+
+        electricityDtoList.remove(electricityDtoList.size()-1);
         return electricityDtoList;
     }
 
     public List<PreciseElectricitiesDto> getCumulativeBillPredictions() {
-        LocalDateTime time = LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime time = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
         List<PreciseElectricitiesDto> electricityDtoList = electricityAdaptor
                 .getMonthlyPredictedValues(1, time).getBody();
 
@@ -62,9 +64,7 @@ public class ElectricityService {
         for(PreciseElectricitiesDto e : electricityDtoList) {
             bill += e.getBill();
             e.setBill(bill);
-            if(e.getTime().isEqual(today) || e.getTime().isAfter(today)) {
-                result.add(e);
-            }
+            result.add(e);
         }
         return result;
     }

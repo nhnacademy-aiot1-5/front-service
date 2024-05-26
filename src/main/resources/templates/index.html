@@ -44,6 +44,9 @@
                                             🌱</h2>
                                         <p></p>
                                     </div>
+                                    <div>
+                                        <h4 id="achievementStatus">목표 요금보다 적게 사용했어요! 👍</h4>
+                                    </div>
                                     <div class="d-flex align-items-center">
                                         <div class="border-end pe-4 border-muted border-opacity-10 d-flex align-items-center">
                                             <p class="mb-0 text-dark me-2"
@@ -69,9 +72,6 @@
                                             };
                                         </script>
                                     </div>
-                                </div>
-
-                            <div class="card w-100">
                                 </div>
                             </div>
                         </div>
@@ -266,7 +266,7 @@
                                         <div class="card mb-3 ms-2 flex-fill">
                                             <div class="card-body p-3">
                                                 <h5>사용 요금</h5>
-                                                <h2 class="fs-2 fw-semibold mb-3 text-nowrap" id="bill"></h2>
+                                                <h2 class="fs-6 fw-semibold mb-3 text-nowrap" id="bill"></h2>
                                                 <div class="d-flex align-items-center mb-3">
                                                     <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
                                                        style="font-size: 0.5rem;"></i>
@@ -282,8 +282,8 @@
                                          onclick="checkRoleAndOpenModal()">
                                         <div class="card overflow-hidden mb-3 me-2">
                                             <div class="card-body cursor-pointer p-3">
-                                                <h5>설정 요금</h5>
-                                                <h2 class="fs-2 fw-semibold mb-3 text-nowrap"
+                                                <h5>목표 요금</h5>
+                                                <h2 class="fs-6 fw-semibold mb-3 text-nowrap"
                                                     th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">
                                                     현재 설정 요금</h2>
                                                 <div class="d-flex align-items-center mb-3"
@@ -402,10 +402,10 @@
                                 <div class="modal-body">
                                     <div class="card mb-3">
                                         <div class="card-body">
-                                            <h5 class="card-title">현재 설정 요금</h5>
+                                            <h5 class="card-title">현재 목표 요금</h5>
                                             <h4 class="fw-semibold mb-3"
                                                 th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">
-                                                현재 설정
+                                                현재 목표
                                                 요금</h4>
                                         </div>
                                     </div>
@@ -742,24 +742,52 @@
                 }
             };
 
-            const prepareChartData = (data) => {
-                return data.map(item => ({
+            const prepareChartData = (currentMonthData, predictedData) => {
+                const current = currentMonthData.map(item => ({
                     x: new Date(item.time).getTime(),
                     y: item.bill
                 }));
+                current.sort((a, b) => a.x - b.x);
+
+                const predicted = predictedData.map(item => ({
+                    x: new Date(item.time).getTime(),
+                    y: item.bill
+                }));
+                predicted.sort((a, b) => a.x - b.x);
+
+                const currentCumulativeBill = current[current.length-1].y;
+                for(var i=0; i<predicted.length; i++) {
+                    predicted[i].y = predicted[i].y + currentCumulativeBill;
+                }
+
+                setAchievementStatus(current, predicted);
+
+                return current.concat(predicted);
             };
+
+        function setAchievementStatus(current, predicted){
+            const achievementStatus = document.getElementById("achievementStatus");
+            if (predicted[predicted.length-1].y >= budget) {
+                achievementStatus.textContent = '목표 요금을 초과할 것 같아요. ⚠️';
+            }
+            if (current[current.length-1].y >= budget) {
+                achievementStatus.textContent = '목표 요금을 초과했어요. 💸';
+            }
+        }
 
         const initCumulativeBillChart = async () => {
             const currentMonthData = await fetchCurrentMonthData();
             const predictedData = await fetchPredictedData();
-            console.log(predictedData);
 
-                const fullData = prepareChartData(currentMonthData).concat(prepareChartData(predictedData));
-                fullData.sort((a, b) => a.x - b.x);
+            const fullData = prepareChartData(currentMonthData, predictedData);
+            fullData.sort((a, b) => a.x - b.x);
 
-                const today = new Date();
-                const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                const forecastCount = endOfMonth.getDate() - today.getDate() - 1;
+            const today = new Date();
+            const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            const forecastCount = endOfMonth.getDate() - today.getDate() - 1;
+
+            const maxVal = Math.max(budget+1000, fullData[fullData.length-1].y);
+            const yMax = Math.ceil(maxVal / 5000) * 5000;
 
             const cumulativeChartOptions = {
                 series: [{
@@ -783,6 +811,12 @@
                             return new Date(timestamp).toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
                         }
                     }
+                },
+                yaxis: {
+                    min: 0,
+                    max: yMax,
+                    tickAmount: 10,
+                    forceNiceScale: true
                 },
                 title: {
                     text: '이번 달 소비 요금',
@@ -816,7 +850,7 @@
                                     bottom: 5
                                 }
                             },
-                            text: '설정 요금',
+                            text: '목표 요금',
                         }
                     }]
                 }
