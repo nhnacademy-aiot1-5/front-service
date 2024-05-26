@@ -92,7 +92,7 @@ public class IndexController {
     @ResponseBody
     public List<PreciseElectricitiesDto> getMontlyPredictedElectricities() {
         int organizationId = userAdaptor.getUser().getBody().getOrganization().getId();
-        return electricityAdaptor.getMonthlyPredictedValues(LocalDateTime.now(), organizationId).getBody();
+        return electricityAdaptor.getMonthlyPredictedValues(organizationId, LocalDateTime.now()).getBody();
     }
 
     @GetMapping("/kwh")
