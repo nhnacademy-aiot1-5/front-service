@@ -19,22 +19,19 @@
     </style>
 </head>
 
-
-<body>
-<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-     data-sidebar-position="fixed" data-header-position="fixed">
-    <th:block th:replace="side-bar :: sidebar"></th:block>
-
-    <div class="body-wrapper">
-    <th:block th:replace="header :: header"></th:block>
-
-        <div class="dashboard-container">
-            <div class="card-body position-relative">
-                <div class="row" style="height: 60px">
-                </div>
-                <div class="row">
-                    <div class="col-lg-8 d-flex align-items-strech">
-                            <div class="card w-100 mb-2">
+    <body>
+        <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+             data-sidebar-position="fixed" data-header-position="fixed">
+            <th:block th:replace="side-bar :: sidebar"></th:block>
+            <div class="body-wrapper">
+                <th:block th:replace="header :: header"></th:block>
+                <div class="dashboard-container">
+                    <!--                    <div class="card-body">-->
+                    <div class="row" style="height: 60px">
+                    </div>
+                    <div class="row gx-3">
+                        <div class="col-lg-8 d-flex align-items-strech">
+                            <div class="card w-100 mb-3">
                                 <div class="card-body">
                                     <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                                         <div class="overflow-hidden me-6 ">
@@ -42,40 +39,52 @@
                                         </div>
                                     </div>
                                     <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                                        <h2 class="mt-0 mb-0 fw-semibold fs-8 d-flex align-content-center">전기 좀
+                                        <h2 class="mt-0 mb-0 fw-semibold fs-9 d-flex align-content-center">전기 좀
                                             아껴쓰세요.
                                             🌱</h2>
                                         <p></p>
                                     </div>
                                     <div class="d-flex align-items-center">
-                                        <div class="border-end pe-4 border-muted border-opacity-10">
-                                            <p class="mb-0 text-dark">이번 달 전기 사용량 5,200 kWh
-                                                <i class="bi bi-arrow-up-right-circle-fill"
-                                                   style="font-size: 1rem;"></i>
+                                        <div class="border-end pe-4 border-muted border-opacity-10 d-flex align-items-center">
+                                            <p class="mb-0 text-dark me-2"
+                                               th:text="'이번 달 전기 사용량 '+${#numbers.formatInteger(thisMonthKwh, 0, 'COMMA')} + 'kwh'">
                                             </p>
+                                            <i class="bi bi-arrow-up-right-circle-fill"
+                                               style="font-size: 1rem;"></i>
                                         </div>
-                                        <div class="ps-4">
-                                            <p class="mb-0 text-dark">이번 달 전기료 ₩ 2,340
-                                                <i class="bi bi-arrow-up-right-circle-fill"
-                                                   style="font-size: 1rem;"></i>
-                                            </p>
-                                        </div>
+                                        <div id="updates"></div>
+                                        <script>
+                                            const eventSource = new EventSource('/sse');
+
+                                            eventSource.onmessage = function (event) {
+                                                const updatesDiv = document.getElementById('updates');
+                                                const newElement = document.createElement('p');
+                                                newElement.textContent = event.data;
+                                                updatesDiv.appendChild(newElement);
+                                            };
+                                            console.log("이거 실행됨")
+                                            eventSource.onerror = function (event) {
+                                                console.error('Error with SSE', event);
+                                                eventSource.close();
+                                            };
+                                        </script>
                                     </div>
                                 </div>
 
                             <div class="card w-100">
                                 </div>
                             </div>
+                        </div>
 
-
-                </div>
-
-                    <!-- 요금 게이지 바 -->
-                    <div class="col-lg-4">
-                        <div class="col">
-                            <div class="card overflow-hidden mb-2">
+                        <!-- 요금 게이지 바 -->
+                        <div class="col-lg-4 d-flex align-items-strech">
+                            <!--                                <div class="col">-->
+                            <div class="card w-100 mb-3">
                                 <div class="card-body p-3">
-                                    <h5 class="card-title mb-9 fw-semibold">테스트 요금</h5>
+                                    <div class="d-flex">
+                                        <h5 class="card-title mb-9 fw-semibold mb-0 me-2">요금 잔량 : </h5>
+                                        <p class="fw-semibold mb-0 ml-2" id="remain-budget"></p>
+                                    </div>
                                     <div class="row align-items-center">
                                         <div class="col-12">
                                             <div id="gauge-chart"></div>
@@ -94,7 +103,7 @@
                                                     }
                                                     const last = dailyElectricities[dailyElectricities.length - 1].bill;
                                                     const secondLast = dailyElectricities[dailyElectricities.length - 2].bill;
-                                                    if (secondLast === 0){
+                                                    if (secondLast === 0) {
                                                         return 0;
                                                     }
                                                     return (last - secondLast) / secondLast * 100;
@@ -113,7 +122,7 @@
                                                         var percentage = (budget - bill) * 100 / budget;
                                                         document.getElementById("bill").textContent = '₩ ' + bill.toLocaleString('ko-KR');
                                                         document.getElementById("remain-budget").textContent =
-                                                            '₩ ' + (budget - bill).toString();
+                                                            '₩ ' + (budget - bill).toLocaleString('ko-KR');
                                                         let billPercentage = getPercentage(dailyElectricities);
                                                         document.getElementById("bill-percentage").textContent =
                                                             billPercentage >= 0 ? '+' + billPercentage.toFixed(2) + '%' : billPercentage.toFixed(2) + '%';
@@ -205,106 +214,85 @@
                                     </div>
                                 </div>
                             </div>
+                            <!--                                </div>-->
                         </div>
                     </div>
-            </div>
-
-
-            <div class="card-body position-relative">
-                <div class="card w-100">
-                    <div class="card-body">
-                        <div class="d-sm-flex d-block align-items-center justify-content-between mb-3">
-                            <div class="overflow-hidden me-6">
-                                <h5 class="fw-semibold">실시간 전력 사용량</h5>
-                            </div>
-                        </div>
-            <div class="row">
-
-
-                <div class="col-lg-4">
-                    <div>
-                        <div id="daily-predict"></div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-                    <div id="realtimeChart"></div>
-                </div>
-
-                <div class="col-lg-4">
-                    <div>
-                        <div id="realtime-total"></div>
-<!--                        <div id="new" style="flex:1"></div>-->
-                    </div>
-                </div>
-
-            </div>
-            </div>
-                </div>
-
-                <div class="card-body position-relative">
-                    <div class="card w-100">
-                        <div class="card-body">
-            <div class="row">
-
-                <div class="col-8">
-                    <div>
-                        <div id="cumulative-bill"></div>
-                    </div>
-                </div>
-
-
-
-                <div class="col-4">
-                    <div class="d-flex justify-content-center">
                     <div class="row">
-
-                                <div class="card overflow-hidden">
-                                    <div class="card-body p-3">
-                                        <h5>이상치<i class="ti ti-bolt fs-6 text-warning"></i></h5>
-                                        이상치 목록 이상치 목록 이상치 목록 이상치 목록
-                                    </div>
-                                </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                <div>
-                        <div class="d-flex justify-content-center">
-                            <div class="col-6 ">
-                                <div class="card overflow-hidden">
-                                    <div class="card-body p-3">
-                                        <h5>사용 요금</h5>
-                                        <div class="row align-items-center">
-                                            <div class="col-20">
-                                                <h2 class="fs-6 fw-semibold mb-3 text-nowrap" id="bill">아무도 날 막을 수 없으셈 ㅋㅋ</h2>
-                                                <div class="d-flex align-items-center mb-3">
-                                                    <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
-                                                       style="font-size: 0.5rem;"></i>
-                                                    <p class="me-1 fs-2 mb-0" id="bill-percentage">+9%</p>
-                                                    <p class="fs-1 mb-0">1일 전</p>
-                                                </div>
+                        <div class="col-lg-12 d-flex align-items-strech">
+                            <div class="card w-100 mb-3">
+                                <div class="card-body">
+                                    <div class="row gx-3">
+                                        <div class="d-sm-flex mb-3">
+                                            <div class="overflow-hidden me-6">
+                                                <h5 class="fw-semibold">실시간 전력 사용량</h5>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div>
+                                                <div id="daily-predict"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div id="realtimeChart"></div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div>
+                                                <div id="realtime-total"></div>
+                                                <!--                        <div id="new" style="flex:1"></div>-->
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="col-6" id="update-fee" th:data-role="${userInfo.role}"
-                                 onclick="checkRoleAndOpenModal()">
-                                <div class="card overflow-hidden">
-                                    <div class="card-body cursor-pointer p-3" >
-                                        <h5>설정 요금</h5>
-                                        <div class="row align-items-center">
-                                            <div class="col-20">
-                                                <h2 class="fs-6 fw-semibold mb-3 text-nowrap"
+                    <!--                        <div class="card-body position-relative">-->
+                    <!--                            <div class="card w-100">-->
+                    <!--                                <div class="card-body">-->
+                    <!--                    <div class="d-flex flex-row">-->
+                    <div class="row gx-3">
+                        <div class="col-lg-8 d-flex flex-column">
+                            <div class="card mb-3 flex-fill">
+                                <div class="card-body p-3">
+                                    <div id="cumulative-bill"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex flex-column">
+                            <div class="row gx-3">
+                                <div class="d-flex justify-content-center">
+                                    <div class="col-6 me-2">
+                                        <div class="card mb-3 ms-2 flex-fill">
+                                            <div class="card-body p-3">
+                                                <h5>사용 요금</h5>
+                                                <h2 class="fs-2 fw-semibold mb-3 text-nowrap" id="bill"></h2>
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
+                                                       style="font-size: 0.5rem;"></i>
+                                                    <p class="me-1 fs-2 mb-0"
+                                                       id="bill-percentage">+9%</p>
+                                                    <p class="fs-1 mb-0">1일 전</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 ms-2" id="update-fee"
+                                         th:data-role="${userInfo.role}"
+                                         onclick="checkRoleAndOpenModal()">
+                                        <div class="card overflow-hidden mb-3 me-2">
+                                            <div class="card-body cursor-pointer p-3">
+                                                <h5>설정 요금</h5>
+                                                <h2 class="fs-2 fw-semibold mb-3 text-nowrap"
                                                     th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">
                                                     현재 설정 요금</h2>
-                                                <div class="d-flex align-items-center mb-3" th:if="${userInfo.role.name() == 'ADMIN'}">
+                                                <div class="d-flex align-items-center mb-3"
+                                                     th:if="${userInfo.role.name() == 'ADMIN'}">
                                                     <p class="me-1 fs-2 mb-0">클릭 시</p>
                                                     <p class="fs-2 mb-0">수정</p>
                                                 </div>
-                                                <div class="d-flex align-items-center mb-3" th:unless="${userInfo.role.name() == 'ADMIN'}">
+                                                <div class="d-flex align-items-center mb-3"
+                                                     th:unless="${userInfo.role.name() == 'ADMIN'}">
                                                     <p class="me-1 fs-2 mb-0">🌱🌱</p>
                                                     <p class="fs-2 mb-0">🌱🌱</p>
                                                 </div>
@@ -313,455 +301,465 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="d-flex justify-content-center">
+                                    <div class="col-lg-6 ">
+                                        <div class="card overflow-hidden mb-3 me-2">
+                                            <div class="card-body p-3">
+                                                <h5>전일<i class="ti ti-bolt fs-6 text-warning"></i>
+                                                </h5>
+                                                <h4 id="yesterdayKwh">-</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 ">
+                                        <div class="card overflow-hidden mb-3 ms-2">
+                                            <div class="card-body p-3">
+                                                <h5>금일<i class="ti ti-bolt fs-6 text-warning"></i>
+                                                </h5>
+                                                <h4 id="todayKwh">-</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="d-flex justify-content-center">
+                                    <div class="col-lg-6">
+                                        <div class="card overflow-hidden mb-3 me-2">
+                                            <div class="card-body p-3">
+                                                <h5>전월<i class="ti ti-bolt fs-6 text-warning"></i>
+                                                </h5>
+                                                <h4 id="lastMonth">-</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 ">
+                                        <div class="card overflow-hidden mb-3 ms-2">
+                                            <div class="card-body p-3">
+                                                <h5>금월<i class="ti ti-bolt fs-6 text-warning"></i>
+                                                </h5>
+                                                <h4 id="thisMonthKwh">-</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card overflow-hidden flex-fill">
+                                <div class="card-body p-3">
+                                    <nav id="navbar-example2"
+                                         class="navbar navbar-light bg-light p-1">
+                                        <ul class="nav nav-pills">
+                                            <li class="nav-item">
+                                                <a class="nav-link fs-1 p-1"
+                                                   href="#scrollspyHeading1">top</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                    <div data-bs-spy="scroll" data-bs-target="#navbar-example2"
+                                         data-bs-offset="0" class="scrollspy-example overflow-auto"
+                                         tabindex="0" style="max-height: 400px; overflow-y: auto;">
+
+                                        <h4 id="scrollspyHeading1">First heading</h4>
+                                        <p>...</p>
+                                        <h4 id="scrollspyHeading2">Second heading</h4>
+                                        <p>...</p>
+                                        <h4 id="scrollspyHeading3">Third heading</h4>
+                                        <p>...</p>
+                                        <h4 id="scrollspyHeading4">Fourth heading</h4>
+                                        <p>...</p>
+                                        <h4 id="scrollspyHeading6">Fifth heading</h4>
+                                        <p>...</p>
+                                        <h4 id="scrollspyHeading7">Fifth heading</h4>
+                                        <p>...</p>
+                                        <h4 id="scrollspyHeading8">Fifth heading</h4>
+                                        <p>...</p>
+                                        <h4 id="scrollspyHeading9">Fifth heading</h4>
+                                        <p>...</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <!--                    </div>-->
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--모달-->
+                    <div class="modal fade" id="settingPriceModal" tabindex="-1"
+                         aria-labelledby="settingPriceModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <h5 class="card-title">현재 설정 요금</h5>
+                                            <h4 class="fw-semibold mb-3"
+                                                th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">
+                                                현재 설정
+                                                요금</h4>
+                                        </div>
+                                    </div>
+                                    <p><br>
+                                    <form th:action="@{/budget}" th:method="PUT" id="resetTargetAmountForm">
+                                        <div class="mb-3">
+                                            <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>
+                                            <div class="input-group" style="width: 70%;">
+                                                <input type="number" class="form-control" id="budget" name="budget"
+                                                       aria-describedby="amountAddon">
+                                                <span class="input-group-text" id="amountAddon">원</span>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                    <button type="submit" class="btn btn-primary" form="resetTargetAmountForm">저장
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                    </div>
-
-                        <div class="row">
-                            <div class="d-flex justify-content-center">
-                            <div class="col-lg-6 ">
-                                <div class="card overflow-hidden">
-                                    <div class="card-body p-3">
-                                        <h5>전일<i class="ti ti-bolt fs-6 text-warning"></i></h5>
-                                        <h4 id="yesterdayKwh">-</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 ">
-                                <div class="card overflow-hidden">
-                                    <div class="card-body p-3">
-                                        <h5>금일<i class="ti ti-bolt fs-6 text-warning"></i></h5>
-                                        <h4 id="todayKwh">-</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-
-                    <div class="row">
-                        <div class="d-flex justify-content-center">
-                            <div class="col-lg-6 ">
-                                <div class="card overflow-hidden">
-                                    <div class="card-body p-3">
-                                        <h5>전월<i class="ti ti-bolt fs-6 text-warning"></i></h5>
-                                        <h4 id="lastMonth">-</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 ">
-                                <div class="card overflow-hidden">
-                                    <div class="card-body p-3">
-                                        <h5>금월<i class="ti ti-bolt fs-6 text-warning"></i></h5>
-                                        <h4 id="thisMonthKwh">-</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            </div>
             </div>
         </div>
-
-                        </div></div></div>
-
-
-    </div>
-</div>
-
-
-<!--모달-->
-<div class="modal fade" id="settingPriceModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">현재 설정 요금</h5>
-                        <h4 class="fw-semibold mb-3"
-                            th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">현재 설정
-                            요금</h4>
-                    </div>
-                </div>
-                <p><br>
-                <form th:action="@{/budget}" th:method="PUT" id="resetTargetAmountForm">
-                    <div class="mb-3">
-                        <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>
-                        <div class="input-group" style="width: 70%;">
-                            <input type="number" class="form-control" id="budget" name="budget"
-                                   aria-describedby="amountAddon">
-                            <span class="input-group-text" id="amountAddon">원</span>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                <button type="submit" class="btn btn-primary" form="resetTargetAmountForm">저장</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-            <!-- 요금 차액. 위치 옮길예쩡-->
-            <div class="col-lg-4 ">
-                <div class="card overflow-hidden">
-                    <div class="card-body p-3">
-                        <h5 class="card-title mb-9 fw-semibold">요금 차액</h5>
-                        <div class="row align-items-center">
-                            <div class="col-20">
-                                <h2 class="fs-2 fw-semibold mb-3 text-nowrap"
-                                    id="remain-budget">1972년 11월 21일 김두한은 오렌지병으로 쓰러졌다.</h2>
-                                <div class="d-flex align-items-center mb-3">
-                                    <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
-                                       style="font-size: 0.5rem;"></i>
-                                    <p class="me-1 fs-2 mb-0" id="remain-budget-percentage">
-                                        남은</p>
-                                    <p class="fs-2 mb-0"> 금액</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-</body>
-<script>
-    let options = {
-        chart: {
-            type: 'bar'
-        },
-        plotOptions: {
-            bar: {
-                horizontal: true,
+    </body>
+    <script>
+        let options = {
+            chart: {
+                type: 'bar'
             },
-        },
-        series: [
-            {
-                name: 'Electricity',
-                data: [],
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                },
             },
-        ],
-        xaxis: {
-            categories: [],
-        },
-        title: {
-            text: '실시간 전력량 Top 10',
-            align: 'center',
-        },
-    };
+            series: [
+                {
+                    name: 'Electricity',
+                    data: [],
+                },
+            ],
+            xaxis: {
+                categories: [],
+            },
+            title: {
+                text: '실시간 전력량 Top 10',
+                align: 'center',
+            },
+        };
 
-    let chart = new ApexCharts(document.querySelector('#realtimeChart'), options);
+        let chart = new ApexCharts(document.querySelector('#realtimeChart'), options);
 
-    chart.render();
+        chart.render();
 
-    function fetchDataAndUpdateChart() {
-        fetch('/top10')
-            .then((response) => response.json())
-            .then((data) => {
-                chart.updateSeries([
-                    {
-                        name: 'Electricity',
-                        data: data.map((item) => item.w),
-                    },
-                ]);
+        function fetchDataAndUpdateChart() {
+            fetch('/top10')
+                .then((response) => response.json())
+                .then((data) => {
+                    chart.updateSeries([
+                        {
+                            name: 'Electricity',
+                            data: data.map((item) => item.w),
+                        },
+                    ]);
 
-                chart.updateOptions({
-                    xaxis: {
-                        categories: data.map((item) => `${item.place}\n${item.channel}`),
-                    },
+                    chart.updateOptions({
+                        xaxis: {
+                            categories: data.map((item) => `${item.place}\n${item.channel}`),
+                        },
+                    });
                 });
-            });
-    }
-
-    fetchDataAndUpdateChart();
-
-    setInterval(fetchDataAndUpdateChart, 60000);
-</script>
-
-<script>
-    function checkRoleAndOpenModal() {
-        var updateFeeDiv = document.getElementById('update-fee');
-        var role = updateFeeDiv.getAttribute('data-role');
-        if (role === 'ADMIN') {
-            openSetBudgetModal();
         }
-    }
 
-    function openSetBudgetModal() {
-        var myModal = new bootstrap.Modal(document.getElementById('settingPriceModal'), {
-            keyboard: false
-        });
-        myModal.show();
-    }
-</script>
+        fetchDataAndUpdateChart();
 
-<script>
-    setInterval(fetchDataAndUpdateUsage, 60000);
-
-    function fetchDataAndUpdateUsage() {
-        $.ajax({
-            url: "/kwh",
-            type: "GET",
-            success: function (result) {
-                $('#lastMonth').text(result.lastMonthKwh.toLocaleString('ko-KR') + ' kwh');
-                $('#todayKwh').text(result.todayKwh.toLocaleString('ko-KR') + ' kwh');
-                $('#yesterdayKwh').text(result.yesterdayKwh.toLocaleString('ko-KR') + ' kwh');
-                $('#thisMonthKwh').text(result.thisMonthKwh.toLocaleString('ko-KR') + ' kwh');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
+        setInterval(fetchDataAndUpdateChart, 60000);
+    </script>
+    <script>
+        function checkRoleAndOpenModal() {
+            var updateFeeDiv = document.getElementById('update-fee');
+            var role = updateFeeDiv.getAttribute('data-role');
+            if (role === 'ADMIN') {
+                openSetBudgetModal();
             }
+        }
+
+        function openSetBudgetModal() {
+            var myModal = new bootstrap.Modal(document.getElementById('settingPriceModal'), {
+                keyboard: false
+            });
+            myModal.show();
+        }
+    </script>
+    <script>
+        setInterval(fetchDataAndUpdateUsage, 60000);
+
+        function fetchDataAndUpdateUsage() {
+            $.ajax({
+                url: "/kwh",
+                type: "GET",
+                success: function (result) {
+                    $('#lastMonth').text(result.lastMonthKwh.toLocaleString('ko-KR') + ' kwh');
+                    $('#todayKwh').text(result.todayKwh.toLocaleString('ko-KR') + ' kwh');
+                    $('#yesterdayKwh').text(result.yesterdayKwh.toLocaleString('ko-KR') + ' kwh');
+                    $('#thisMonthKwh').text(result.thisMonthKwh.toLocaleString('ko-KR') + ' kwh');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            fetchDataAndUpdateUsage();
         });
-    }
+    </script>
+    <script>
 
-    $(document).ready(function () {
-        fetchDataAndUpdateUsage();
-    });
-</script>
-
-
-<script>
-
-    var realtimeTotalOptions = {
-        series: [{
-            name: "kwh",
-            data: []
-        }],
-        chart: {
-            id: 'realtime',
-            type: 'bar',
-            zoom: {
+        var realtimeTotalOptions = {
+            series: [{
+                name: "kwh",
+                data: []
+            }],
+            chart: {
+                id: 'realtime',
+                type: 'bar',
+                zoom: {
+                    enabled: false
+                },
+                animations: {
+                    enabled: true,
+                    easing: 'linear',
+                    dynamicAnimation: {
+                        speed: 1000
+                    }
+                }
+            },
+            dataLabels: {
                 enabled: false
             },
-            animations: {
-                enabled: true,
-                easing: 'linear',
-                dynamicAnimation: {
-                    speed: 1000
-                }
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        title: {
-            text: '최근 1시간 전력 소비량',
-            align: 'left'
-        },
-        grid: {
-            row: {
-                colors: ['#f3f3f3'],
-                opacity: 0.5
+            title: {
+                text: '최근 1시간 전력 소비량',
+                align: 'left'
             },
-        },
-        xaxis: {
-            type: 'datetime',
-            tickAmount: 12,
-            labels: {
-                format: 'HH:mm'
-            }
-        },
-        yaxis: {
-            tickAmount: 4,
-            labels: {
-                formatter: function (val) {
-                    return val.toFixed(1);
+            grid: {
+                row: {
+                    colors: ['#f3f3f3'],
+                    opacity: 0.5
+                },
+            },
+            xaxis: {
+                type: 'datetime',
+                tickAmount: 12,
+                labels: {
+                    format: 'HH:mm'
+                }
+            },
+            yaxis: {
+                tickAmount: 4,
+                labels: {
+                    formatter: function (val) {
+                        return val.toFixed(1);
+                    }
+                }
+            },
+            tooltip: {
+                x: {
+                    format: 'HH:mm'
                 }
             }
-        },
-        tooltip: {
-            x: {
-                format: 'HH:mm'
-            }
-        }
-    };
+        };
 
-    var realtimeTotalChart = new ApexCharts(document.querySelector("#realtime-total"), realtimeTotalOptions);
-    realtimeTotalChart.render();
+        var realtimeTotalChart = new ApexCharts(document.querySelector("#realtime-total"), realtimeTotalOptions);
+        realtimeTotalChart.render();
 
-    function fetchOneHourTotalData() {
-        fetch('/total')
-            .then(response => response.json())
-            .then(data => {
-                if (!Array.isArray(data)) {
-                    console.error('Expected an array of data but got:', data);
-                    return;
-                }
-                var seriesData = data.map(item => {
-                    const time = new Date(item.time);
-                    return {
-                        x: time.getTime(),
-                        y: item.kwh
-                    };
-                });
-                seriesData.sort((a, b) => a.x - b.x);
-                realtimeTotalChart.updateSeries([{
-                    data: seriesData
-                }]);
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        function scheduleFetch() {
-            const now = new Date();
-            const delay = 300000 - (now % 300000);
-            setTimeout(function () {
-                fetchOneHourTotalData();
-                scheduleFetch();
-            }, delay);
+        function fetchOneHourTotalData() {
+            fetch('/total')
+                .then(response => response.json())
+                .then(data => {
+                    if (!Array.isArray(data)) {
+                        console.error('Expected an array of data but got:', data);
+                        return;
+                    }
+                    var seriesData = data.map(item => {
+                        const time = new Date(item.time);
+                        return {
+                            x: time.getTime(),
+                            y: item.kwh
+                        };
+                    });
+                    seriesData.sort((a, b) => a.x - b.x);
+                    realtimeTotalChart.updateSeries([{
+                        data: seriesData
+                    }]);
+                })
+                .catch(error => console.error('Error fetching data:', error));
         }
 
-        fetchOneHourTotalData();
-        scheduleFetch();
-    });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const fetchCurrentMonthData = async () => {
-            try {
-                const response = await fetch('/daily/electricity/current-month');
-                if (!response.ok) throw new Error('Failed to fetch current month data');
-                return response.json();
-            } catch (error) {
-                console.error('Error fetching current month data:', error);
-                return [];
+        document.addEventListener('DOMContentLoaded', function () {
+            function scheduleFetch() {
+                const now = new Date();
+                const delay = 300000 - (now % 300000);
+                setTimeout(function () {
+                    fetchOneHourTotalData();
+                    scheduleFetch();
+                }, delay);
             }
-        };
 
-        const fetchPredictedData = async () => {
-            try {
-                const response = await fetch('/monthly-predict');
-                if (!response.ok) throw new Error('Failed to fetch predicted data');
-                return response.json();
-            } catch (error) {
-                console.error('Error fetching predicted data:', error);
-                return [];
-            }
-        };
-
-        const prepareChartData = (data) => {
-            return data.map(item => ({
-                x: new Date(item.time).getTime(),
-                y: item.kwh
-            }));
-        };
-
-        const initdailyPredictChart = async () => {
-            const currentMonthData = await fetchCurrentMonthData();
-            const predictedData = await fetchPredictedData();
-
-            const fullData = prepareChartData(currentMonthData).concat(prepareChartData(predictedData));
-            fullData.sort((a, b) => a.x - b.x);
-
-            const today = new Date();
-            const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-            const forecastCount = endOfMonth.getDate() - today.getDate() - 1;
-
-            const chartOptions = {
-                series: [{
-                    data: fullData,
-                    name: 'kwh'
-                }],
-                chart: {
-                    type: 'line',
-                },
-                forecastDataPoints: {
-                    count: forecastCount
-                },
-                stroke: {
-                    width: 5,
-                    curve: 'smooth'
-                },
-                xaxis: {
-                    type: 'datetime',
-                    tickAmount: 10,
-                    labels: {
-                        formatter: function (value, timestamp) {
-                            return new Date(timestamp).toLocaleDateString('en-US', {month: 'short', day: '2-digit'});
-                        }
-                    }
-                },
-                title: {
-                    text: '이번 달 전력 소비량',
-                    align: 'left',
-                    style: {
-                        fontSize: "14px",
-                        color: '#666'
-                    }
-                },
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shade: 'dark',
-                        gradientToColors: ['#FDD835'],
-                        shadeIntensity: 1,
-                        type: 'horizontal',
-                        opacityFrom: 1,
-                        opacityTo: 1,
-                        stops: [0, 100, 100, 100]
-                    },
+            fetchOneHourTotalData();
+            scheduleFetch();
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fetchCurrentMonthData = async () => {
+                try {
+                    const response = await fetch('/daily/electricity/current-month');
+                    if (!response.ok) throw new Error('Failed to fetch current month data');
+                    return response.json();
+                } catch (error) {
+                    console.error('Error fetching current month data:', error);
+                    return [];
                 }
             };
 
-            var dailyPredictChart = new ApexCharts(document.querySelector("#daily-predict"), chartOptions);
-            dailyPredictChart.render();
-        };
+            const fetchPredictedData = async () => {
+                try {
+                    const response = await fetch('/monthly-predict');
+                    if (!response.ok) throw new Error('Failed to fetch predicted data');
+                    return response.json();
+                } catch (error) {
+                    console.error('Error fetching predicted data:', error);
+                    return [];
+                }
+            };
 
-        initdailyPredictChart();
-    });
-</script>
+            const prepareChartData = (data) => {
+                return data.map(item => ({
+                    x: new Date(item.time).getTime(),
+                    y: item.kwh
+                }));
+            };
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const fetchCurrentMonthData = async () => {
-            try {
-                const response = await fetch('/bill');
-                if (!response.ok) throw new Error('Failed to fetch current month data');
-                return response.json();
-            } catch (error) {
-                console.error('Error fetching current month data:', error);
-                return [];
-            }
-        };
+            const initdailyPredictChart = async () => {
+                const currentMonthData = await fetchCurrentMonthData();
+                const predictedData = await fetchPredictedData();
 
-        const fetchPredictedData = async () => {
-            try {
-                const response = await fetch('/bill-predict');
-                if (!response.ok) throw new Error('Failed to fetch predicted data');
-                return response.json();
-            } catch (error) {
-                console.error('Error fetching predicted data:', error);
-                return [];
-            }
-        };
+                const fullData = prepareChartData(currentMonthData).concat(prepareChartData(predictedData));
+                fullData.sort((a, b) => a.x - b.x);
 
-        const prepareChartData = (data) => {
-            return data.map(item => ({
-                x: new Date(item.time).getTime(),
-                y: item.bill
-            }));
-        };
+                const today = new Date();
+                const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                const forecastCount = endOfMonth.getDate() - today.getDate() - 1;
+
+                const chartOptions = {
+                    series: [{
+                        data: fullData,
+                        name: 'kwh'
+                    }],
+                    chart: {
+                        type: 'line',
+                    },
+                    forecastDataPoints: {
+                        count: forecastCount
+                    },
+                    stroke: {
+                        width: 5,
+                        curve: 'smooth'
+                    },
+                    xaxis: {
+                        type: 'datetime',
+                        tickAmount: 10,
+                        labels: {
+                            formatter: function (value, timestamp) {
+                                return new Date(timestamp).toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: '2-digit'
+                                });
+                            }
+                        }
+                    },
+                    title: {
+                        text: '이번 달 전력 소비량',
+                        align: 'left',
+                        style: {
+                            fontSize: "14px",
+                            color: '#666'
+                        }
+                    },
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            shade: 'dark',
+                            gradientToColors: ['#FDD835'],
+                            shadeIntensity: 1,
+                            type: 'horizontal',
+                            opacityFrom: 1,
+                            opacityTo: 1,
+                            stops: [0, 100, 100, 100]
+                        },
+                    }
+                };
+
+                var dailyPredictChart = new ApexCharts(document.querySelector("#daily-predict"), chartOptions);
+                dailyPredictChart.render();
+            };
+
+            initdailyPredictChart();
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fetchCurrentMonthData = async () => {
+                try {
+                    const response = await fetch('/bill');
+                    if (!response.ok) throw new Error('Failed to fetch current month data');
+                    return response.json();
+                } catch (error) {
+                    console.error('Error fetching current month data:', error);
+                    return [];
+                }
+            };
+
+            const fetchPredictedData = async () => {
+                try {
+                    const response = await fetch('/bill-predict');
+                    if (!response.ok) throw new Error('Failed to fetch predicted data');
+                    return response.json();
+                } catch (error) {
+                    console.error('Error fetching predicted data:', error);
+                    return [];
+                }
+            };
+
+            const prepareChartData = (data) => {
+                return data.map(item => ({
+                    x: new Date(item.time).getTime(),
+                    y: item.bill
+                }));
+            };
 
         const initCumulativeBillChart = async () => {
             const currentMonthData = await fetchCurrentMonthData();
             const predictedData = await fetchPredictedData();
             console.log(predictedData);
 
-            const fullData = prepareChartData(currentMonthData).concat(prepareChartData(predictedData));
-            fullData.sort((a, b) => a.x - b.x);
+                const fullData = prepareChartData(currentMonthData).concat(prepareChartData(predictedData));
+                fullData.sort((a, b) => a.x - b.x);
 
-            const today = new Date();
-            const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-            const forecastCount = endOfMonth.getDate() - today.getDate() - 1;
+                const today = new Date();
+                const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                const forecastCount = endOfMonth.getDate() - today.getDate() - 1;
 
             const cumulativeChartOptions = {
                 series: [{
