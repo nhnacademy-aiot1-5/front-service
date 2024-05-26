@@ -9,10 +9,26 @@
 
     <header class="app-header">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <form th:if="${status ==1}" th:method="PUT" action="/controller-status/disable">
-                <h2>🚨🚨이상치가 감지되었습니다.🚨🚨</h2>
-                <button type="submit" class="btn btn-primary">확인</button>
-            </form>
+<!--            <form th:if="${status ==1}" th:method="PUT" action="/controller-status/disable">-->
+<!--                <h2>🚨🚨이상치가 감지되었습니다.🚨🚨</h2>-->
+<!--                <button type="submit" class="btn btn-primary">확인</button>-->
+<!--            </form>-->
+            <div id="updates"></div>
+            <script>
+                const eventSource = new EventSource('/sse');
+
+                eventSource.onmessage = function (event) {
+                    const updatesDiv = document.getElementById('updates');
+                    const newElement = document.createElement('p');
+                    newElement.textContent = event.data;
+                    updatesDiv.appendChild(newElement);
+                };
+                console.log("이거 실행됨")
+                eventSource.onerror = function (event) {
+                    console.error('Error with SSE', event);
+                    eventSource.close();
+                };
+            </script>
         </nav>
     </header>
 </th:block>
