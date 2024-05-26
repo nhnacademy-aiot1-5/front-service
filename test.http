@@ -1,2 +1,33 @@
 ### 월별 리포트
 GET localhost:8080/monthly-electricity/2024-04-30T00:00:00
+
+### 이상치 알람 보내기
+POST localhost:8080/notify
+Content-Type: application/json
+
+{
+  "deveui": "24E124445D189958",
+  "sensorName": "light",
+  "place": "class_a",
+  "type": "ac",
+  "time": 17782937,
+  "outlier_value": 12212,
+  "organizationId": 1
+}
+
+###
+GET localhost:8090/outlier
+
+### 이상치 저장
+POST localhost:8080/notify
+Content-Type: application/json
+
+{
+  "deveui": "24E124445D189958",
+  "sensorName": "light",
+  "place": "class_a",
+  "type": "ac",
+  "time": 17782937,
+  "outlier_value": 12212,
+  "organizationId": 1
+}
