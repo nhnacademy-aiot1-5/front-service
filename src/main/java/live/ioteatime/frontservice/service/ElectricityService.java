@@ -54,7 +54,7 @@ public class ElectricityService {
     public List<PreciseElectricitiesDto> getCumulativeBillPredictions() {
         LocalDateTime time = LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
         List<PreciseElectricitiesDto> electricityDtoList = electricityAdaptor
-                .getMonthlyPredictedValues(time,-1).getBody();
+                .getMonthlyPredictedValues(1, time).getBody();
 
         Long bill = 0L;
         LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
@@ -66,6 +66,6 @@ public class ElectricityService {
                 result.add(e);
             }
         }
-        return electricityDtoList;
+        return result;
     }
 }

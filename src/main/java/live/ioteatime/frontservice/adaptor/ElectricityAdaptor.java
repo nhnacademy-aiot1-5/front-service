@@ -78,9 +78,9 @@ public interface ElectricityAdaptor {
      */
     @GetMapping("/api/predicted")
     ResponseEntity<List<PreciseElectricitiesDto>> getMonthlyPredictedValues(
+            @RequestParam int organizationId,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            @RequestParam LocalDateTime requestTime,
-            @RequestParam int organizationId);
+            @RequestParam LocalDateTime requestTime);
 
     @GetMapping("/api/predicted/next-month")
     ResponseEntity<List<PreciseElectricitiesDto>> getNextMonthlyPredictedValues(
