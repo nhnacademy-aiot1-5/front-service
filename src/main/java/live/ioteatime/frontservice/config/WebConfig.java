@@ -48,6 +48,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new UserInfoInterceptor(userAdaptor))
                 .addPathPatterns(List.of("/admin", "/admin/**", "/sensors/**", "/change-password",
-                        "/daily-report/**", "/monthly-report/**", "/places/**"));
+                        "/daily-report/**", "/monthly-report/**", "/places/**", "/sse"));
     }
 }
