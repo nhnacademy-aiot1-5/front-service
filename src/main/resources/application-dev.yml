@@ -3,3 +3,6 @@ discovery:
   password: test
   ip: localhost
 
+eureka:
+  client:
+    enabled: false
