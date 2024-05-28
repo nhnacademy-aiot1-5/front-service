@@ -48,8 +48,9 @@ public class ElectricityService {
             bill += e.getBill();
             e.setBill(bill);
         }
-
-        electricityDtoList.remove(electricityDtoList.size()-1);
+        if (electricityDtoList.size() > 1) {
+            electricityDtoList.remove(electricityDtoList.size() - 1);
+        }
         return electricityDtoList;
     }
 
@@ -59,7 +60,6 @@ public class ElectricityService {
                 .getMonthlyPredictedValues(1, time).getBody();
 
         Long bill = 0L;
-        LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
         List<PreciseElectricitiesDto> result = new ArrayList<>();
         for(PreciseElectricitiesDto e : electricityDtoList) {
             bill += e.getBill();

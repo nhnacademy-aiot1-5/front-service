@@ -27,7 +27,7 @@
                 <th:block th:replace="header :: header"></th:block>
                 <div class="dashboard-container">
                     <!--                    <div class="card-body">-->
-                    <div class="row" style="height: 60px">
+                    <div class="row" style="height: 40px">
                     </div>
                     <div class="row gx-3">
                         <div class="col-lg-8 d-flex align-items-strech">
@@ -464,6 +464,7 @@
                 {
                     name: 'Electricity',
                     data: [],
+                    color: '#846EF4'
                 },
             ],
             xaxis: {
@@ -473,6 +474,20 @@
                 text: '실시간 전력량 Top 10',
                 align: 'center',
             },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'light',
+                    type: "horizontal",
+                    shadeIntensity: 0.5,
+                    gradientToColors: ['#F17674'], // optional, if not defined - uses the shades of same color in series
+                    inverseColors: true,
+                    opacityFrom: 1,
+                    opacityTo: 0.8,
+                    stops: [0, 80, 100],
+                    colorStops: []
+                }
+            }
         };
 
         let chart = new ApexCharts(document.querySelector('#realtimeChart'), options);
@@ -546,7 +561,8 @@
         var realtimeTotalOptions = {
             series: [{
                 name: "kwh",
-                data: []
+                data: [],
+                color: '#846EF4',
             }],
             chart: {
                 id: 'realtime',
@@ -594,6 +610,21 @@
                 x: {
                     format: 'HH:mm'
                 }
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'light',
+                    type: "vertical",
+                    shadeIntensity: 0.5,
+                    gradientToColors: ['#F17674'], // optional, if not defined - uses the shades of same color in series
+                    inverseColors: true,
+                    opacityFrom: 1,
+                    opacityTo: 0.8,
+                    stops: [0, 80, 100],
+                    colorStops: [],
+                },
+
             }
         };
 
@@ -682,7 +713,8 @@
                 const chartOptions = {
                     series: [{
                         data: fullData,
-                        name: 'kwh'
+                        name: 'kwh',
+                        color: '#846EF4'
                     }],
                     chart: {
                         type: 'line',
@@ -718,7 +750,7 @@
                         type: 'gradient',
                         gradient: {
                             shade: 'dark',
-                            gradientToColors: ['#FDD835'],
+                            gradientToColors: ['#F17674'],
                             shadeIntensity: 1,
                             type: 'horizontal',
                             opacityFrom: 1,
@@ -811,7 +843,7 @@
                         name: '₩',
                         data: fullData,
                         type: 'line',
-                        color: '#1B998B',
+                        color: '#F17674',
                     }],
                 chart: {
                     type: 'line'
@@ -849,16 +881,16 @@
                 annotations: {
                     yaxis: [{
                         y: budget,
-                        borderColor: '#FF0000',
+                        borderColor: '#F17674',
                         opacity: 1,
                         borderWidth: 5,
                         label: {
                             offsetX: 70,
                             position: 'left',
-                            borderColor: '#FF0000',
+                            borderColor: '#F17674',
                             style: {
                                 color: '#fff',
-                                background: '#FF0000',
+                                background: '#F17674',
                                 fontSize: '16px',
                                 padding: {
                                     left: 10,
@@ -870,6 +902,23 @@
                             text: '목표 요금',
                         }
                     }]
+                }
+
+                ,
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'light',
+                        type: "vertical",
+                        shadeIntensity: 0.5,
+                        gradientToColors: ['#846EF4'], // optional, if not defined - uses the shades of same color in series
+                        inverseColors: true,
+                        opacityFrom: 1,
+                        opacityTo: 0.8,
+                        stops: [0, 80, 100],
+                        colorStops: [],
+                    },
+
                 }
             };
             var cumulativeBillChart = new ApexCharts(document.querySelector("#cumulative-bill"), cumulativeChartOptions);
