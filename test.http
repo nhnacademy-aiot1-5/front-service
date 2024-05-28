@@ -18,16 +18,14 @@ Content-Type: application/json
 ###
 GET localhost:8090/outlier
 
-### 이상치 저장
-POST localhost:8080/notify
-Content-Type: application/json
+###
+GET localhost:8080/daily/electricity/current-month
+Cookie: iotaot=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhc2RmIiwiaWF0IjoxNzE2ODU0ODg1LCJleHAiOjE3MTY4NTg0ODV9.nqh2tGlbFS6OGIj3amQ2NtUS79Awaf5rYs52lwQ13Ew
 
-{
-  "deveui": "24E124445D189958",
-  "sensorName": "light",
-  "place": "class_a",
-  "type": "ac",
-  "time": 17782937,
-  "outlier_value": 12212,
-  "organizationId": 1
-}
+
+###
+GET localhost:8090/users
+X-USER-ID: asdf
+
+### anjrk
+GET localhost:8090/daily/electricities/total?localDateTime=2024-05-28T00:00:00&organizationId=1
