@@ -6,6 +6,7 @@ import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.domain.Role;
 import live.ioteatime.frontservice.dto.DailyElectricityDto;
 import live.ioteatime.frontservice.dto.KwhDto;
+import live.ioteatime.frontservice.dto.MonthlyElectricityDto;
 import live.ioteatime.frontservice.dto.RealtimeElectricityResponseDto;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -44,12 +46,28 @@ public class IndexController {
             return "redirect:/mypage";
         }
 
+        Double lastMonthKwh = Optional.ofNullable(electricityAdaptor.getLastMonthElectricity().getBody())
+                .map(MonthlyElectricityDto::getKwh)
+                .orElse(0.0);
+
+        Double todayKwh = Optional.ofNullable(electricityAdaptor.getCurrentDayElectricity().getBody())
+                .map(DailyElectricityDto::getKwh)
+                .orElse(0.0);
+
+        Double yesterdayKwh = Optional.ofNullable(electricityAdaptor.getLastDayElectricity().getBody())
+                .map(DailyElectricityDto::getKwh)
+                .orElse(0.0);
+
+        Double thisMonthKwh = Optional.ofNullable(electricityAdaptor.getcurrentMonthElectricity().getBody())
+                .map(MonthlyElectricityDto::getKwh)
+                .orElse(0.0);
+
         OrganizationResponse budget = userAdaptor.requestBudget().getBody();
         model.addAttribute("budget", budget);
-        model.addAttribute("lastMonthKwh", electricityAdaptor.getLastMonthElectricity().getBody().getKwh());
-        model.addAttribute("todayKwh", electricityAdaptor.getCurrentDayElectricity().getBody().getKwh());
-        model.addAttribute("yesterdayKwh", electricityAdaptor.getLastDayElectricity().getBody().getKwh());
-        model.addAttribute("thisMonthKwh", electricityAdaptor.getcurrentMonthElectricity().getBody().getKwh());
+        model.addAttribute("lastMonthKwh", lastMonthKwh);
+        model.addAttribute("todayKwh", todayKwh);
+        model.addAttribute("yesterdayKwh", yesterdayKwh);
+        model.addAttribute("thisMonthKwh", thisMonthKwh);
         model.addAttribute("wTop10", electricityService.getTop10Electricity());
         model.addAttribute("outliers", sseService.getOutliers());
         return "index";
@@ -101,12 +119,12 @@ public class IndexController {
     @GetMapping("/kwh")
     @ResponseBody
     public KwhDto getKwh() {
-        long lastMonthKwh = electricityAdaptor.getLastMonthElectricity().getBody().getKwh();
-        long thisMonthKwh = electricityAdaptor.getcurrentMonthElectricity().getBody().getKwh();
-        long yesterdayKwh = electricityAdaptor.getLastDayElectricity().getBody().getKwh();
-        long todayKwh = electricityAdaptor.getCurrentDayElectricity().getBody().getKwh();
+        double lastMonthKwh = electricityAdaptor.getLastMonthElectricity().getBody().getKwh();
+        double thisMonthKwh = electricityAdaptor.getcurrentMonthElectricity().getBody().getKwh();
+        double yesterdayKwh = electricityAdaptor.getLastDayElectricity().getBody().getKwh();
+        double todayKwh = electricityAdaptor.getCurrentDayElectricity().getBody().getKwh();
 
-        return new KwhDto(lastMonthKwh, thisMonthKwh, todayKwh, yesterdayKwh);
+        return new KwhDto((long) lastMonthKwh, (long) thisMonthKwh, (long) todayKwh, (long) yesterdayKwh);
     }
 
     @GetMapping("/bill")
