@@ -29,3 +29,7 @@ X-USER-ID: asdf
 
 ### anjrk
 GET localhost:8090/daily/electricities/total?localDateTime=2024-05-28T00:00:00&organizationId=1
+
+### 데일리 리포트 시간 별
+GET localhost:8080/daily-report/-1
+Cookie: iotaot=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhc2RmIiwiaWF0IjoxNzE2ODk1MTg0LCJleHAiOjE3MTY4OTg3ODR9.fRHD4kkkv3m2Zb0Alz9eNFffx616o1P-RpgAHGNrY_k

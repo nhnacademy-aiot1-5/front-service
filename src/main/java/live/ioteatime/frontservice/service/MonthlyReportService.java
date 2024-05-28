@@ -45,7 +45,7 @@ public class MonthlyReportService {
                 .filter(channelDto -> channelDto.getChannelName().equalsIgnoreCase("main"))
                 .collect(Collectors.toList());
 
-        Map<LocalDateTime, Long> summedKwhByTime = mainChannelIds.stream()
+        Map<LocalDateTime, Double> summedKwhByTime = mainChannelIds.stream()
                 .flatMap(c ->
                         Objects.requireNonNull(
                                 userAdaptor.getMonthlyElectricities(LocalDateTime.now(), c.getId()).getBody()
@@ -53,7 +53,7 @@ public class MonthlyReportService {
                 )
                 .collect(Collectors.groupingBy(
                         MonthlyElectricityDto::getTime,
-                        Collectors.summingLong(MonthlyElectricityDto::getKwh)
+                        Collectors.summingDouble(MonthlyElectricityDto::getKwh)
                 ));
 
         List<MonthlyElectricityDto> monthlyElectricityDtos =
@@ -71,8 +71,17 @@ public class MonthlyReportService {
         List<PreciseElectricitiesDto> thisMonthPreciseElectricitiesDtos = electricityAdaptor
                 .getThisMonthlyPredictedValues(LocalDateTime.now(), organization.getId()).getBody();
 
-        double nextMonthKwh = nextMonthPreciseElectricitiesDtos.stream().mapToDouble(PreciseElectricitiesDto::getKwh).sum();
-        double thisMonthKwh = thisMonthPreciseElectricitiesDtos.stream().mapToDouble(PreciseElectricitiesDto::getKwh).sum();
+        double nextMonthKwh = Optional.ofNullable(nextMonthPreciseElectricitiesDtos)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .mapToDouble(PreciseElectricitiesDto::getKwh)
+                .sum();
+
+        double thisMonthKwh = Optional.ofNullable(thisMonthPreciseElectricitiesDtos)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .mapToDouble(PreciseElectricitiesDto::getKwh)
+                .sum();
 
         model.addAttribute("nextMonthCharge", electricityAdaptor.getChargeByKwh(nextMonthKwh).getBody());
         model.addAttribute("thisMonthCharge", electricityAdaptor.getChargeByKwh(thisMonthKwh).getBody());
@@ -113,11 +122,11 @@ public class MonthlyReportService {
      * @param dateTime       요청일 입니다.
      * @return 계산 결과(kwh)를 반환 합니다.
      */
-    private Long getMonthlyKwh(List<ChannelDto> mainChannelIds, LocalDateTime dateTime) {
+    private Double getMonthlyKwh(List<ChannelDto> mainChannelIds, LocalDateTime dateTime) {
         return mainChannelIds.stream()
                 .flatMap(channelDto -> fetchMonthlyElectricity(dateTime, channelDto.getId()))
-                .collect(Collectors.groupingBy(MonthlyElectricityDto::getTime, Collectors.summingLong(MonthlyElectricityDto::getKwh)))
-                .getOrDefault(dateTime, 0L);
+                .collect(Collectors.groupingBy(MonthlyElectricityDto::getTime, Collectors.summingDouble(MonthlyElectricityDto::getKwh)))
+                .getOrDefault(dateTime, 0.0);
     }
 
     /**
