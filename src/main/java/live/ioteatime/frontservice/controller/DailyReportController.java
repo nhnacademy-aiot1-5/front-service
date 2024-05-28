@@ -1,6 +1,5 @@
 package live.ioteatime.frontservice.controller;
 
-import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.DailyElectricitiesDto;
 import live.ioteatime.frontservice.service.DailyReportService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/daily-report")
 public class DailyReportController {
     private final DailyReportService dailyReportService;
-    private final UserAdaptor userAdaptor;
 
     @GetMapping
     public String dailyReport(Model model) {

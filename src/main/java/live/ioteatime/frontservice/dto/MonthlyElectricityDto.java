@@ -11,6 +11,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class MonthlyElectricityDto {
     private LocalDateTime time;
-    private long kwh;
+    private double kwh;
     private long bill;
 }
