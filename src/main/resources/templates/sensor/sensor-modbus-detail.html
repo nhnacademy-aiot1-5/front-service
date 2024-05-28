@@ -74,7 +74,6 @@
                                         <th>Type</th>
                                         <th>Function-Code</th>
                                         <th>장소 수정</th>
-                                        <th>이름 수정</th>
                                         <th>정보 수정</th>
                                         <th>삭제</th>
                                     </tr>
@@ -89,9 +88,6 @@
                                         <td th:text="${channel.functionCode}"></td>
                                         <td>
                                             <button type="submit" class="btn btn-primary" th:onclick="'openUpdateChannelPlaceModal(' + ${channel.id} + ');'">장소 수정</button>
-                                        </td>
-                                        <td>
-                                            <button type="submit" class="btn btn-primary" th:onclick="'openUpdateChannelNameModal(' + ${channel.id} + ');'">이름 수정</button>
                                         </td>
                                         <td>
                                             <button type="submit" class="btn btn-primary" th:onclick="'openUpdateChannelInfoModal(' + ${channel.id} + ');'">정보 수정</button>
@@ -143,34 +139,6 @@
     </div>
 </div>
 
-<!--채널 이름 수정 모달-->
-<div class="modal fade" id="channelNameUpdateModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body d-flex justify-content-center align-items-center">
-                <form th:method="PUT" id="channelNameUpdateForm" style="width: 90%;">
-                    <div class="mb-3">
-                        <h4 class="fw-semibold mb-3">채널 이름 수정</h4>
-                        <br>
-                        <div class="input-group" style="width: 100%;">
-                            <input type="text" class="form-control" id="channelName" name="channelName"
-                                   aria-describedby="amountAddon" placeholder="채널" required>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                <button type="submit" class="btn btn-primary" form="channelNameUpdateForm">저장</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!--채널 정보 수정 모달-->
 <div class="modal fade" id="channelInfoUpdateModal" tabindex="-1" aria-labelledby="settingPriceModalLabel"
      aria-hidden="true">
@@ -182,6 +150,12 @@
             <div class="modal-body d-flex justify-content-center align-items-center">
                 <form th:method="PUT" id="channelInfoUpdateForm" style="width: 90%;">
                     <div class="mb-3">
+                        <h4>채널 이름</h4>
+                        <div class="input-group" style="width: 100%;">
+                            <input type="text" class="form-control" id="channelName" name="channelName"
+                                   aria-describedby="amountAddon" placeholder="채널 이름" required>
+                        </div>
+                        <br>
                         <h4>Address</h4>
                         <div class="input-group" style="width: 100%;">
                             <input type="number" class="form-control" id="address" name="address"
@@ -256,16 +230,6 @@
             event.preventDefault(); // 폼 제출 방지
         }
     });
-
-    function openUpdateChannelNameModal(channelId) {
-        let updateForm = document.getElementById('channelNameUpdateForm');
-        updateForm.action = '/sensors/modbus/' + channelId + '/change-name'
-        // 모달을 열기
-        let myModal = new bootstrap.Modal(document.getElementById('channelNameUpdateModal'), {
-            keyboard: false
-        });
-        myModal.show();
-    }
 
     function openUpdateChannelInfoModal(channelId) {
         let updateForm = document.getElementById('channelInfoUpdateForm');

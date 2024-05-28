@@ -8,8 +8,10 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"
                 integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
                 crossorigin="anonymous"></script>
-        <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
-        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css"/>
+        <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.0.7/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/datatables.min.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.0.7/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/datatables.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <link rel="stylesheet" href="/css/style.css">
     </head>
@@ -23,7 +25,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
-                            <h2 class="ps-0" th:text="${userInfo.name}+'님의 전력량'"></h2>
+                            <h2 class="ps-0" th:text="${userInfo.name}+'님의 월간 전력량 리포트 📃'"></h2>
                         </div>
                     </div>
 
@@ -69,19 +71,20 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h6 class="text-end">설정 요금</h6>
-                                    <h3 class="mb-0 text-end" th:text="${budget}+'원'"></h3>
+                                    <h3 class="mb-0 text-end"
+                                        th:text="'₩ '+${#numbers.formatInteger(budget, 0, 'COMMA')}"></h3>
                                 </div>
                             </div>
                             <div class="card">
                                 <div class="card-body">
                                     <h6 class="text-end">사용 요금</h6>
-                                    <h3 class="mb-0 text-end">원</h3>
+                                    <h3 class="mb-0 text-end" id="bill"> - </h3>
                                 </div>
                             </div>
                             <div class="card">
                                 <div class="card-body">
                                     <h6 class="text-end">남은 요금</h6>
-                                    <h3 class="mb-0 text-primary text-end">원</h3>
+                                    <h3 class="mb-0 text-primary text-end" id="remain-budget"> - </h3>
                                 </div>
                             </div>
                         </div>
@@ -95,23 +98,21 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6 class="text-end">설정 전력량</h6>
-                                    <h3 class="mb-0 text-end">5,200 kWh</h3>
+                        <div class="col-3 d-flex flex-column">
+                            <div class="card flex-fill">
+                                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center">
+                                    <h6>이번 달 목표 요금을 추천 드려요 💰</h6>
+                                    <br></br>
+                                    <h3 class="mb-0 "
+                                        th:text="'₩ '+${#numbers.formatInteger(thisMonthCharge.charge, 0, 'COMMA')}"></h3>
                                 </div>
                             </div>
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6 class="text-end">사용 전력량</h6>
-                                    <h3 class="mb-0 text-end">200 kWh</h3>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6 class="text-end">남은 전력량</h6>
-                                    <h3 class="mb-0 text-primary text-end">5,000 kWh</h3>
+                            <div class="card flex-fill">
+                                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center">
+                                    <h6>다음 달 목표 요금을 추천 드려요 💰</h6>
+                                    <br></br>
+                                    <h3 class="mb-0 "
+                                        th:text="'₩ '+${#numbers.formatInteger(nextMonthCharge.charge, 0, 'COMMA')}"></h3>
                                 </div>
                             </div>
                         </div>
@@ -217,8 +218,21 @@
             });
 
             let table = new DataTable('#zero_config', {
-                responsive: true
+                responsive: true,
+                layout: {
+                    topStart: {
+                        buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                    }
+                }
             });
+
+            function addAllBills(dailyElectricities) {
+                let sum = 0;
+                dailyElectricities.forEach(dto => {
+                    sum = sum + dto.bill;
+                });
+                return sum;
+            }
 
             document.getElementById('monthSelect').addEventListener('change', function () {
                 const selectedMonth = this.value;
@@ -241,18 +255,22 @@
                         fetch(`/monthly-electricity/${dateForRequest}`)
                             .then(response => response.json())
                             .then(currentMonthData => {
-                                const lastMonthCharge = lastMonthData.kwh;
-                                const currentMonthCharge = currentMonthData.kwh;
-                                const changePercent = ((currentMonthCharge - lastMonthCharge) / lastMonthCharge) * 100;
+                                const changePercent = getPercentage(lastMonthData.kwh, currentMonthData.kwh);
                                 document.getElementById('electricityChange').textContent =
-                                    `${changePercent.toFixed(1)}% 저번 달 대비 전기료`;
+                                    `${changePercent}% 저번 달 대비 전기료`;
                                 if (changePercent < 0) {
                                     document.getElementById('electricitySlogan').textContent = "집에 피카츄가 있으신가요? ⚡";
                                 } else {
                                     document.getElementById('electricitySlogan').textContent = "전기 좀 아껴 쓰세요. 🌱";
                                 }
-                                updateChartData(currentMonthData.dailyElectricityDtos);
-                                updateDataTable(currentMonthData.dailyElectricityDtos);
+                                const dailyElectricities = currentMonthData.dailyElectricityDtos;
+                                var bill = addAllBills(dailyElectricities);
+                                var budget = [[${budget}]];
+                                document.getElementById("bill").textContent = '₩ ' + bill.toLocaleString('ko-KR');
+                                document.getElementById("remain-budget").textContent =
+                                    '₩ ' + (budget - bill).toLocaleString('ko-KR');
+                                updateChartData(dailyElectricities);
+                                updateDataTable(dailyElectricities);
                             })
                             .catch(error => console.error('Error fetching current month data: ', error));
                     })
@@ -276,15 +294,25 @@
 
             function updateDataTable(dailyData) {
                 table.clear();
-                dailyData.forEach(dto => {
+                let previousKwh = 0;
+
+                dailyData.forEach((dto, index) => {
+                    const percentageChange = index === 0 ? "0.00" : getPercentage(previousKwh, dto.kwh);
+
                     table.row.add([
-                        dto.time,
-                        `${dto.kwh} 원`,
-                        `${dto.kwh} kWh`,
-                        `+${Math.random().toFixed(2)}%`
+                        dto.time.split('T')[0],
+                        `${dto.kwh.toLocaleString('ko-KR')} 원`,
+                        `${dto.kwh.toLocaleString('ko-KR')} Wh`,
+                        percentageChange >= 0 ? `+${percentageChange}%` : `${percentageChange}%`
                     ]).draw(false); // 변경 사항을 테이블에 즉시 반영하지 않음
+
+                    previousKwh = dto.kwh;
                 });
                 table.draw(); // 모든 데이터가 추가된 후 테이블을 다시 그림
+            }
+
+            function getPercentage(previous, current) {
+                return (((current - previous) / previous) * 100).toFixed(2);
             }
         </script>
     </body>

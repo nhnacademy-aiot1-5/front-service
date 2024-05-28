@@ -79,7 +79,7 @@
                         </a>
                     </li>
                     <li class="sidebar-item" th:if="${userInfo.role.name() == 'ADMIN'}">
-                        <a class="sidebar-link" href="/sensors" aria-expanded="false">
+                        <a class="sidebar-link" href="/places" aria-expanded="false">
                             <span>
                               <i class="ti ti-layout-dashboard"></i>
                             </span>
@@ -106,14 +106,6 @@
                               <i class="ti ti-cards"></i>
                             </span>
                             <span class="hide-menu">월 별 리포트</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item" th:if="${userInfo.role.name() !='GUEST'}">
-                        <a class="sidebar-link" href="#" aria-expanded="false">
-                            <span>
-                              <i class="ti ti-file-description"></i>
-                            </span>
-                            <span class="hide-menu">누적 리포트</span>
                         </a>
                     </li>
 
