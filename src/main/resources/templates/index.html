@@ -27,7 +27,7 @@
                 <th:block th:replace="header :: header"></th:block>
                 <div class="dashboard-container">
                     <!--                    <div class="card-body">-->
-                    <div class="row" style="height: 40px">
+                    <div class="row" style="height: 50px">
                     </div>
                     <div class="row gx-3">
                         <div class="col-lg-8 d-flex align-items-strech">
@@ -350,7 +350,7 @@
                                                 <li class="nav-item">
                                                     <a class="nav-link fs-1 p-1"
                                                        th:href="'#scrollspyHeading' + ${iterStat.count}"
-                                                       th:text="${'Outlier ' + iterStat.count}">Outlier 1</a>
+                                                       th:text="${'이상치 ' + iterStat.count}">Outlier 1</a>
                                                 </li>
                                             </th:block>
                                         </ul>
@@ -361,14 +361,14 @@
                                         <div th:each="outlier, iterStat : ${outliers}"
                                              th:id="'outlier-' + ${outlier.id}">
                                             <h4 class="fs-3 mt-2" th:id="'scrollspyHeading' + ${iterStat.count}"
-                                                th:text="${iterStat.count + '. Outlier ' + outlier.id + ' at ' + outlier.place}">
+                                                th:text="${outlier.id + '. ' + outlier.place + ' : ' + outlier.type  }">
                                                 Outlier Heading</h4>
-                                            <p th:text="${'Detected value: ' + outlier.outlierValue + ', Type: ' + outlier.type}">
+                                            <p th:text="${'value: ' + outlier.outlierValue + ', 위치: ' + outlier.type}">
                                                 Outlier details</p>
                                             <button class="btn btn-primary mb-1" th:if="${outlier.flag == 0}"
                                                     th:attr="data-id=${outlier.id}"
-                                                    onclick="resolveOutlier(this.getAttribute('data-id'), this)">Resolve
-                                                Outlier
+                                                    onclick="resolveOutlier(this.getAttribute('data-id'), this)"
+                                            >경고등 끄기
                                             </button>
                                         </div>
                                     </div>
