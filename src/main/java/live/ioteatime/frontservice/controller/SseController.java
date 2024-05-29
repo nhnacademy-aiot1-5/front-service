@@ -5,6 +5,7 @@ import live.ioteatime.frontservice.dto.OutlierRequest;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import live.ioteatime.frontservice.service.SseService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class SseController {
@@ -25,6 +27,7 @@ public class SseController {
 
     @GetMapping("/sse")
     public SseEmitter subscribeSse(HttpServletRequest request) {
+        log.info("client subscribed : {}", request.getRemoteAddr());
         GetUserResponse userInfo = (GetUserResponse) request.getAttribute("userInfo");
         int orgId = userInfo.getOrganization().getId();
         String userId = userInfo.getId();
@@ -39,6 +42,7 @@ public class SseController {
 
     @PostMapping("/notify")
     public void notifyClients(@RequestBody Alert alert) {
+        log.info("outlier notify called : {}", alert);
         int targetOrgId = alert.getOrganizationId();
         List<String> toRemove = new ArrayList<>();
         Map<String, SseEmitter> targetEmitters = emitters.getOrDefault(targetOrgId, new ConcurrentHashMap<>());
