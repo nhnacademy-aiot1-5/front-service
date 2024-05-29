@@ -23,14 +23,43 @@
         <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
              data-sidebar-position="fixed" data-header-position="fixed">
             <th:block th:replace="side-bar :: sidebar"></th:block>
-            <div class="body-wrapper">
-                <th:block th:replace="header :: header"></th:block>
-                <div class="dashboard-container">
-                    <!--                    <div class="card-body">-->
-                    <div class="row" style="height: 50px">
+                <div class="body-wrapper">
+                    <th:block th:replace="header :: header"></th:block>
+                    <div class="dashboard-container">
+                        <div class="row" style="height: 50px">
                     </div>
+
+                    <div class="row">
+                        <div class="col-lg-12 d-flex align-items-strech">
+                            <div class="card w-100 mb-3">
+                                <div class="card-body">
+                                    <div class="row gx-3">
+                                        <div class="d-sm-flex mb-3">
+                                            <div class="overflow-hidden me-6">
+                                                <h5 class="fw-semibold">실시간 전력 사용량</h5>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div>
+                                                <div id="daily-predict"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div id="realtimeChart"></div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div>
+                                                <div id="realtime-total"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row gx-3">
-                        <div class="col-lg-8 d-flex align-items-strech">
+                        <div class="col-lg-4 d-flex align-items-strech">
                             <div class="card w-100 mb-3">
                                 <div class="card-body">
                                     <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
@@ -38,12 +67,12 @@
                                             <h5 class="fw-semibold mb-0 fs-5">⚡️이번 달 총평⚡️</h5>
                                         </div>
                                     </div>
-                                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                                        <h2 class="mt-0 mb-0 fw-semibold fs-9 d-flex align-content-center" id="total-review">
-                                            집에 피카츄가 있으신가요? ⚡️
-                                        </h2>
-                                        <p></p>
-                                    </div>
+<!--                                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">-->
+<!--                                        <h2 class="mt-0 mb-0 fw-semibold fs-9 d-flex align-content-center" id="total-review">-->
+<!--                                            집에 피카츄가 있으신가요? ⚡️-->
+<!--                                        </h2>-->
+<!--                                        <p></p>-->
+<!--                                    </div>-->
                                     <div>
                                         <h4 id="achievementStatus">목표 요금보다 적게 사용했어요! 👍</h4>
                                     </div>
@@ -55,32 +84,65 @@
                                             <i class="bi bi-arrow-up-right-circle-fill"
                                                style="font-size: 1rem;"></i>
                                         </div>
-                                        <!--                                        <div id="updates"></div>-->
-                                        <!--                                        <script>-->
-                                        <!--                                            const eventSource = new EventSource('/sse');-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                        <!--                                            eventSource.onmessage = function (event) {-->
-                                        <!--                                                const updatesDiv = document.getElementById('updates');-->
-                                        <!--                                                const newElement = document.createElement('p');-->
-                                        <!--                                                newElement.textContent = event.data;-->
-                                        <!--                                                updatesDiv.appendChild(newElement);-->
-                                        <!--                                            };-->
-                                        <!--                                            console.log("이거 실행됨")-->
-                                        <!--                                            eventSource.onerror = function (event) {-->
-                                        <!--                                                console.error('Error with SSE', event);-->
-                                        <!--                                                eventSource.close();-->
-                                        <!--                                            };-->
-                                        <!--                                        </script>-->
+                        <div class="col-lg-4 ">
+
+                            <div class="row">
+                                <div class="d-flex justify-content-center">
+                                    <div class="col-6">
+                                        <div class="card overflow-hidden mb-3 me-2">
+                                            <div class="card-body p-3">
+                                                <h5>전일<i class="ti ti-bolt fs-6 text-warning"></i>
+                                                </h5>
+                                                <h4 id="yesterdayKwh">-</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card overflow-hidden mb-3 ms-2">
+                                            <div class="card-body p-3">
+                                                <h5>금일<i class="ti ti-bolt fs-6 text-warning"></i>
+                                                </h5>
+                                                <h4 id="todayKwh">-</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="d-flex justify-content-center">
+                                    <div class="col-lg-6">
+                                        <div class="card overflow-hidden mb-3 me-2">
+                                            <div class="card-body p-3">
+                                                <h5>전월<i class="ti ti-bolt fs-6 text-warning"></i>
+                                                </h5>
+                                                <h4 id="lastMonth">-</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 ">
+                                        <div class="card overflow-hidden mb-3 ms-2">
+                                            <div class="card-body p-3">
+                                                <h5>금월<i class="ti ti-bolt fs-6 text-warning"></i>
+                                                </h5>
+                                                <h4 id="thisMonthKwh">-</h4>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- 요금 게이지 바 -->
-                        <div class="col-lg-4 d-flex align-items-strech">
+                        <div class="col-lg-4 d-flex align-items-stretch">
                             <div class="card w-100 mb-3">
                                 <div class="card-body p-3">
-                                    <div class="d-flex">
+                                    <div class="d-flex" style="height: 20px">
                                         <h5 class="card-title mb-9 fw-semibold mb-0 me-2">요금 잔량 : </h5>
                                         <p class="fw-semibold mb-0 ml-2" id="remain-budget"></p>
                                     </div>
@@ -128,7 +190,7 @@
                                                         var options1 = {
                                                             series: [percentage],
                                                             chart: {
-                                                                height: 200,
+                                                                height: 170,
                                                                 type: 'radialBar',
                                                                 toolbar: {
                                                                     show: true
@@ -215,131 +277,56 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-12 d-flex align-items-strech">
-                            <div class="card w-100 mb-3">
-                                <div class="card-body">
-                                    <div class="row gx-3">
-                                        <div class="d-sm-flex mb-3">
-                                            <div class="overflow-hidden me-6">
-                                                <h5 class="fw-semibold">실시간 전력 사용량</h5>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div>
-                                                <div id="daily-predict"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div id="realtimeChart"></div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div>
-                                                <div id="realtime-total"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <div class="row gx-3">
-                        <div class="col-lg-8 d-flex flex-column">
-                            <div class="card mb-3 flex-fill">
+                        <div class="col-lg-8">
+                            <div class="card mb-3">
                                 <div class="card-body p-3">
                                     <div id="cumulative-bill"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4 d-flex flex-column">
-                            <div class="row gx-3">
-                                <div class="d-flex justify-content-center">
-                                    <div class="col-6 me-2">
-                                        <div class="card mb-3 ms-2 flex-fill">
-                                            <div class="card-body p-3">
-                                                <h5>사용 요금</h5>
-                                                <h2 class="fs-6 fw-semibold mb-3 text-nowrap" id="bill"></h2>
-                                                <div class="d-flex align-items-center mb-3">
-                                                    <i class="bi bi-arrow-up-left-circle-fill text-success me-1"
-                                                       style="font-size: 0.5rem;"></i>
-                                                    <p class="me-1 fs-2 mb-0"
-                                                       id="bill-percentage">+9%</p>
-                                                    <p class="fs-1 mb-0">1일 전</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6 ms-2" id="update-fee"
-                                         th:data-role="${userInfo.role}"
-                                         onclick="checkRoleAndOpenModal()">
-                                        <div class="card overflow-hidden mb-3 me-2">
-                                            <div class="card-body cursor-pointer p-3">
-                                                <h5>목표 요금</h5>
-                                                <h2 class="fs-6 fw-semibold mb-3 text-nowrap"
-                                                    th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">
-                                                    현재 설정 요금</h2>
-                                                <div class="d-flex align-items-center mb-3"
-                                                     th:if="${userInfo.role.name() == 'ADMIN'}">
-                                                    <p class="me-1 fs-2 mb-0">클릭 시</p>
-                                                    <p class="fs-2 mb-0">수정</p>
-                                                </div>
-                                                <div class="d-flex align-items-center mb-3"
-                                                     th:unless="${userInfo.role.name() == 'ADMIN'}">
-                                                    <p class="me-1 fs-2 mb-0">🌱🌱</p>
-                                                    <p class="fs-2 mb-0">🌱🌱</p>
-                                                </div>
+                        <div class="col-4">
+                            <div class="row" style="height: 20%;">
+<!--                                <div class="d-flex">-->
+                                <div class="col-6 pe-2">
+                                    <div class="card mb-3">
+                                        <div class="card-body p-3">
+                                            <h5>사용 요금</h5>
+                                            <h2 class="fs-6 fw-semibold mb-3 text-nowrap" id="bill"></h2>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <i class="bi bi-arrow-up-left-circle-fill text-success me-1" style="font-size: 0.5rem;"></i>
+                                                <p class="me-1 fs-2 mb-0" id="bill-percentage">+9%</p>
+                                                <p class="fs-1 mb-0">1일 전</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-6 ps-2" id="update-fee" th:data-role="${userInfo.role}" onclick="checkRoleAndOpenModal()">
+                                    <div class="card">
+                                        <div class="card-body cursor-pointer p-3">
+                                            <h5>목표 요금</h5>
+                                            <h2 class="fs-6 fw-semibold mb-3 text-nowrap"
+                                                th:text="'₩ '+${#numbers.formatInteger(budget.electricityBudget, 0, 'COMMA')}">
+                                                현재 설정 요금</h2>
+                                            <div class="d-flex align-items-center mb-3" th:if="${userInfo.role.name() == 'ADMIN'}">
+                                                <p class="me-1 fs-2 mb-0">클릭 시</p>
+                                                <p class="fs-2 mb-0">수정</p>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-3" th:unless="${userInfo.role.name() == 'ADMIN'}">
+                                                <p class="me-1 fs-2 mb-0">🌱🌱</p>
+                                                <p class="fs-2 mb-0">🌱🌱</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--                                </div>-->
                             </div>
 
-                            <div class="row">
-                                <div class="d-flex justify-content-center">
-                                    <div class="col-lg-6 ">
-                                        <div class="card overflow-hidden mb-3 me-2">
-                                            <div class="card-body p-3">
-                                                <h5>전일<i class="ti ti-bolt fs-6 text-warning"></i>
-                                                </h5>
-                                                <h4 id="yesterdayKwh">-</h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 ">
-                                        <div class="card overflow-hidden mb-3 ms-2">
-                                            <div class="card-body p-3">
-                                                <h5>금일<i class="ti ti-bolt fs-6 text-warning"></i>
-                                                </h5>
-                                                <h4 id="todayKwh">-</h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="d-flex justify-content-center">
-                                    <div class="col-lg-6">
-                                        <div class="card overflow-hidden mb-3 me-2">
-                                            <div class="card-body p-3">
-                                                <h5>전월<i class="ti ti-bolt fs-6 text-warning"></i>
-                                                </h5>
-                                                <h4 id="lastMonth">-</h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 ">
-                                        <div class="card overflow-hidden mb-3 ms-2">
-                                            <div class="card-body p-3">
-                                                <h5>금월<i class="ti ti-bolt fs-6 text-warning"></i>
-                                                </h5>
-                                                <h4 id="thisMonthKwh">-</h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                             <div class="card overflow-hidden flex-fill">
                                 <div class="card-body p-3">
@@ -357,7 +344,7 @@
                                     </nav>
                                     <div data-bs-spy="scroll" data-bs-target="#navbar-example2"
                                          data-bs-offset="0" class="scrollspy-example overflow-auto"
-                                         tabindex="0" style="max-height: 400px; overflow-y: auto;">
+                                         tabindex="0" style="height: 377px; max-height: 400px; overflow-y: auto;">
                                         <div th:each="outlier, iterStat : ${outliers}"
                                              th:id="'outlier-' + ${outlier.id}">
                                             <h4 class="fs-3 mt-2" th:id="'scrollspyHeading' + ${iterStat.count}"
