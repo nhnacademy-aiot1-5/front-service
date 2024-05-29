@@ -27,6 +27,7 @@ public class SseController {
 
     @GetMapping("/sse")
     public SseEmitter subscribeSse(HttpServletRequest request) {
+        log.info("client subscribed : {}", request.getRemoteAddr());
         GetUserResponse userInfo = (GetUserResponse) request.getAttribute("userInfo");
         int orgId = userInfo.getOrganization().getId();
         String userId = userInfo.getId();
@@ -41,7 +42,7 @@ public class SseController {
 
     @PostMapping("/notify")
     public void notifyClients(@RequestBody Alert alert) {
-        log.info("outlier notify called : {}", alert.getValue());
+        log.info("outlier notify called : {}", alert);
         int targetOrgId = alert.getOrganizationId();
         List<String> toRemove = new ArrayList<>();
         Map<String, SseEmitter> targetEmitters = emitters.getOrDefault(targetOrgId, new ConcurrentHashMap<>());
