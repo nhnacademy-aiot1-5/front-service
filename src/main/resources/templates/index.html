@@ -719,6 +719,13 @@
                             }
                         }
                     },
+                    yaxis: {
+                        labels: {
+                            formatter: function (val) {
+                                return val.toFixed(1);
+                            }
+                        }
+                    },
                     title: {
                         text: '이번 달 전력 소비량',
                         align: 'left',
@@ -778,15 +785,23 @@
                     y: item.bill
                 }));
                 current.sort((a, b) => a.x - b.x);
-
-                const predicted = predictedData.map(item => ({
-                    x: new Date(item.time).getTime(),
-                    y: item.bill
-                }));
+                let predicted;
+                if (predictedData.length === 0) {
+                    const today = new Date();
+                    predicted = Array.from({length: 10}, (_, i) => ({
+                        x: new Date(today.getFullYear(), today.getMonth(), today.getDate() + i).getTime(),
+                        y: Math.random() * 100 + 100
+                    }));
+                } else {
+                    predicted = predictedData.map(item => ({
+                        x: new Date(item.time).getTime(),
+                        y: item.bill
+                    }));
+                }
                 predicted.sort((a, b) => a.x - b.x);
 
-                const currentCumulativeBill = current[current.length-1].y;
-                for(var i=0; i<predicted.length; i++) {
+                const currentCumulativeBill = current[current.length - 1].y;
+                for (var i = 0; i < predicted.length; i++) {
                     predicted[i].y = predicted[i].y + currentCumulativeBill;
                 }
 
@@ -805,108 +820,116 @@
             }
         }
 
-        const initCumulativeBillChart = async () => {
-            const currentMonthData = await fetchCurrentMonthData();
-            const predictedData = await fetchPredictedData();
+            const initCumulativeBillChart = async () => {
+                const currentMonthData = await fetchCurrentMonthData();
+                const predictedData = await fetchPredictedData();
 
-            const fullData = prepareChartData(currentMonthData, predictedData);
-            fullData.sort((a, b) => a.x - b.x);
+                const fullData = prepareChartData(currentMonthData, predictedData);
+                fullData.sort((a, b) => a.x - b.x);
 
-            const today = new Date();
-            const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-            const forecastCount = endOfMonth.getDate() - today.getDate() - 1;
+                const today = new Date();
+                const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                const forecastCount = endOfMonth.getDate() - today.getDate() - 1;
 
-            const maxVal = Math.max(budget+1000, fullData[fullData.length-1].y);
-            const yMax = Math.ceil(maxVal / 5000) * 5000;
+                const maxVal = Math.max(budget + 1000, fullData[fullData.length - 1].y);
+                const yMax = Math.ceil(maxVal / 5000) * 5000;
 
-            const cumulativeChartOptions = {
-                series: [{
+                const cumulativeChartOptions = {
+                    series: [{
                         name: '₩',
                         data: fullData,
                         type: 'line',
                         color: '#F17674',
                     }],
-                chart: {
-                    type: 'line'
-                },
-                stroke: {
-                    width: 5,
-                    curve: 'smooth',
-                },
-                xaxis: {
-                    type: 'datetime',
-                    tickAmount: 10,
-                    labels: {
-                        formatter: function (value, timestamp) {
-                            return new Date(timestamp).toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
-                        }
-                    }
-                },
-                yaxis: {
-                    min: 0,
-                    max: yMax,
-                    tickAmount: 10,
-                    forceNiceScale: true
-                },
-                title: {
-                    text: '이번 달 소비 요금',
-                    align: 'left',
-                    style: {
-                        fontSize: "14px",
-                        color: '#666'
-                    }
-                },
-                forecastDataPoints: {
-                    count: forecastCount
-                },
-                annotations: {
-                    yaxis: [{
-                        y: budget,
-                        borderColor: '#F17674',
-                        opacity: 1,
-                        borderWidth: 5,
-                        label: {
-                            offsetX: 70,
-                            position: 'left',
-                            borderColor: '#F17674',
-                            style: {
-                                color: '#fff',
-                                background: '#F17674',
-                                fontSize: '16px',
-                                padding: {
-                                    left: 10,
-                                    right: 10,
-                                    top: 5,
-                                    bottom: 5
-                                }
-                            },
-                            text: '목표 요금',
-                        }
-                    }]
-                }
-
-                ,
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shade: 'light',
-                        type: "vertical",
-                        shadeIntensity: 0.5,
-                        gradientToColors: ['#846EF4'], // optional, if not defined - uses the shades of same color in series
-                        inverseColors: true,
-                        opacityFrom: 1,
-                        opacityTo: 0.8,
-                        stops: [0, 80, 100],
-                        colorStops: [],
+                    chart: {
+                        type: 'line'
                     },
+                    stroke: {
+                        width: 5,
+                        curve: 'smooth',
+                    },
+                    xaxis: {
+                        type: 'datetime',
+                        tickAmount: 10,
+                        labels: {
+                            formatter: function (value, timestamp) {
+                                return new Date(timestamp).toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: '2-digit'
+                                });
+                            }
+                        }
+                    },
+                    yaxis: {
+                        min: 0,
+                        max: yMax,
+                        tickAmount: 10,
+                        forceNiceScale: true,
+                        labels: {
+                            formatter: function (val) {
+                                return val.toFixed(1);
+                            }
+                        }
+                    },
+                    title: {
+                        text: '이번 달 소비 요금',
+                        align: 'left',
+                        style: {
+                            fontSize: "14px",
+                            color: '#666'
+                        }
+                    },
+                    forecastDataPoints: {
+                        count: forecastCount
+                    },
+                    annotations: {
+                        yaxis: [{
+                            y: budget.toFixed(2),
+                            borderColor: '#F17674',
+                            opacity: 1,
+                            borderWidth: 5,
+                            label: {
+                                offsetX: 70,
+                                position: 'left',
+                                borderColor: '#F17674',
+                                style: {
+                                    color: '#fff',
+                                    background: '#F17674',
+                                    fontSize: '16px',
+                                    padding: {
+                                        left: 10,
+                                        right: 10,
+                                        top: 5,
+                                        bottom: 5
+                                    }
+                                },
+                                text: '목표 요금',
+                            }
+                        }]
+                    }
 
-                }
+                    ,
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            shade: 'light',
+                            type: "vertical",
+                            shadeIntensity: 0.5,
+                            gradientToColors: ['#846EF4'], // optional, if not defined - uses the shades of same color in series
+                            inverseColors: true,
+                            opacityFrom: 1,
+                            opacityTo: 0.8,
+                            stops: [0, 80, 100],
+                            colorStops: [],
+                        },
+
+                    }
+                };
+                var cumulativeBillChart = new ApexCharts(document.querySelector("#cumulative-bill"), cumulativeChartOptions);
+                cumulativeBillChart.render();
             };
-            var cumulativeBillChart = new ApexCharts(document.querySelector("#cumulative-bill"), cumulativeChartOptions);
-            cumulativeBillChart.render();
-        };
-        initCumulativeBillChart();
-    });
-</script>
+            initCumulativeBillChart();
+        });
+    </script>
 
 </html>

@@ -32,11 +32,19 @@ public class SseController {
         int orgId = userInfo.getOrganization().getId();
         String userId = userInfo.getId();
 
-        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
+        SseEmitter emitter = new SseEmitter(3600000L);
         this.emitters.computeIfAbsent(orgId, k -> new ConcurrentHashMap<>()).put(userId, emitter);
 
         emitter.onCompletion(() -> this.emitters.get(orgId).remove(userId));
-        emitter.onTimeout(() -> this.emitters.get(orgId).remove(userId));
+        emitter.onTimeout(() -> {
+            this.emitters.get(orgId).remove(userId);
+            log.warn("SSE connection timed out for user: {}", userId);
+        });
+        emitter.onError((e) -> {
+            this.emitters.get(orgId).remove(userId);
+            log.error("SSE connection error for user: {}", userId, e);
+        });
+
         return emitter;
     }
 
@@ -54,6 +62,7 @@ public class SseController {
             } catch (IOException e) {
                 toRemove.add(entry.getKey());
                 emitter.completeWithError(e);
+                log.error("Error sending SSE event to user: {}", entry.getKey(), e);
             }
         }
 
