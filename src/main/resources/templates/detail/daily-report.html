@@ -219,8 +219,8 @@
                 }
             });
             const recent7daysElectricities = [[${recent7DaysElectricities}]]
-            const kwhData2 = recent7daysElectricities.map(dto => dto.kwh);
-            const dates2 = recent7daysElectricities.map(dto => dto.time);
+            const kwhData2 = recent7daysElectricities.map(dto => dto.kwh.toFixed(2));
+            const dates2 = recent7daysElectricities.map(dto => dto.time.replace('T', " "));
             chart2.updateOptions({
                 series: [{
                     name: 'KWh',
