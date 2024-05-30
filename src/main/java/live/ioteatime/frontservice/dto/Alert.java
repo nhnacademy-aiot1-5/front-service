@@ -13,7 +13,6 @@ public class Alert {
     private String place;
     private String type;
     private int time;
-    @JsonProperty("outlier_value")
-    private long value;
+    private long outlierValue;
     private int organizationId;
 }

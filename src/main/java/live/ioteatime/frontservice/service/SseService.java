@@ -18,7 +18,7 @@ public class SseService {
                 "의 " +
                 alert.getType() +
                 "에서 이상치 " +
-                alert.getValue() +
+                alert.getOutlierValue() +
                 "가 발생했습니다.";
     }
 
@@ -27,7 +27,7 @@ public class SseService {
                 .organizationId(0)
                 .type(alert.getType())
                 .place(alert.getPlace())
-                .outlierValue(alert.getValue())
+                .outlierValue(alert.getOutlierValue())
                 .flag(0)
                 .build();
         outlierAdaptor.saveOutlier(outlierDto);

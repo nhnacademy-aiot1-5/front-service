@@ -12,7 +12,7 @@ Content-Type: application/json
   "place": "class_a",
   "type": "ac",
   "time": 17782937,
-  "outlier_value": 12212,
+  "outlierValue": 12212,
   "organizationId": 1
 }
 
