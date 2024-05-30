@@ -10,7 +10,7 @@ import java.util.List;
 @FeignClient(value = "gateway-service", contextId = "outlier-adaptor")
 public interface OutlierAdaptor {
     @GetMapping("/api/outlier")
-    ResponseEntity<List<OutlierDto>> getOutliers();
+    ResponseEntity<List<OutlierDto>> getOutliers(@RequestParam int organizationId);
 
     @PostMapping("/api/outlier")
     ResponseEntity<Integer> saveOutlier(@RequestBody OutlierDto outlierDto);
