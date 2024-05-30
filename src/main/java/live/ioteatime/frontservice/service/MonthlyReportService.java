@@ -102,7 +102,7 @@ public class MonthlyReportService {
     public MonthlyElectricitiesDto getElectricityByMonth(LocalDateTime localDateTime) {
         List<ChannelDto> channelDtos = getAllChannelListByPlaceIds();
         List<ChannelDto> mainChannelIds = channelDtos.stream()
-                .filter(channelDto -> channelDto.getChannelName().equalsIgnoreCase("main"))
+                .filter(channelDto -> channelDto.getId() == -1)
                 .collect(Collectors.toList());
 
         MonthlyElectricitiesDto monthlyElectricitiesDto = new MonthlyElectricitiesDto();

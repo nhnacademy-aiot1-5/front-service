@@ -206,8 +206,8 @@
             chart2.render();
 
             const dailyElectricityPerHour = [[${recent24HoursElectricites}]];
-            const kwhData = dailyElectricityPerHour.map(dto => dto.kwh.toFixed(2));
-            const dates = dailyElectricityPerHour.map(dto => dto.time);
+            const kwhData = dailyElectricityPerHour.map(dto => dto.kwh.toFixed(0));
+            const dates = dailyElectricityPerHour.map(dto => dto.time.substring(11, 16));
 
             chart1.updateOptions({
                 series: [{
@@ -215,12 +215,13 @@
                     data: kwhData
                 }],
                 xaxis: {
-                    categories: dates
+                    categories: dates,
+                    tickAmount: 12
                 }
             });
             const recent7daysElectricities = [[${recent7DaysElectricities}]]
-            const kwhData2 = recent7daysElectricities.map(dto => dto.kwh);
-            const dates2 = recent7daysElectricities.map(dto => dto.time);
+            const kwhData2 = recent7daysElectricities.map(dto => dto.kwh.toFixed(0));
+            const dates2 = recent7daysElectricities.map(dto => dto.time.substring(0, 10));
             chart2.updateOptions({
                 series: [{
                     name: 'KWh',
@@ -254,7 +255,7 @@
             });
 
             function updateChartData1(dailyData) {
-                const kwhData = dailyData.map(dto => dto.kwh.toFixed(2));
+                const kwhData = dailyData.map(dto => dto.kwh.toFixed(0));
                 const dates = dailyData.map(dto => dto.time);
 
                 chart1.updateOptions({
@@ -269,7 +270,7 @@
             }
 
             function updateChartData2(dailyData) {
-                const kwhData = dailyData.map(dto => dto.kwh.toFixed(2));
+                const kwhData = dailyData.map(dto => dto.kwh.toFixed(0));
                 const dates = dailyData.map(dto => dto.time);
 
                 chart2.updateOptions({
