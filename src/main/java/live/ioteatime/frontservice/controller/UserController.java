@@ -67,9 +67,15 @@ public class UserController {
         return "redirect:/mypage";
     }
 
+    @GetMapping("/change-password")
+    public String changePasswordPage() {
+        return "authentication/change-password";
+    }
+
     @PostMapping("/change-password")
-    public String changePassword(HttpServletRequest request, RedirectAttributes redirectAttributes,
-                                 @Valid @ModelAttribute ChangePasswordRequest changePasswordRequest, BindingResult bindingResult) {
+    public String changePassword(RedirectAttributes redirectAttributes,
+                                 @Valid @ModelAttribute ChangePasswordRequest changePasswordRequest,
+                                 BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             redirectAttributes.addFlashAttribute("message", "모든 항목을 입력해주세요.");
             return "redirect:/change-password";
@@ -86,10 +92,5 @@ public class UserController {
         }
         redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
         return "redirect:/mypage";
-    }
-
-    @GetMapping("/change-password")
-    public String changePasswordPage() {
-        return "authentication/change-password";
     }
 }
