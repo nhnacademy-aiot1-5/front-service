@@ -44,14 +44,16 @@ public class ElectricityService {
         LocalDateTime time = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
         List<DailyElectricityDto> electricityDtoList = userAdaptor.getDailyElectricities(time,-1).getBody();
         Long bill = 0L;
+        List<DailyElectricityDto> cumulativeBillsUntilToday = new ArrayList<>();
         for(DailyElectricityDto e : electricityDtoList) {
             bill += e.getBill();
             e.setBill(bill);
+            if (e.getTime().isAfter(time)) {
+                break;
+            }
+            cumulativeBillsUntilToday.add(e);
         }
-        if (electricityDtoList.size() > 1) {
-            electricityDtoList.remove(electricityDtoList.size() - 1);
-        }
-        return electricityDtoList;
+        return cumulativeBillsUntilToday;
     }
 
     public List<PreciseElectricitiesDto> getCumulativeBillPredictions() {
