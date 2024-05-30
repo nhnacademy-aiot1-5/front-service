@@ -69,7 +69,7 @@ public class IndexController {
         model.addAttribute("yesterdayKwh", yesterdayKwh);
         model.addAttribute("thisMonthKwh", thisMonthKwh);
         model.addAttribute("wTop10", electricityService.getTop10Electricity());
-        model.addAttribute("outliers", sseService.getOutliers());
+        model.addAttribute("outliers", sseService.getOutliers(userInfo.getOrganization().getId()));
         return "index";
     }
 
