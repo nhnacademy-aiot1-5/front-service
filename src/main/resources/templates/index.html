@@ -596,7 +596,7 @@
                     shade: 'light',
                     type: "vertical",
                     shadeIntensity: 0.5,
-                    gradientToColors: ['#F17674'], // optional, if not defined - uses the shades of same color in series
+                    gradientToColors: ['#F17674'],
                     inverseColors: true,
                     opacityFrom: 1,
                     opacityTo: 0.8,
@@ -824,8 +824,7 @@
                 const fullData = prepareChartData(currentMonthData, predictedData);
                 fullData.sort((a, b) => a.x - b.x);
 
-            const forecastCount = predictedData.length;
-
+                const forecastCount = predictedData.length;
 
                 const maxVal = Math.max(budget + 1000, fullData[fullData.length - 1].y);
                 const yMax = Math.ceil(maxVal / 5000) * 5000;
@@ -874,19 +873,20 @@
                             fontSize: "14px",
                             color: '#666'
                         }
-                ,
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shade: 'light',
-                        type: "vertical",
-                        shadeIntensity: 0.5,
-                        gradientToColors: ['#846EF4'],
-                        inverseColors: true,
-                        opacityFrom: 1,
-                        opacityTo: 0.8,
-                        stops: [0, 80, 100],
-                        colorStops: [],
+                    },
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            shade: 'light',
+                            type: "vertical",
+                            shadeIntensity: 0.5,
+                            gradientToColors: ['#846EF4'],
+                            inverseColors: true,
+                            opacityFrom: 1,
+                            opacityTo: 0.8,
+                            stops: [0, 80, 100],
+                            colorStops: [],
+                        }
                     },
                     forecastDataPoints: {
                         count: forecastCount
