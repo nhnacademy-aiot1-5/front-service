@@ -13,6 +13,6 @@ public class Alert {
     private String place;
     private String type;
     private int time;
-    private long outlierValue;
+    private double outlierValue;
     private int organizationId;
 }
