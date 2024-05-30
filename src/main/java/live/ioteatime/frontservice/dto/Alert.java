@@ -12,7 +12,7 @@ public class Alert {
     private String sensorName;
     private String place;
     private String type;
-    private int time;
+    private long time;
     private double outlierValue;
     private int organizationId;
 }
