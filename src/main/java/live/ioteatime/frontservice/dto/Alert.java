@@ -12,8 +12,7 @@ public class Alert {
     private String sensorName;
     private String place;
     private String type;
-    private int time;
-    @JsonProperty("outlier_value")
-    private long value;
+    private long time;
+    private double outlierValue;
     private int organizationId;
 }
