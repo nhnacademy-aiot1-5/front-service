@@ -24,7 +24,7 @@ public class SseService {
 
     public void saveAlert(Alert alert) {
         OutlierDto outlierDto = OutlierDto.builder()
-                .id(0)
+                .organizationId(0)
                 .type(alert.getType())
                 .place(alert.getPlace())
                 .outlierValue(alert.getValue())
@@ -33,8 +33,8 @@ public class SseService {
         outlierAdaptor.saveOutlier(outlierDto);
     }
 
-    public List<OutlierDto> getOutliers() {
-        return outlierAdaptor.getOutliers().getBody();
+    public List<OutlierDto> getOutliers(int organizationId) {
+        return outlierAdaptor.getOutliers(organizationId).getBody();
     }
 
     public void updateOutlier(int id, int flag) {
