@@ -316,8 +316,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <!--                                </div>-->
                             </div>
 
 
@@ -461,7 +459,7 @@
                     shade: 'light',
                     type: "horizontal",
                     shadeIntensity: 0.5,
-                    gradientToColors: ['#F17674'], // optional, if not defined - uses the shades of same color in series
+                    gradientToColors: ['#F17674'],
                     inverseColors: true,
                     opacityFrom: 1,
                     opacityTo: 0.8,
@@ -680,16 +678,14 @@
                 }));
             };
 
-            const initdailyPredictChart = async () => {
+            const initDailyPredictChart = async () => {
                 const currentMonthData = await fetchCurrentMonthData();
                 const predictedData = await fetchPredictedData();
 
                 const fullData = prepareChartData(currentMonthData).concat(prepareChartData(predictedData));
                 fullData.sort((a, b) => a.x - b.x);
 
-                const today = new Date();
-                const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                const forecastCount = endOfMonth.getDate() - today.getDate() - 1;
+                const forecastCount = predictedData.length;
 
                 const chartOptions = {
                     series: [{
@@ -752,7 +748,7 @@
                 dailyPredictChart.render();
             };
 
-            initdailyPredictChart();
+            initDailyPredictChart();
         });
     </script>
     <script>
@@ -780,6 +776,7 @@
             };
 
             const prepareChartData = (currentMonthData, predictedData) => {
+
                 const current = currentMonthData.map(item => ({
                     x: new Date(item.time).getTime(),
                     y: item.bill
@@ -827,9 +824,8 @@
                 const fullData = prepareChartData(currentMonthData, predictedData);
                 fullData.sort((a, b) => a.x - b.x);
 
-                const today = new Date();
-                const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                const forecastCount = endOfMonth.getDate() - today.getDate() - 1;
+            const forecastCount = predictedData.length;
+
 
                 const maxVal = Math.max(budget + 1000, fullData[fullData.length - 1].y);
                 const yMax = Math.ceil(maxVal / 5000) * 5000;
@@ -878,6 +874,19 @@
                             fontSize: "14px",
                             color: '#666'
                         }
+                ,
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'light',
+                        type: "vertical",
+                        shadeIntensity: 0.5,
+                        gradientToColors: ['#846EF4'],
+                        inverseColors: true,
+                        opacityFrom: 1,
+                        opacityTo: 0.8,
+                        stops: [0, 80, 100],
+                        colorStops: [],
                     },
                     forecastDataPoints: {
                         count: forecastCount
@@ -908,22 +917,6 @@
                         }]
                     }
 
-                    ,
-                    fill: {
-                        type: 'gradient',
-                        gradient: {
-                            shade: 'light',
-                            type: "vertical",
-                            shadeIntensity: 0.5,
-                            gradientToColors: ['#846EF4'], // optional, if not defined - uses the shades of same color in series
-                            inverseColors: true,
-                            opacityFrom: 1,
-                            opacityTo: 0.8,
-                            stops: [0, 80, 100],
-                            colorStops: [],
-                        },
-
-                    }
                 };
                 var cumulativeBillChart = new ApexCharts(document.querySelector("#cumulative-bill"), cumulativeChartOptions);
                 cumulativeBillChart.render();
