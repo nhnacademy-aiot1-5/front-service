@@ -709,11 +709,11 @@
                     },
                     xaxis: {
                         type: 'datetime',
-                        tickAmount: 10,
+                        tickAmount: 6,
                         labels: {
                             formatter: function (value, timestamp) {
                                 return new Date(timestamp).toLocaleDateString('en-US', {
-                                    month: 'short',
+                                    month: '2-digit',
                                     day: '2-digit'
                                 });
                             }
@@ -722,7 +722,7 @@
                     yaxis: {
                         labels: {
                             formatter: function (val) {
-                                return val.toFixed(1);
+                                return val.toFixed(0);
                             }
                         }
                     },
@@ -854,7 +854,7 @@
                         labels: {
                             formatter: function (value, timestamp) {
                                 return new Date(timestamp).toLocaleDateString('en-US', {
-                                    month: 'short',
+                                    month: '2-digit',
                                     day: '2-digit'
                                 });
                             }
@@ -867,7 +867,7 @@
                         forceNiceScale: true,
                         labels: {
                             formatter: function (val) {
-                                return val.toFixed(1);
+                                return val.toFixed(0);
                             }
                         }
                     },
