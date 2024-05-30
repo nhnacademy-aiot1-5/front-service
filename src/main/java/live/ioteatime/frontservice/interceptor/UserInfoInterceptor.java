@@ -42,7 +42,6 @@ public class UserInfoInterceptor implements HandlerInterceptor {
             throws Exception {
 
         if (!request.getMethod().equalsIgnoreCase("GET") || model == null) return;
-        log.info("interceptor 실행 됨");
         GetUserResponse userInfo = userAdaptor.getUser().getBody();
         if (userInfo == null) {
             throw new IllegalStateException();
