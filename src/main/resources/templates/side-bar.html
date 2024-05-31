@@ -30,7 +30,7 @@
                     </div>
 
                     <div class="john-title" th:if="${userInfo}">
-                        <h6 class="mb-0 fs-4 fw-semibold" th:text="${userInfo.id}+' 님'">유저내용</h6>
+                        <h6 class="mb-0 fs-4 fw-semibold" th:text="${userInfo.name}+' 님'">유저내용</h6>
                         <span class="fs-2" th:text="${userInfo.role}">userRole</span></div>
 
                     <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0"
