@@ -71,8 +71,6 @@
                                         <th>IP</th>
                                         <th>PORT</th>
                                         <th>장소</th>
-                                        <th>상태</th>
-                                        <th>동작</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -83,15 +81,6 @@
                                         <td th:text="${sensor.ip}"></td>
                                         <td th:text="${sensor.port}"></td>
                                         <td th:text="${sensor.place.placeName}"></td>
-                                        <td th:text="${sensor.alive}"></td>
-                                        <td>
-                                            <form th:action="@{/sensor/mqtt/work/{sensorId}(sensorId=${sensor.id})}"
-                                                  th:method="PUT" onsubmit="return confirmRequest();">
-                                                <button type="submit" class="btn btn-primary"
-                                                        th:text="${sensor.alive == 'UP'} ? '중지' : '동작'">권한 변경
-                                                </button>
-                                            </form>
-                                        </td>
                                         <td>
                                             <form th:action="@{/sensors/mqtt/{sensorId}(sensorId=${sensor.id})}"
                                                   th:method="GET">
@@ -114,12 +103,6 @@
     let table = new DataTable('#table', {
         responsive: true
     });
-
-    function confirmRequest() {
-        var userResponse = confirm("유저 권한을 정말로 바꾸시겠습니까?")
-        return userResponse;
-    }
-
 </script>
 </body>
 </html>
