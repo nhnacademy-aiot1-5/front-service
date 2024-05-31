@@ -72,8 +72,6 @@
                                         <th>IP</th>
                                         <th>PORT</th>
                                         <th>채널 수</th>
-                                        <th>상태</th>
-                                        <th>동작</th>
                                         <th>센서 상세</th>
                                         <th>센서 수정</th>
                                         <th>센서 삭제</th>
@@ -86,16 +84,6 @@
                                         <td th:text="${sensor.ip}"></td>
                                         <td th:text="${sensor.port}"></td>
                                         <td th:text="${sensor.channelCount}"></td>
-                                        <td th:text="${sensor.alive}"></td>
-                                        <td>
-                                            <form th:action="@{/sensors/modbus/work/{sensorId}(sensorId=${sensor.id})}"
-                                                  th:method="PUT" onsubmit="return confirmRequest();">
-                                                <button type="submit" class="btn btn-primary"
-                                                        th:text="${sensor.alive.name() == 'UP' ? '중지' : '동작'}">권한 변경
-                                                </button>
-
-                                            </form>
-                                        </td>
                                         <td>
                                             <form th:action="@{/sensors/modbus/{sensorId}(sensorId=${sensor.id})}"
                                                   th:method="GET">
