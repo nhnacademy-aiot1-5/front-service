@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +36,10 @@ public class SseService {
     }
 
     public List<OutlierDto> getOutliers(int organizationId) {
-        return outlierAdaptor.getOutliers(organizationId).getBody();
+        List<OutlierDto> outlierDtos = Optional.ofNullable(outlierAdaptor.getOutliers(organizationId).getBody()).orElse(List.of());
+        return outlierDtos.stream()
+                .filter(outlierDto -> outlierDto.getFlag() == 0)
+                .collect(Collectors.toList());
     }
 
     public void updateOutlier(int id, int flag) {

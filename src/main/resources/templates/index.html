@@ -328,22 +328,52 @@
                                                         <p>Please check back later for any updates.</p>
                                                     </div>
                                                 </th:block>
-                                                <th:block th:each="outlier, iterStat : ${outliers}"
-                                                          th:id="'outlier-' + ${outlier.organizationId}">
-                                                    <h4 class="fs-3 mt-2" th:id="'scrollspyHeading' + ${iterStat.count}"
-                                                        th:text="${iterStat.index + '. ' + outlier.place + ' : ' + outlier.type}">
-                                                        Outlier Heading</h4>
-                                                    <p th:text="${'value: ' + outlier.outlierValue + ', 위치: ' + outlier.type}">
-                                                        Outlier details</p>
-                                                    <button class="btn btn-primary mb-1" th:if="${outlier.flag == 0}"
-                                                            th:attr="data-id=${outlier.organizationId}"
-                                                            onclick="resolveOutlier(this.getAttribute('data-id'), this)">
-                                                        경고등 끄기
-                                                    </button>
+                                                <th:block th:each="outlier, iterStat : ${outliers}">
+                                                    <div th:id="'outlier-' + ${outlier.id}">
+                                                        <h4 class="fs-3 mt-2"
+                                                            th:id="'scrollspyHeading' + ${iterStat.count}"
+                                                            th:text="${iterStat.index + '. ' + outlier.place + ' : ' + outlier.type}">
+                                                            Outlier Heading</h4>
+                                                        <p th:text="${'value: ' + outlier.outlierValue + ', 위치: ' + outlier.type}">
+                                                            Outlier details</p>
+                                                        <button class="btn btn-primary mb-1"
+                                                                th:if="${outlier.flag == 0}"
+                                                                th:attr="data-id=${outlier.id}"
+                                                                onclick="resolveOutlier(this.getAttribute('data-id'), this)">
+                                                            경고등 끄기
+                                                        </button>
+                                                    </div>
                                                 </th:block>
                                             </div>
                                         </div>
                                     </div>
+                                    <script>
+                                        function resolveOutlier(outlierId, button) {
+                                            fetch('/outlier-off', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                body: JSON.stringify({
+                                                    outlier_id: outlierId
+                                                })
+                                            })
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    alert('Outlier resolved: ' + outlierId);
+                                                    console.log('outlier-' + outlierId);
+                                                    let outlierElement = document.getElementById('outlier-' + outlierId);
+                                                    console.log(outlierElement);
+                                                    if (outlierElement) {
+                                                        outlierElement.remove();
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error resolving outlier:', error);
+                                                    alert('Error resolving outlier');
+                                                });
+                                        }
+                                    </script>
                                 </div>
                             </div>
                             <div class="row flex-grow-1">
@@ -385,35 +415,6 @@
                             </div>
                         </div>
                     </div>
-                    <script>
-                        function resolveOutlier(outlierId, button) {
-                            fetch('/outlier-off', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    outlier_id: outlierId
-                                })
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    alert('Outlier resolved: ' + outlierId);
-                                    // Remove or hide the outlier element from the list
-                                    const outlierElement = document.getElementById('outlier-' + outlierId);
-                                    if (outlierElement) {
-                                        // To remove the element completely
-                                        outlierElement.remove();
-                                        // Or, to hide the element
-                                        // outlierElement.style.display = 'none';
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error resolving outlier:', error);
-                                    alert('Error resolving outlier');
-                                });
-                        }
-                    </script>
 
                     <!--모달-->
                     <div class="modal fade" id="settingPriceModal" tabindex="-1"

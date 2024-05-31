@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OutlierDto {
+    int id;
     int organizationId;
     String place;
     String type;
