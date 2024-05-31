@@ -331,7 +331,7 @@
                                                 <th:block th:each="outlier, iterStat : ${outliers}"
                                                           th:id="'outlier-' + ${outlier.organizationId}">
                                                     <h4 class="fs-3 mt-2" th:id="'scrollspyHeading' + ${iterStat.count}"
-                                                        th:text="${outlier.organizationId + '. ' + outlier.place + ' : ' + outlier.type}">
+                                                        th:text="${iterStat.index + '. ' + outlier.place + ' : ' + outlier.type}">
                                                         Outlier Heading</h4>
                                                     <p th:text="${'value: ' + outlier.outlierValue + ', 위치: ' + outlier.type}">
                                                         Outlier details</p>
