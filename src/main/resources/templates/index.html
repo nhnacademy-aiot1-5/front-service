@@ -859,7 +859,12 @@
                 }
                 predicted.sort((a, b) => a.x - b.x);
 
-                const currentCumulativeBill = current[current.length - 1].y;
+                let currentCumulativeBill;
+                if(currentMonthData.length < 1) {
+                    currentCumulativeBill = 0;
+                } else {
+                    currentCumulativeBill = current[current.length - 1].y;
+                }
                 for (var i = 0; i < predicted.length; i++) {
                     predicted[i].y = predicted[i].y + currentCumulativeBill;
                 }
@@ -871,10 +876,10 @@
 
             function setAchievementStatus(current, predicted) {
                 const achievementStatus = document.getElementById("achievementStatus");
-                if (predicted[predicted.length - 1].y >= budget) {
+                if (predicted.length >= 1 && predicted[predicted.length - 1].y >= budget) {
                     achievementStatus.textContent = '목표 요금을 초과할 것 같아요. ⚠️';
                 }
-                if (current[current.length - 1].y >= budget) {
+                if (current.length >= 1 && current[current.length - 1].y >= budget) {
                     achievementStatus.textContent = '목표 요금을 초과했어요. 💸';
                 }
             }
@@ -882,6 +887,9 @@
             const initCumulativeBillChart = async () => {
                 const currentMonthData = await fetchCurrentMonthData();
                 const predictedData = await fetchPredictedData();
+
+                console.log(currentMonthData)
+                console.log(predictedData)
 
                 const fullData = prepareChartData(currentMonthData, predictedData);
                 fullData.sort((a, b) => a.x - b.x);
