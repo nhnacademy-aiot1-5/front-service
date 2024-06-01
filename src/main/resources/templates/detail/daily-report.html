@@ -256,7 +256,7 @@
 
             function updateChartData1(dailyData) {
                 const kwhData = dailyData.map(dto => dto.kwh.toFixed(0));
-                const dates = dailyData.map(dto => dto.time);
+                const dates = dailyData.map(dto => dto.time.substring(11, 16));
 
                 chart1.updateOptions({
                     series: [{
@@ -264,7 +264,8 @@
                         data: kwhData
                     }],
                     xaxis: {
-                        categories: dates
+                        categories: dates,
+                        tickAmount: 12
                     }
                 });
             }
