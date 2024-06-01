@@ -1,321 +1,300 @@
 <!doctype html>
 <html lang="ko">
 
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>아이오티타임</title>
-        <script src="https://code.jquery.com/jquery-3.7.1.js"
-                integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-                crossorigin="anonymous"></script>
-        <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.0.7/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/datatables.min.css"
-              rel="stylesheet">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-        <script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.0.7/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/datatables.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-        <link rel="stylesheet" href="/css/style.css">
-    </head>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>아이오티타임</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"></script>
+    <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.0.7/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/datatables.min.css"
+          rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.0.7/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/datatables.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/apexcharts"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
 
-    <body>
-        <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
-             data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
-            <th:block th:replace="side-bar :: sidebar"></th:block>
-            <div class="body-wrapper">
-                <th:block th:replace="header :: header"></th:block>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12">
-                            <h2 class="ps-0" th:text="${userInfo.name}+'님의 월간 전력량 리포트 📃'"></h2>
-                        </div>
-                    </div>
+<body>
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
+     data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <th:block th:replace="side-bar :: sidebar"></th:block>
+    <div class="body-wrapper">
+        <th:block th:replace="header :: header"></th:block>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="ps-0" th:text="${userInfo.name}+'님의 월간 전력량 리포트 📃'"></h2>
+                </div>
+            </div>
 
-                    <div class="row mb-9" style="padding-left: 12px">
-                        <select id="monthSelect" class="form-select fw-semibold w-auto">
-                            <option value="1">1 월</option>
-                            <option value="2">2 월</option>
-                            <option value="3">3 월</option>
-                            <option value="4">4 월</option>
-                            <option value="5">5 월</option>
-                            <option value="6">6 월</option>
-                            <option value="7">7 월</option>
-                            <option value="8">8 월</option>
-                            <option value="9">9 월</option>
-                            <option value="10">10 월</option>
-                            <option value="11">11 월</option>
-                            <option value="12">12 월</option>
-                        </select>
-                    </div>
+            <div class="row mb-9" style="padding-left: 12px">
+                <select id="monthSelect" class="form-select fw-semibold w-auto">
+                    <option value="1">1 월</option>
+                    <option value="2">2 월</option>
+                    <option value="3">3 월</option>
+                    <option value="4">4 월</option>
+                    <option value="5">5 월</option>
+                    <option value="6">6 월</option>
+                    <option value="7">7 월</option>
+                    <option value="8">8 월</option>
+                    <option value="9">9 월</option>
+                    <option value="10">10 월</option>
+                    <option value="11">11 월</option>
+                    <option value="12">12 월</option>
+                </select>
+            </div>
 
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5>종 합</h5>
-                                    <h1 id="electricitySlogan">반갑습니다 🌱 </h1>
-                                    <p id="electricityChange" class="mb-0">조회 할 달을 선택해주세요.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-9">
-                            <div class="card">
-                                <div class="card-body pb-2">
-                                    <h4 id="month-graph-title" class="card-title fw-semibold">조회 할 달을 선택해주세요</h4>
-                                    <div id="chart2"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6 class="text-end">설정 요금</h6>
-                                    <h3 class="mb-0 text-end"
-                                        th:text="'₩ '+${#numbers.formatInteger(budget, 0, 'COMMA')}"></h3>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6 class="text-end">사용 요금</h6>
-                                    <h3 class="mb-0 text-end" id="bill"> - </h3>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6 class="text-end">남은 요금</h6>
-                                    <h3 class="mb-0 text-primary text-end" id="remain-budget"> - </h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-9">
-                            <div class="card">
-                                <div class="card-body pb-2">
-                                    <h4 class="card-title fw-semibold">최근 12 개월 전기 사용 내역</h4>
-                                    <div id="chart1"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3 d-flex flex-column">
-                            <div class="card flex-fill">
-                                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center">
-                                    <h6>이번 달 목표 요금을 추천 드려요 💰</h6>
-                                    <br></br>
-                                    <h3 class="mb-0 "
-                                        th:text="'₩ '+${#numbers.formatInteger(thisMonthCharge.charge, 0, 'COMMA')}"></h3>
-                                </div>
-                            </div>
-                            <div class="card flex-fill">
-                                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center">
-                                    <h6>다음 달 목표 요금을 추천 드려요 💰</h6>
-                                    <br></br>
-                                    <h3 class="mb-0 "
-                                        th:text="'₩ '+${#numbers.formatInteger(nextMonthCharge.charge, 0, 'COMMA')}"></h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+            <div class="row">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">전력 사용 내역</h4>
-                            <div class="table-responsive">
-                                <div id="zero_config_wrapper" class="dataTables_wrapper">
-                                    <table id="zero_config"
-                                           class="table table-striped table-bordered text-nowrap align-middle dataTable"
-                                           aria-describedby="zero_config_info">
-                                        <thead>
-                                            <tr>
-                                                <th class="sorting sorting_asc col-1" tabindex="0"
-                                                    aria-controls="zero_config" rowspan="1" colspan="1"
-                                                    aria-sort="ascending">
-                                                    날 짜
-                                                </th>
-                                                <th class="sorting col-1" tabindex="0"
-                                                    aria-controls="zero_config"
-                                                    rowspan="1" colspan="1">
-                                                    요 금
-                                                </th>
-                                                <th class="sorting col-1" tabindex="0"
-                                                    aria-controls="zero_config"
-                                                    rowspan="1" colspan="1">
-                                                    kWh
-                                                </th>
-                                                <th class="sorting col-1" tabindex="0"
-                                                    aria-controls="zero_config"
-                                                    rowspan="1" colspan="1">
-                                                    변 화
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <!--                                                <th class="sorting sorting_asc col-1" tabindex="0"-->
-                                                <!--                                                    aria-controls="zero_config" rowspan="1" colspan="1"-->
-                                                <!--                                                    aria-sort="ascending">-->
-                                                <!--                                                    총 합-->
-                                                <!--                                                </th>-->
-                                                <!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
-                                                <!--                                                    aria-controls="zero_config"-->
-                                                <!--                                                    rowspan="1" colspan="1">-->
-                                                <!--                                                </th>-->
-                                                <!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
-                                                <!--                                                    aria-controls="zero_config"-->
-                                                <!--                                                    rowspan="1" colspan="1">-->
-                                                <!--                                                </th>-->
-                                                <!--                                                <th class="sorting col-1 text-end" tabindex="0"-->
-                                                <!--                                                    aria-controls="zero_config"-->
-                                                <!--                                                    rowspan="1" colspan="1">-->
-                                                <!--                                                </th>-->
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
+                            <h5>종 합</h5>
+                            <h1 id="electricitySlogan">반갑습니다 🌱 </h1>
+                            <p id="electricityChange" class="mb-0">조회 할 달을 선택해주세요.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-9">
+                    <div class="card">
+                        <div class="card-body pb-2">
+                            <h4 id="month-graph-title" class="card-title fw-semibold">조회 할 달을 선택해주세요</h4>
+                            <div id="chart2"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="text-end">설정 요금</h6>
+                            <h3 class="mb-0 text-end"
+                                th:text="'₩ '+${#numbers.formatInteger(budget, 0, 'COMMA')}"></h3>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="text-end">사용 요금</h6>
+                            <h3 class="mb-0 text-end" id="bill"> - </h3>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="text-end">남은 요금</h6>
+                            <h3 class="mb-0 text-primary text-end" id="remain-budget"> - </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9">
+                    <div class="card">
+                        <div class="card-body pb-2">
+                            <h4 class="card-title fw-semibold">최근 12 개월 전기 사용 내역</h4>
+                            <div id="chart1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 d-flex flex-column">
+                    <div class="card flex-fill">
+                        <div class="card-body d-flex flex-column align-items-center justify-content-center text-center">
+                            <h6>이번 달 목표 요금을 추천 드려요 💰</h6>
+                            <br></br>
+                            <h3 class="mb-0 "
+                                th:text="'₩ '+${#numbers.formatInteger(thisMonthCharge.charge, 0, 'COMMA')}"></h3>
+                        </div>
+                    </div>
+                    <div class="card flex-fill">
+                        <div class="card-body d-flex flex-column align-items-center justify-content-center text-center">
+                            <h6>다음 달 목표 요금을 추천 드려요 💰</h6>
+                            <br></br>
+                            <h3 class="mb-0 "
+                                th:text="'₩ '+${#numbers.formatInteger(nextMonthCharge.charge, 0, 'COMMA')}"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">전력 사용 내역</h4>
+                    <div class="table-responsive">
+                        <div id="zero_config_wrapper" class="dataTables_wrapper">
+                            <table id="zero_config"
+                                   class="table table-striped table-bordered text-nowrap align-middle dataTable"
+                                   aria-describedby="zero_config_info">
+                                <thead>
+                                <tr>
+                                    <th class="sorting sorting_asc col-1" tabindex="0"
+                                        aria-controls="zero_config" rowspan="1" colspan="1"
+                                        aria-sort="ascending">
+                                        날 짜
+                                    </th>
+                                    <th class="sorting col-1" tabindex="0"
+                                        aria-controls="zero_config"
+                                        rowspan="1" colspan="1">
+                                        요 금
+                                    </th>
+                                    <th class="sorting col-1" tabindex="0"
+                                        aria-controls="zero_config"
+                                        rowspan="1" colspan="1">
+                                        kWh
+                                    </th>
+                                    <th class="sorting col-1" tabindex="0"
+                                        aria-controls="zero_config"
+                                        rowspan="1" colspan="1">
+                                        변 화
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <script th:inline="javascript">
-            var options = {
-                chart: {
-                    type: 'line',
-                    height: '320'
-                },
-                series: [{
-                    name: 'sales',
-                    data: []
-                }],
-                xaxis: {
-                    categories: []
-                }
+<script th:inline="javascript">
+    var options = {
+        chart: {
+            type: 'line',
+            height: '320'
+        },
+        series: [{
+            name: 'sales',
+            data: []
+        }],
+        xaxis: {
+            categories: []
+        }
+    }
+
+    var chart1 = new ApexCharts(document.getElementById("chart1"), options);
+    var chart2 = new ApexCharts(document.getElementById("chart2"), options);
+
+    chart1.render();
+    chart2.render();
+
+    const monthlyElectricityDtos = [[${recent12monthElectricities}]];
+    const kwhData = monthlyElectricityDtos.map(dto => dto.kwh.toFixed(0));
+    const dates = monthlyElectricityDtos.map(dto => dto.time.substring(0, 10));
+
+    chart1.updateOptions({
+        series: [{
+            name: 'KWh',
+            data: kwhData
+        }],
+        xaxis: {
+            categories: dates
+        }
+    });
+
+    let table = new DataTable('#zero_config', {
+        responsive: true,
+        layout: {
+            topStart: {
+                buttons: ['pageLength', 'copy', 'csv', 'excel', 'pdf', 'print']
             }
+        }
+    });
 
-            var chart1 = new ApexCharts(document.getElementById("chart1"), options);
-            var chart2 = new ApexCharts(document.getElementById("chart2"), options);
+    function addAllBills(dailyElectricities) {
+        let sum = 0;
+        dailyElectricities.forEach(dto => {
+            sum = sum + dto.bill;
+        });
+        return sum;
+    }
 
-            chart1.render();
-            chart2.render();
+    document.getElementById('monthSelect').addEventListener('change', function () {
+        const selectedMonth = this.value;
+        const year = new Date().getFullYear();  // 현재 연도를 가져옴
+        const monthPadded = selectedMonth.padStart(2, '0');  // 월을 두 자리 숫자로 표현 (예: '02')
 
-            const monthlyElectricityDtos = [[${recent12monthElectricities}]];
-            const kwhData = monthlyElectricityDtos.map(dto => dto.kwh.toFixed(0));
-            const dates = monthlyElectricityDtos.map(dto => dto.time.substring(0, 10));
+        const lastDayOfCurrentMonth = new Date(year, monthPadded, 0).getDate();
+        const dateForRequest = `${year}-${monthPadded}-${lastDayOfCurrentMonth}T00:00:00`;
 
-            chart1.updateOptions({
-                series: [{
-                    name: 'KWh',
-                    data: kwhData
-                }],
-                xaxis: {
-                    categories: dates
-                }
-            });
+        const lastMonth = monthPadded - 1 < 1 ? 12 : monthPadded - 1;
+        const lastYear = lastMonth === 12 ? year - 1 : year;
+        const lastMonthPadded = lastMonth.toString().padStart(2, '0');
+        const lastDayOfLastMonth = new Date(lastYear, lastMonth, 0).getDate();
+        const lastDateForRequest = `${lastYear}-${lastMonthPadded}-${lastDayOfLastMonth}T00:00:00`;
+        document.getElementById('month-graph-title').textContent = `${selectedMonth}월 전기 사용 내역`;
 
-            let table = new DataTable('#zero_config', {
-                responsive: true,
-                layout: {
-                    topStart: {
-                        buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
-                    }
-                }
-            });
-
-            function addAllBills(dailyElectricities) {
-                let sum = 0;
-                dailyElectricities.forEach(dto => {
-                    sum = sum + dto.bill;
-                });
-                return sum;
-            }
-
-            document.getElementById('monthSelect').addEventListener('change', function () {
-                const selectedMonth = this.value;
-                const year = new Date().getFullYear();  // 현재 연도를 가져옴
-                const monthPadded = selectedMonth.padStart(2, '0');  // 월을 두 자리 숫자로 표현 (예: '02')
-
-                const lastDayOfCurrentMonth = new Date(year, monthPadded, 0).getDate();
-                const dateForRequest = `${year}-${monthPadded}-${lastDayOfCurrentMonth}T00:00:00`;
-
-                const lastMonth = monthPadded - 1 < 1 ? 12 : monthPadded - 1;
-                const lastYear = lastMonth === 12 ? year - 1 : year;
-                const lastMonthPadded = lastMonth.toString().padStart(2, '0');
-                const lastDayOfLastMonth = new Date(lastYear, lastMonth, 0).getDate();
-                const lastDateForRequest = `${lastYear}-${lastMonthPadded}-${lastDayOfLastMonth}T00:00:00`;
-                document.getElementById('month-graph-title').textContent = `${selectedMonth}월 전기 사용 내역`;
-
-                fetch(`/monthly-electricity/${lastDateForRequest}`)
+        fetch(`/monthly-electricity/${lastDateForRequest}`)
+            .then(response => response.json())
+            .then(lastMonthData => {
+                fetch(`/monthly-electricity/${dateForRequest}`)
                     .then(response => response.json())
-                    .then(lastMonthData => {
-                        fetch(`/monthly-electricity/${dateForRequest}`)
-                            .then(response => response.json())
-                            .then(currentMonthData => {
-                                const changePercent = getPercentage(lastMonthData.kwh, currentMonthData.kwh);
-                                document.getElementById('electricityChange').textContent =
-                                    `${changePercent}% 저번 달 대비 전기료`;
-                                if (changePercent < 0) {
-                                    document.getElementById('electricitySlogan').textContent = "집에 피카츄가 있으신가요? ⚡";
-                                } else {
-                                    document.getElementById('electricitySlogan').textContent = "전기 좀 아껴 쓰세요. 🌱";
-                                }
-                                const dailyElectricities = currentMonthData.dailyElectricityDtos;
-                                var bill = addAllBills(dailyElectricities);
-                                var budget = [[${budget}]];
-                                document.getElementById("bill").textContent = '₩ ' + bill.toLocaleString('ko-KR');
-                                document.getElementById("remain-budget").textContent =
-                                    '₩ ' + (budget - bill).toLocaleString('ko-KR');
-                                updateChartData(dailyElectricities);
-                                updateDataTable(dailyElectricities);
-                            })
-                            .catch(error => console.error('Error fetching current month data: ', error));
+                    .then(currentMonthData => {
+                        const changePercent = getPercentage(lastMonthData.kwh, currentMonthData.kwh);
+                        document.getElementById('electricityChange').textContent =
+                            `${changePercent}% 저번 달 대비 전기료`;
+                        if (changePercent < 0) {
+                            document.getElementById('electricitySlogan').textContent = "집에 피카츄가 있으신가요? ⚡";
+                        } else {
+                            document.getElementById('electricitySlogan').textContent = "전기 좀 아껴 쓰세요. 🌱";
+                        }
+                        const dailyElectricities = currentMonthData.dailyElectricityDtos;
+                        var bill = addAllBills(dailyElectricities);
+                        var budget = [[${budget}]];
+                        document.getElementById("bill").textContent = '₩ ' + bill.toLocaleString('ko-KR');
+                        document.getElementById("remain-budget").textContent =
+                            '₩ ' + (budget - bill).toLocaleString('ko-KR');
+                        updateChartData(dailyElectricities);
+                        updateDataTable(dailyElectricities);
                     })
-                    .catch(error => console.error('Error fetching previous month data: ', error));
-            });
+                    .catch(error => console.error('Error fetching current month data: ', error));
+            })
+            .catch(error => console.error('Error fetching previous month data: ', error));
+    });
 
-            function updateChartData(dailyData) {
-                const kwhData2 = dailyData.map(dto => dto.kwh.toFixed(0));
-                const dates2 = dailyData.map(dto => dto.time.substring(0, 10));
+    function updateChartData(dailyData) {
+        const kwhData2 = dailyData.map(dto => dto.kwh.toFixed(0));
+        const dates2 = dailyData.map(dto => dto.time.substring(0, 10));
 
-                chart2.updateOptions({
-                    series: [{
-                        name: 'KWh',
-                        data: kwhData2
-                    }],
-                    xaxis: {
-                        categories: dates2,
-                        tickAmount: 12
-                    }
-                });
+        chart2.updateOptions({
+            series: [{
+                name: 'KWh',
+                data: kwhData2
+            }],
+            xaxis: {
+                categories: dates2,
+                tickAmount: 12
             }
+        });
+    }
 
-            function updateDataTable(dailyData) {
-                table.clear();
-                let previousKwh = 0;
+    function updateDataTable(dailyData) {
+        table.clear();
+        let previousKwh = 0;
 
-                dailyData.forEach((dto, index) => {
-                    const percentageChange = index === 0 ? "0.00" : getPercentage(previousKwh, dto.kwh);
+        dailyData.forEach((dto, index) => {
+            const percentageChange = index === 0 ? "0.00" : getPercentage(previousKwh, dto.kwh);
 
-                    table.row.add([
-                        dto.time.split('T')[0],
-                        `${dto.kwh.toLocaleString('ko-KR')} 원`,
-                        `${dto.kwh.toLocaleString('ko-KR')} Wh`,
-                        percentageChange >= 0 ? `+${percentageChange}%` : `${percentageChange}%`
-                    ]).draw(false); // 변경 사항을 테이블에 즉시 반영하지 않음
+            table.row.add([
+                dto.time.split('T')[0],
+                `${dto.kwh.toLocaleString('ko-KR')} 원`,
+                `${dto.kwh.toLocaleString('ko-KR')} Wh`,
+                percentageChange >= 0 ? `+${percentageChange}%` : `${percentageChange}%`
+            ]).draw(false); // 변경 사항을 테이블에 즉시 반영하지 않음
 
-                    previousKwh = dto.kwh;
-                });
-                table.draw(); // 모든 데이터가 추가된 후 테이블을 다시 그림
-            }
+            previousKwh = dto.kwh;
+        });
+        table.draw(); // 모든 데이터가 추가된 후 테이블을 다시 그림
+    }
 
-            function getPercentage(previous, current) {
-                return (((current - previous) / previous) * 100).toFixed(2);
-            }
-        </script>
-    </body>
+    function getPercentage(previous, current) {
+        return (((current - previous) / previous) * 100).toFixed(2);
+    }
+</script>
+</body>
 </html>
