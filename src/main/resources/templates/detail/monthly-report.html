@@ -73,7 +73,7 @@
                                 <div class="card-body">
                                     <h6 class="text-end">설정 요금</h6>
                                     <h3 class="mb-0 text-end"
-                                        th:text="'₩ '+${#numbers.formatInteger(budget, 0, 'COMMA')}"></h3>
+                                        th:text="${#numbers.formatInteger(budget, 0, 'COMMA')} +' 원'"></h3>
                                 </div>
                             </div>
                             <div class="card">
@@ -105,7 +105,7 @@
                                     <h6>이번 달 목표 요금을 추천 드려요 💰</h6>
                                     <br></br>
                                     <h3 class="mb-0 "
-                                        th:text="'₩ '+${#numbers.formatInteger(thisMonthCharge.charge, 0, 'COMMA')}"></h3>
+                                        th:text="${#numbers.formatInteger(thisMonthCharge.charge, 0, 'COMMA')} + ' 원'"></h3>
                                 </div>
                             </div>
                             <div class="card flex-fill">
@@ -113,7 +113,7 @@
                                     <h6>다음 달 목표 요금을 추천 드려요 💰</h6>
                                     <br></br>
                                     <h3 class="mb-0 "
-                                        th:text="'₩ '+${#numbers.formatInteger(nextMonthCharge.charge, 0, 'COMMA')}"></h3>
+                                        th:text="${#numbers.formatInteger(nextMonthCharge.charge, 0, 'COMMA')} + ' 원'"></h3>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                             <div class="table-responsive">
                                 <div id="zero_config_wrapper" class="dataTables_wrapper">
                                     <table id="zero_config"
-                                           class="table table-striped table-bordered text-nowrap align-middle dataTable"
+                                           class="table table-striped table-bordered text-nowrap align-end text-end dataTable"
                                            aria-describedby="zero_config_info">
                                         <thead>
                                             <tr>
@@ -134,12 +134,12 @@
                                                     aria-sort="ascending">
                                                     날 짜
                                                 </th>
-                                                <th class="sorting col-1" tabindex="0"
+                                                <th class="sorting col-1 text-end" tabindex="0"
                                                     aria-controls="zero_config"
                                                     rowspan="1" colspan="1">
                                                     요 금
                                                 </th>
-                                                <th class="sorting col-1" tabindex="0"
+                                                <th class="sorting col-1 text-end" tabindex="0"
                                                     aria-controls="zero_config"
                                                     rowspan="1" colspan="1">
                                                     kWh
@@ -210,7 +210,7 @@
 
             chart1.updateOptions({
                 series: [{
-                    name: 'KWh',
+                    name: 'kWh',
                     data: kwhData
                 }],
                 xaxis: {
@@ -267,9 +267,9 @@
                                 const dailyElectricities = currentMonthData.dailyElectricityDtos;
                                 var bill = addAllBills(dailyElectricities);
                                 var budget = [[${budget}]];
-                                document.getElementById("bill").textContent = '₩ ' + bill.toLocaleString('ko-KR');
+                                document.getElementById("bill").textContent = bill.toLocaleString('ko-KR') + ' 원';
                                 document.getElementById("remain-budget").textContent =
-                                    '₩ ' + (budget - bill).toLocaleString('ko-KR');
+                                    (budget - bill).toLocaleString('ko-KR') + ' 원';
                                 updateChartData(dailyElectricities);
                                 updateDataTable(dailyElectricities);
                             })
@@ -284,7 +284,7 @@
 
                 chart2.updateOptions({
                     series: [{
-                        name: 'KWh',
+                        name: 'kWh',
                         data: kwhData2
                     }],
                     xaxis: {
@@ -303,7 +303,7 @@
 
                     table.row.add([
                         dto.time.split('T')[0],
-                        `${dto.kwh.toLocaleString('ko-KR')} 원`,
+                        `${Math.floor(dto.kwh).toLocaleString('ko-KR')} 원`,
                         `${dto.kwh.toLocaleString('ko-KR')} Wh`,
                         percentageChange >= 0 ? `+${percentageChange}%` : `${percentageChange}%`
                     ]).draw(false); // 변경 사항을 테이블에 즉시 반영하지 않음
