@@ -892,9 +892,6 @@
                 const currentMonthData = await fetchCurrentMonthData();
                 const predictedData = await fetchPredictedData();
 
-                console.log(currentMonthData)
-                console.log(predictedData)
-
                 const fullData = prepareChartData(currentMonthData, predictedData);
                 fullData.sort((a, b) => a.x - b.x);
 
