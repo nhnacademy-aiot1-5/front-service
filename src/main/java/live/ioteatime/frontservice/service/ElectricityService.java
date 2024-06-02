@@ -46,7 +46,7 @@ public class ElectricityService {
         Long bill = 0L;
         List<DailyElectricityDto> cumulativeBillsUntilToday = new ArrayList<>();
         for(DailyElectricityDto e : electricityDtoList) {
-            if(e.getTime().isBefore(time)) {
+            if(e.getTime().isBefore(time.withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0))) {
                 continue;
             }
             if (e.getTime().isEqual(time)) {
