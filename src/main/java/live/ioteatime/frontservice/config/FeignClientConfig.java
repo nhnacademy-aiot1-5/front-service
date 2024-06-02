@@ -34,8 +34,10 @@ public class FeignClientConfig {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
             String url = requestTemplate.url();
-            log.error("{} {}", url, request.getMethod());
-            if (url.equals("/auth/login") || (url.equals("/api/users") && request.getMethod().equalsIgnoreCase("post"))) {
+            log.error("{} {}", url, requestTemplate.method());
+            if (url.equals("/auth/login") ||
+                    (url.equals("/api/users") && requestTemplate.method().equalsIgnoreCase("post"))
+            ) {
                 return;
             }
             String accessToken = cookieUtil.getCookieValue(request, "iotaot");
