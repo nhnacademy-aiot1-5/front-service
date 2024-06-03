@@ -1,5 +1,6 @@
 package live.ioteatime.frontservice.adaptor;
 
+import live.ioteatime.frontservice.dto.DoorayMessageDto;
 import live.ioteatime.frontservice.dto.OutlierDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -20,4 +21,7 @@ public interface OutlierAdaptor {
 
     @GetMapping("/control/sensor/on")
     void turnSensorOn(@RequestParam String sensorName, @RequestParam String devEui);
+
+    @PostMapping("/control/dooray/send")
+    void sendDooray(@RequestBody DoorayMessageDto doorayMessageDto);
 }
