@@ -2,6 +2,7 @@ package live.ioteatime.frontservice.service;
 
 import live.ioteatime.frontservice.adaptor.OutlierAdaptor;
 import live.ioteatime.frontservice.dto.Alert;
+import live.ioteatime.frontservice.dto.DoorayMessageDto;
 import live.ioteatime.frontservice.dto.OutlierDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,15 @@ public class SseService {
 
     public void turnSensorOn(String sensorName, String devEui) {
         outlierAdaptor.turnSensorOn(sensorName, devEui);
+    }
+
+    public void sendDoorayMessage(String botName, int id, String place, String type) {
+        System.out.println("이거 실행됰");
+        DoorayMessageDto doorayMessageDto = DoorayMessageDto.builder()
+                .botName(botName)
+                .text(id + ": " + place + " " + type + "resolved")
+                .build();
+        outlierAdaptor.sendDooray(doorayMessageDto);
     }
 
 }

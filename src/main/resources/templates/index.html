@@ -52,7 +52,7 @@
                                     <div class="row gx-3">
                                         <div class="d-sm-flex mb-3">
                                             <div class="overflow-hidden me-6">
-<!--                                                <h5 class="fw-semibold">실시간 전력 사용량</h5>-->
+                                                <!--                                                <h5 class="fw-semibold">실시간 전력 사용량</h5>-->
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
@@ -153,9 +153,11 @@
                         <div class="col-lg-4 d-flex align-items-stretch">
                             <div class="card w-100 mb-3">
                                 <div class="card-body p-3">
-                                    <div class="d-flex align-items-center justify-content-center" style="height: 20px; width: 100%;">
-<!--                                        <h5 class="card-title mb-9 fw-semibold mb-0 me-5" style="text-align: center;">요금 잔량 :</h5>-->
-                                        <h5 class="fw-semibold mb-0" id="remain-budget" style="text-align: center;">-</h5>
+                                    <div class="d-flex align-items-center justify-content-center"
+                                         style="height: 20px; width: 100%;">
+                                        <!--                                        <h5 class="card-title mb-9 fw-semibold mb-0 me-5" style="text-align: center;">요금 잔량 :</h5>-->
+                                        <h5 class="fw-semibold mb-0" id="remain-budget" style="text-align: center;">
+                                            -</h5>
                                     </div>
                                     <div class="row align-items-center">
                                         <div class="col-12">
@@ -339,8 +341,8 @@
                                                             Outlier details</p>
                                                         <button class="btn btn-primary mb-1"
                                                                 th:if="${outlier.flag == 0}"
-                                                                th:attr="data-id=${outlier.id}"
-                                                                onclick="resolveOutlier(this.getAttribute('data-id'), this)">
+                                                                th:attr="data-id=${outlier.id}, data-place=${outlier.place}, data-type=${outlier.type}"
+                                                                onclick="resolveOutlier(this)">
                                                             경고등 끄기
                                                         </button>
                                                     </div>
@@ -349,7 +351,23 @@
                                         </div>
                                     </div>
                                     <script>
-                                        function resolveOutlier(outlierId, button) {
+                                        function resolveOutlier(button) {
+                                            var outlierId = button.getAttribute('data-id');
+                                            var place = button.getAttribute('data-place');
+                                            var type = button.getAttribute('data-type');
+
+                                            fetch('/send-dooray', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                body: JSON.stringify({
+                                                    id: outlierId,
+                                                    place: place,
+                                                    type: type
+                                                })
+                                            });
+
                                             fetch('/outlier-off', {
                                                 method: 'POST',
                                                 headers: {
@@ -640,7 +658,7 @@
                 labels: {
                     formatter: function (value) {
                         var date = new Date(value);
-                        return date.toLocaleString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false });
+                        return date.toLocaleString('ko-KR', {hour: '2-digit', minute: '2-digit', hour12: false});
                     }
                 }
             },
@@ -864,7 +882,7 @@
                 predicted.sort((a, b) => a.x - b.x);
 
                 let currentCumulativeBill;
-                if(currentMonthData.length < 1) {
+                if (currentMonthData.length < 1) {
                     currentCumulativeBill = 0;
                 } else {
                     currentCumulativeBill = current[current.length - 1].y;

@@ -4,10 +4,7 @@ import live.ioteatime.frontservice.adaptor.AdminAdaptor;
 import live.ioteatime.frontservice.adaptor.ElectricityAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.domain.Role;
-import live.ioteatime.frontservice.dto.DailyElectricityDto;
-import live.ioteatime.frontservice.dto.KwhDto;
-import live.ioteatime.frontservice.dto.MonthlyElectricityDto;
-import live.ioteatime.frontservice.dto.RealtimeElectricityResponseDto;
+import live.ioteatime.frontservice.dto.*;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
 import live.ioteatime.frontservice.dto.response.PreciseElectricitiesDto;
@@ -15,6 +12,7 @@ import live.ioteatime.frontservice.service.ElectricityService;
 import live.ioteatime.frontservice.service.SseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -137,5 +135,11 @@ public class IndexController {
     @ResponseBody
     public List<PreciseElectricitiesDto> getCumulativeBillPredictions() {
         return electricityService.getCumulativeBillPredictions();
+    }
+
+    @PostMapping("/send-dooray")
+    public ResponseEntity<?> sendDoorayMessage(@RequestBody OutlierDto outlierDto) {
+        sseService.sendDoorayMessage("이상치 알림", outlierDto.getId(), outlierDto.getPlace(), outlierDto.getType());
+        return ResponseEntity.ok().build();
     }
 }
