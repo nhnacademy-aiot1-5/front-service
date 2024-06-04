@@ -91,7 +91,7 @@
                                         <td th:text="${user.role}"></td>
                                         <td>
                                             <form th:action="@{/admin/roles/{userId}(userId=${user.id})}"
-                                                  th:method="PUT" onsubmit="return confirmRequest();">
+                                                  th:method="put" onsubmit="return confirmRequest();">
                                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
                                                 <button type="submit" class="btn btn-primary">권한 변경</button>

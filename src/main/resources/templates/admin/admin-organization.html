@@ -116,7 +116,7 @@
                     </div>
                 </div>
                 <p><br>
-                <form th:action="@{/admin/organization-name}" th:method="PUT" id="putOrganizationName">
+                <form action="/admin/organization-name" th:method="PUT" id="putOrganizationName">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <div class="mb-3">
                         <h4 class="fw-semibold mb-3">변경할 조직 이름</h4>
@@ -152,7 +152,7 @@
                     </div>
                 </div>
                 <p><br>
-                <form th:action="@{/admin/organization-code}" th:method="PUT" id="putOrganizationCode">
+                <form action="/admin/organization-code" th:method="PUT" id="putOrganizationCode">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <div class="mb-3">
                         <h4 class="fw-semibold mb-3">변경할 조직 코드</h4>

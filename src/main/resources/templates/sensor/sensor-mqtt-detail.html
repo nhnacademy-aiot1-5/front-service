@@ -170,7 +170,7 @@
         </button>
     </div>
     <div class="modal-body" style="padding: 10px;">
-        <form id="topicForm" th:action="@{/}" th:method="PUT">
+        <form id="topicForm" action="/" th:method="PUT">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
             <div class="mb-3 d-flex align-items-center">
