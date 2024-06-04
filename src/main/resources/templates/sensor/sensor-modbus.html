@@ -96,6 +96,7 @@
                                         </td>
                                         <td>
                                             <form th:action="@{/sensors/modbus/{sensorId}(sensorId=${sensor.id})}" th:method="DELETE" onsubmit="return confirmDelete();">
+                                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                                                 <button type="submit" class="btn btn-primary">삭제</button>
                                             </form>
                                         </td>
@@ -122,6 +123,8 @@
             </div>
             <div class="modal-body d-flex justify-content-center align-items-center">
                 <form th:method="PUT" id="sensorUpdateForm" style="width: 90%;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
                     <div class="mb-3">
                         <h4>센서명</h4>
                         <div class="input-group" style="width: 100%;">
