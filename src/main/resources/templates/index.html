@@ -457,6 +457,8 @@
                                     </div>
                                     <p><br>
                                     <form th:action="@{/budget}" th:method="PUT" id="resetTargetAmountForm">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
                                         <div class="mb-3">
                                             <h4 class="fw-semibold mb-3">목표 요금 재설정</h4>
                                             <div class="input-group" style="width: 70%;">
