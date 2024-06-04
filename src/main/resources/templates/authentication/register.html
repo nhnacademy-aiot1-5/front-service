@@ -8,6 +8,14 @@
   <link rel="shortcut icon" type="image/png" href="/images/logos/only-icon.png" />
   <link rel="stylesheet" href="/css/style.css" />
 </head>
+<script th:inline="javascript">
+  document.addEventListener("DOMContentLoaded", function() {
+    var message = [[${message}]];
+    if (message) {
+      alert(message);
+    }
+  });
+</script>
 
 <body>
   <!--  Body Wrapper -->
@@ -23,10 +31,6 @@
                 <a href="/" class="text-nowrap logo-img text-center d-block py-3 w-100">
                   <h1 class="display-6">IOTEATIME</h1>
                 </a>
-
-                <div th:if="${message}" class="alert alert-danger" role="alert" style="text-align: center">
-                  <p th:text="${message}"></p>
-                </div>
 
                 <form th:action="@{/register}" method="post">
                   <div class="mb-3">
