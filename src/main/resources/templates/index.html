@@ -33,6 +33,7 @@
                 flex: 1;
             }
         </style>
+
     </head>
 
     <body>
@@ -343,6 +344,8 @@
                                                                 th:if="${outlier.flag == 0}"
                                                                 th:attr="data-id=${outlier.id}, data-place=${outlier.place}, data-type=${outlier.type}"
                                                                 onclick="resolveOutlier(this)">
+                                                            <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+                                                            <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
                                                             경고등 끄기
                                                         </button>
                                                     </div>
@@ -351,6 +354,8 @@
                                         </div>
                                     </div>
                                     <script>
+                                        const header = document.querySelector('meta[name="_csrf_header"]').content;
+                                        const token = document.querySelector('meta[name="_csrf"]').content;
                                         function resolveOutlier(button) {
                                             var outlierId = button.getAttribute('data-id');
                                             var place = button.getAttribute('data-place');
@@ -359,7 +364,9 @@
                                             fetch('/send-dooray', {
                                                 method: 'POST',
                                                 headers: {
-                                                    'Content-Type': 'application/json'
+                                                    'header': header,
+                                                    'Content-Type': 'application/json',
+                                                    'X-CSRF-Token': token
                                                 },
                                                 body: JSON.stringify({
                                                     id: outlierId,
@@ -371,7 +378,9 @@
                                             fetch('/outlier-off', {
                                                 method: 'POST',
                                                 headers: {
-                                                    'Content-Type': 'application/json'
+                                                    'header': header,
+                                                    'Content-Type': 'application/json',
+                                                    'X-CSRF-Token': token
                                                 },
                                                 body: JSON.stringify({
                                                     outlier_id: outlierId
@@ -456,7 +465,7 @@
                                         </div>
                                     </div>
                                     <p><br>
-                                    <form th:action="@{/budget}" th:method="PUT" id="resetTargetAmountForm">
+                                    <form action="/budget" th:method="PUT" id="resetTargetAmountForm">
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
                                         <div class="mb-3">
