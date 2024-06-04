@@ -42,7 +42,7 @@ public class MonthlyReportService {
         OrganizationResponse organization = getOrganization();
         List<ChannelDto> channelDtos = getAllChannelListByPlaceIds();
         List<ChannelDto> mainChannelIds = channelDtos.stream()
-                .filter(channelDto -> channelDto.getChannelName().equalsIgnoreCase("main"))
+                .filter(channelDto -> channelDto.getId() == -1)
                 .collect(Collectors.toList());
 
         Map<LocalDateTime, Double> summedKwhByTime = mainChannelIds.stream()

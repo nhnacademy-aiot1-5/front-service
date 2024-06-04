@@ -38,11 +38,11 @@ public class DailyReportService {
      *              budget - 조직의 설정 요금
      *              places - 조직에 등록된 장소 리스트
      *              placeMap - (장소 id, ChannelDto) 정보가 저장된 HashMap
-     *                          ChannelDto - (id, 채널명, 주소, 타입, fc, 센서 id, 장소 id, 장소명, ModbusSensorResponse, PlaceDto)
-     *                                        ModbusSensorResponse - (id, 센서명, 모델명, ip, port, 채널 수, Alive)
-     *                                                                Alive - (UP, DOWN)
-     *                                        PlaceDto - (id, 장소명, 조직 id, OrganizationResponse)
-     *                                                    OrganizationResponse - (id, 조직명, 설정 요금, 조직 코드)
+     *              ChannelDto - (id, 채널명, 주소, 타입, fc, 센서 id, 장소 id, 장소명, ModbusSensorResponse, PlaceDto)
+     *              ModbusSensorResponse - (id, 센서명, 모델명, ip, port, 채널 수, Alive)
+     *              Alive - (UP, DOWN)
+     *              PlaceDto - (id, 장소명, 조직 id, OrganizationResponse)
+     *              OrganizationResponse - (id, 조직명, 설정 요금, 조직 코드)
      *              recent7DaysElectricities - 최근 7일간 사용한 전력 사용량 정보 (time, kwh, bill)
      *              recent24HoursElectricites - 최근 24시간 사용한 전력 사용량 정보 (time, kwh, bill)
      */
@@ -63,7 +63,7 @@ public class DailyReportService {
 
             if (channelDtos != null && !channelDtos.isEmpty()) {
                 for (ChannelDto channelDto : channelDtos) {
-                    if ("main".equals(channelDto.getChannelName())) {
+                    if (-1 == channelDto.getId()) {
                         mainChannelDtos.add(channelDto);
                     }
                 }
@@ -118,10 +118,11 @@ public class DailyReportService {
 
     /**
      * 채널별 지난 7일/24시간 동안 사용한 총 전력 사용량(kwh)과 요금 정보를 설정 합니다.
+     *
      * @param channelId 요금 정보를 검색할 채널 id 입니다.
-     * @param model 검색한 요금 정보를 등록할 모델 입니다.
+     * @param model     검색한 요금 정보를 등록할 모델 입니다.
      * @return 일별/시간별 전력 정보가 저장된 리스트들의 튜플을 반환합니다.
-     *         DailyElectricityDto - (time, kwh, bill)
+     * DailyElectricityDto - (time, kwh, bill)
      */
     public DailyElectricitiesDto getDailyElectricites(int channelId, Model model) {
         List<DailyElectricityDto> dailyElectricityDtos = userAdaptor.getDailyElectricities(
