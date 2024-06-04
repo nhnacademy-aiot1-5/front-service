@@ -160,6 +160,6 @@ public class MqttSensorController {
     @DeleteMapping("/{sensorId}/topics/{topicId}")
     public String deleteTopic(@PathVariable("sensorId") int sensorId, @PathVariable("topicId") int topicId) {
         mqttSensorAdaptor.deleteTopic(sensorId, topicId);
-        return REDIRECT_SENSORS_MQTT + sensorId;
+        return REDIRECT_SENSORS_MQTT;
     }
 }
