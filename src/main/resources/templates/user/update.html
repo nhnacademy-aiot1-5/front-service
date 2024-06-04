@@ -24,7 +24,7 @@
                   <h1 class="display-6">IOTEATIME</h1>
                 </a>
 
-                <form th:action="/update" method="post">
+                <form action="/update" method="post">
                   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
                   <div class="mb-3">
