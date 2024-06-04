@@ -49,7 +49,7 @@ public class RegisterController {
         } catch (FeignException.BadRequest exception) {
             redirectAttributes.addFlashAttribute("message", "이미 존재하는 아이디입니다.");
             return "redirect:/register";
-        } catch (FeignException.Unauthorized exception) {
+        } catch (FeignException.Forbidden exception) {
             redirectAttributes.addFlashAttribute("message", "조직이 존재하지 않거나 조직 코드가 일치하지 않습니다.");
             return "redirect:/register";
         }
