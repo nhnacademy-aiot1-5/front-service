@@ -1,6 +1,7 @@
 package live.ioteatime.frontservice.config;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +18,7 @@ public class SecurityConfig {
         http
                 .formLogin().disable()
                 .httpBasic().disable()
+                .csrf().ignoringRequestMatchers(request -> StringUtils.containsIgnoreCase(request.getRequestURI(), "/notify")).and()
                 .authorizeRequests()
                 .anyRequest()
                 .permitAll();
