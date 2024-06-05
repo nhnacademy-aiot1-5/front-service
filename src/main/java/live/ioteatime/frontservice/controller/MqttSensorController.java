@@ -104,8 +104,8 @@ public class MqttSensorController {
      * @param request  수정 요청 폼 데이터
      * @return 센서 단일 조회 페이지 리다이렉트
      */
-    @PutMapping("/{sensorId}")
-    public String updateMqttSensor(@PathVariable("sensorId") int sensorId, @ModelAttribute MqttSensorRequest request) {
+    @PutMapping
+    public String updateMqttSensor(@RequestParam("id") int sensorId, @ModelAttribute MqttSensorRequest request) {
         mqttSensorAdaptor.updateMqttSensor(sensorId, request);
         return REDIRECT_SENSORS_MQTT + sensorId;
     }
@@ -116,8 +116,8 @@ public class MqttSensorController {
      * @param sensorId 센서아이디
      * @return mqtt 센서 목록 페이지 리다이렉트
      */
-    @DeleteMapping("/{sensorId}")
-    public String deleteMqttSensor(@PathVariable("sensorId") int sensorId) {
+    @PostMapping("/delete")
+    public String deleteMqttSensor(@RequestParam("id") int sensorId) {
         mqttSensorAdaptor.deleteMqttSensor(sensorId);
         return "redirect:/sensors/mqtt";
     }
