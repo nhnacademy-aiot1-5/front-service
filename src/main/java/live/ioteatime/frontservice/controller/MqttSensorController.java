@@ -116,8 +116,8 @@ public class MqttSensorController {
      * @param sensorId 센서아이디
      * @return mqtt 센서 목록 페이지 리다이렉트
      */
-    @DeleteMapping("/{sensorId}")
-    public String deleteMqttSensor(@PathVariable("sensorId") int sensorId) {
+    @PostMapping("/delete")
+    public String deleteMqttSensor(@RequestParam("id") int sensorId) {
         mqttSensorAdaptor.deleteMqttSensor(sensorId);
         return "redirect:/sensors/mqtt";
     }
