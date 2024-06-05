@@ -18,7 +18,7 @@ public class SecurityConfig {
         http
                 .formLogin().disable()
                 .httpBasic().disable()
-                .csrf().ignoringRequestMatchers(request -> StringUtils.containsIgnoreCase(request.getRequestURI(), "/notify") &&
+                .csrf().ignoringRequestMatchers(request -> StringUtils.containsIgnoreCase(request.getRequestURI(), "/notify") ||
                         StringUtils.containsIgnoreCase(request.getRequestURI(), "/sensors/mqtt/**")
                 ).and()
                 .authorizeRequests()
