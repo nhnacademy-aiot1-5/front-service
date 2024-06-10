@@ -7,7 +7,7 @@ import live.ioteatime.frontservice.adaptor.PlaceAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.*;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
-import live.ioteatime.frontservice.dto.response.PreciseElectricitiesDto;
+import live.ioteatime.frontservice.dto.response.ElectricityResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -66,21 +66,21 @@ public class MonthlyReportService {
                         })
                         .sorted(Comparator.comparing(MonthlyElectricityDto::getTime))
                         .collect(Collectors.toList());
-        List<PreciseElectricitiesDto> nextMonthPreciseElectricitiesDtos = electricityAdaptor
+        List<ElectricityResponse> nextMonthElectricityResponses = electricityAdaptor
                 .getNextMonthlyPredictedValues(LocalDateTime.now(), organization.getId()).getBody();
-        List<PreciseElectricitiesDto> thisMonthPreciseElectricitiesDtos = electricityAdaptor
+        List<ElectricityResponse> thisMonthElectricityResponses = electricityAdaptor
                 .getThisMonthlyPredictedValues(LocalDateTime.now(), organization.getId()).getBody();
 
-        double nextMonthKwh = Optional.ofNullable(nextMonthPreciseElectricitiesDtos)
+        double nextMonthKwh = Optional.ofNullable(nextMonthElectricityResponses)
                 .orElseGet(Collections::emptyList)
                 .stream()
-                .mapToDouble(PreciseElectricitiesDto::getKwh)
+                .mapToDouble(ElectricityResponse::getKwh)
                 .sum();
 
-        double thisMonthKwh = Optional.ofNullable(thisMonthPreciseElectricitiesDtos)
+        double thisMonthKwh = Optional.ofNullable(thisMonthElectricityResponses)
                 .orElseGet(Collections::emptyList)
                 .stream()
-                .mapToDouble(PreciseElectricitiesDto::getKwh)
+                .mapToDouble(ElectricityResponse::getKwh)
                 .sum();
 
         model.addAttribute("nextMonthCharge", electricityAdaptor.getChargeByKwh(nextMonthKwh).getBody());

@@ -4,7 +4,7 @@ import live.ioteatime.frontservice.adaptor.ElectricityAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.DailyElectricityDto;
 import live.ioteatime.frontservice.dto.RealtimeElectricityResponseDto;
-import live.ioteatime.frontservice.dto.response.PreciseElectricitiesDto;
+import live.ioteatime.frontservice.dto.response.ElectricityResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -59,14 +59,14 @@ public class ElectricityService {
         return cumulativeBillsUntilToday;
     }
 
-    public List<PreciseElectricitiesDto> getCumulativeBillPredictions() {
+    public List<ElectricityResponse> getCumulativeBillPredictions() {
         LocalDateTime time = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
-        List<PreciseElectricitiesDto> electricityDtoList = electricityAdaptor
+        List<ElectricityResponse> electricityDtoList = electricityAdaptor
                 .getMonthlyPredictedValues(1, time).getBody();
 
         Long bill = 0L;
-        List<PreciseElectricitiesDto> result = new ArrayList<>();
-        for(PreciseElectricitiesDto e : electricityDtoList) {
+        List<ElectricityResponse> result = new ArrayList<>();
+        for(ElectricityResponse e : electricityDtoList) {
             bill += e.getBill();
             e.setBill(bill);
             result.add(e);
