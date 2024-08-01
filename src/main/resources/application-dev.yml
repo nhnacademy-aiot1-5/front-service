@@ -1,8 +1,8 @@
 discovery:
-  id: test
-  password: test
+  id: admin
+  password: admin
   ip: localhost
 
 eureka:
   client:
-    enabled: false
+    enabled: true
