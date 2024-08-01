@@ -30,8 +30,8 @@ jobs:
 
     - name: Build and Push Docker Images
       run: |
-        docker build -t mydockerhubusername/front-service:${{ github.sha }} ./front-service/
-        docker push mydockerhubusername/front-service:${{ github.sha }}
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/nhnacademy-final-project-front-service:${{ github.sha }} ./front-service/
+        docker push ${{ secrets.DOCKER_USERNAME }}/nhnacademy-final-project-front-service:${{ github.sha }}
 
     - name: Deploy to Cloud Server
       uses: appleboy/ssh-action@master
