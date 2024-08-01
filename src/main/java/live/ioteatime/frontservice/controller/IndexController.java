@@ -80,6 +80,7 @@ public class IndexController {
     @GetMapping("/top10")
     @ResponseBody
     public List<RealtimeElectricityResponseDto> getTop10() {
+        log.debug("프론트 getTop10 인덱스 컨트롤러 위치한 컨트롤러 실행됨");
         return electricityService.getTop10Electricity();
     }
 

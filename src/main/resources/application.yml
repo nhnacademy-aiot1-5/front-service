@@ -19,10 +19,19 @@ spring:
     name: front-service
   thymeleaf:
     cache: false
+    prefix: classpath:/templates/
+    suffix: .html
   jackson:
     default-property-inclusion: non_null
+#  mvc:
+#    hiddenmethod:
+#      filter:
+#        enabled: true
+#  web:
+#    resources:
+#      static-locations: classpath:/static/
 
-  mvc:
-    hiddenmethod:
-      filter:
-        enabled: true
+logging:
+  level:
+    org:
+      springframework: DEBUG

@@ -1,0 +1,8 @@
+discovery:
+  id: ${DISCOVERY_ID}
+  password: ${DISCOVERY_PASSWORD}
+  ip: ${DISCOVERY_IP}
+
+eureka:
+  client:
+    enabled: true
