@@ -4,7 +4,7 @@ import live.ioteatime.frontservice.dto.DailyElectricityDto;
 import live.ioteatime.frontservice.dto.DemandCharge;
 import live.ioteatime.frontservice.dto.MonthlyElectricityDto;
 import live.ioteatime.frontservice.dto.RealtimeElectricityResponseDto;
-import live.ioteatime.frontservice.dto.response.PreciseElectricitiesDto;
+import live.ioteatime.frontservice.dto.response.ElectricityResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -68,7 +68,7 @@ public interface ElectricityAdaptor {
      * @return (time, kwh) 리스트를 리턴합니다.
      */
     @GetMapping("/api/hourly/electricities/total")
-    ResponseEntity<List<PreciseElectricitiesDto>> getOneHourTotalElectricties(@RequestParam int organizationId);
+    ResponseEntity<List<ElectricityResponse>> getOneHourTotalElectricties(@RequestParam int organizationId);
 
     /**
      * 한달 예측값을 가져옵니다.
@@ -77,19 +77,19 @@ public interface ElectricityAdaptor {
      * @return (time, kwh) 리스트를 리턴합니다.
      */
     @GetMapping("/api/predicted")
-    ResponseEntity<List<PreciseElectricitiesDto>> getMonthlyPredictedValues(
+    ResponseEntity<List<ElectricityResponse>> getMonthlyPredictedValues(
             @RequestParam int organizationId,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             @RequestParam LocalDateTime requestTime);
 
     @GetMapping("/api/predicted/next-month")
-    ResponseEntity<List<PreciseElectricitiesDto>> getNextMonthlyPredictedValues(
+    ResponseEntity<List<ElectricityResponse>> getNextMonthlyPredictedValues(
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             @RequestParam LocalDateTime requestTime,
             @RequestParam int organizationId);
 
     @GetMapping("/api/predicted/this-month")
-    ResponseEntity<List<PreciseElectricitiesDto>> getThisMonthlyPredictedValues(
+    ResponseEntity<List<ElectricityResponse>> getThisMonthlyPredictedValues(
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             @RequestParam LocalDateTime requestTime,
             @RequestParam int organizationId);
