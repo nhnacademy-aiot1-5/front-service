@@ -43,7 +43,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            grep -q 'export FRONT_IMAGE_TAG=' ~/.bashrc && sed -i 's/export FRONT_IMAGE_TAG=.*/export FRONT_IMAGE_TAG=${{ github.sha }}/' ~/.bashrc || echo 'export FRONT_IMAGE_TAG=${{ github.sha }}' >> ~/.bashrc
+            echo "FRONT_IMAGE_TAG=${{ github.sha }}" > .env
             source ~/.bashrc
             
             SERVICE_NAME="front-service"
