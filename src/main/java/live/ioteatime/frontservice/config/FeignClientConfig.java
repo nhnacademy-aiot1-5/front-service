@@ -1,6 +1,8 @@
 package live.ioteatime.frontservice.config;
 
 import feign.RequestInterceptor;
+import feign.codec.ErrorDecoder;
+import live.ioteatime.frontservice.exception.CustomErrorDecoder;
 import live.ioteatime.frontservice.exception.UnauthorizedAccessException;
 import live.ioteatime.frontservice.utils.CookieUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -47,5 +49,10 @@ public class FeignClientConfig {
             requestTemplate.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
             log.info("AccessToken applied for request: {}", requestTemplate.headers().get("Authorization"));
         };
+    }
+
+    @Bean
+    public ErrorDecoder errorDecoder() {
+        return new CustomErrorDecoder();
     }
 }

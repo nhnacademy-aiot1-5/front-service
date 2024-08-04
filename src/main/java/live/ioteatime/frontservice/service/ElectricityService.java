@@ -4,10 +4,12 @@ import live.ioteatime.frontservice.adaptor.ElectricityAdaptor;
 import live.ioteatime.frontservice.adaptor.UserAdaptor;
 import live.ioteatime.frontservice.dto.DailyElectricityDto;
 import live.ioteatime.frontservice.dto.RealtimeElectricityResponseDto;
-import live.ioteatime.frontservice.dto.response.PreciseElectricitiesDto;
+import live.ioteatime.frontservice.dto.response.ElectricityResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,12 +33,27 @@ public class ElectricityService {
      */
     public List<RealtimeElectricityResponseDto> getTop10Electricity(){
         int organizationId = userAdaptor.getUser().getBody().getOrganization().getId();
+        List<RealtimeElectricityResponseDto> response = new ArrayList<>();
 
-        List<RealtimeElectricityResponseDto> response = electricityAdaptor.getRealtimeElectricity(organizationId).getBody();
-        response = response.stream()
-                .sorted(Comparator.comparing(RealtimeElectricityResponseDto::getW).reversed())
-                .limit(10)
-                .collect(Collectors.toList());
+        try {
+            response = electricityAdaptor.getRealtimeElectricity(organizationId).getBody();
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                log.warn("404 error received: No data found for organizationId {}", organizationId);
+            } else {
+                throw e;
+            }
+        } catch (NullPointerException e) {
+            log.error("NullPointerException occurred: ", e);
+        }
+
+        if (response != null) {
+            response = response.stream()
+                    .sorted(Comparator.comparing(RealtimeElectricityResponseDto::getW).reversed())
+                    .limit(10)
+                    .collect(Collectors.toList());
+        }
+
         return response;
     }
 
@@ -59,14 +76,14 @@ public class ElectricityService {
         return cumulativeBillsUntilToday;
     }
 
-    public List<PreciseElectricitiesDto> getCumulativeBillPredictions() {
+    public List<ElectricityResponse> getCumulativeBillPredictions() {
         LocalDateTime time = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
-        List<PreciseElectricitiesDto> electricityDtoList = electricityAdaptor
+        List<ElectricityResponse> electricityDtoList = electricityAdaptor
                 .getMonthlyPredictedValues(1, time).getBody();
 
         Long bill = 0L;
-        List<PreciseElectricitiesDto> result = new ArrayList<>();
-        for(PreciseElectricitiesDto e : electricityDtoList) {
+        List<ElectricityResponse> result = new ArrayList<>();
+        for(ElectricityResponse e : electricityDtoList) {
             bill += e.getBill();
             e.setBill(bill);
             result.add(e);

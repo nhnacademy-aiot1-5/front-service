@@ -7,7 +7,7 @@ import live.ioteatime.frontservice.domain.Role;
 import live.ioteatime.frontservice.dto.*;
 import live.ioteatime.frontservice.dto.response.GetUserResponse;
 import live.ioteatime.frontservice.dto.response.OrganizationResponse;
-import live.ioteatime.frontservice.dto.response.PreciseElectricitiesDto;
+import live.ioteatime.frontservice.dto.response.ElectricityResponse;
 import live.ioteatime.frontservice.service.ElectricityService;
 import live.ioteatime.frontservice.service.SseService;
 import lombok.RequiredArgsConstructor;
@@ -80,12 +80,13 @@ public class IndexController {
     @GetMapping("/top10")
     @ResponseBody
     public List<RealtimeElectricityResponseDto> getTop10() {
+        log.debug("프론트 getTop10 인덱스 컨트롤러 위치한 컨트롤러 실행됨");
         return electricityService.getTop10Electricity();
     }
 
     @GetMapping("/total")
     @ResponseBody
-    public List<PreciseElectricitiesDto> getOneHourTotalElectricities() {
+    public List<ElectricityResponse> getOneHourTotalElectricities() {
         int organizationId = userAdaptor.getUser().getBody().getOrganization().getId();
         return electricityAdaptor.getOneHourTotalElectricties(organizationId).getBody();
     }
@@ -99,7 +100,8 @@ public class IndexController {
     @ResponseBody
     public List<DailyElectricityDto> getCurrentMonthDailyTotalElectricities() {
         int organizationId = userAdaptor.getUser().getBody().getOrganization().getId();
-        return electricityAdaptor.getMontlyTotalElectricities(LocalDateTime.now(), organizationId).getBody();
+        List<DailyElectricityDto> body =  electricityAdaptor.getMontlyTotalElectricities(LocalDateTime.now(), organizationId).getBody();
+        return body;
     }
 
     /**
@@ -109,9 +111,10 @@ public class IndexController {
      */
     @GetMapping("/monthly-predict")
     @ResponseBody
-    public List<PreciseElectricitiesDto> getMontlyPredictedElectricities() {
+    public List<ElectricityResponse> getMontlyPredictedElectricities() {
         int organizationId = userAdaptor.getUser().getBody().getOrganization().getId();
-        return electricityAdaptor.getMonthlyPredictedValues(organizationId, LocalDateTime.now()).getBody();
+        List<ElectricityResponse> body =  electricityAdaptor.getMonthlyPredictedValues(organizationId, LocalDateTime.now()).getBody();
+        return body;
     }
 
     @GetMapping("/kwh")
@@ -133,7 +136,7 @@ public class IndexController {
 
     @GetMapping("/bill-predict")
     @ResponseBody
-    public List<PreciseElectricitiesDto> getCumulativeBillPredictions() {
+    public List<ElectricityResponse> getCumulativeBillPredictions() {
         return electricityService.getCumulativeBillPredictions();
     }
 

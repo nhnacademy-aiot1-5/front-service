@@ -18,13 +18,13 @@ public class SecurityConfig {
         http
                 .formLogin().disable()
                 .httpBasic().disable()
-                .csrf().ignoringRequestMatchers(request -> StringUtils.containsIgnoreCase(request.getRequestURI(), "/notify") ||
-                        StringUtils.containsIgnoreCase(request.getRequestURI(), "/sensors/mqtt/**")
+                .csrf().ignoringRequestMatchers(request ->
+                        StringUtils.containsIgnoreCase(request.getRequestURI(), "/notify") ||
+                                StringUtils.containsIgnoreCase(request.getRequestURI(), "/sensors/mqtt/**")
                 ).and()
                 .authorizeRequests()
-                .anyRequest()
-                .permitAll();
-
+                .antMatchers("/css/**", "/images/**", "/js/**").permitAll() // 정적 리소스에 대한 접근 허용
+                .anyRequest().permitAll();
 
         return http.build();
     }

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
@@ -49,5 +50,13 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new UserInfoInterceptor(userAdaptor))
                 .addPathPatterns(List.of("/admin", "/admin/**", "/sensors/**", "/change-password",
                         "/daily-report/**", "/monthly-report/**", "/places/**", "/sse"));
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/css/**")
+                .addResourceLocations("classpath:/static/css/")
+                .setCachePeriod(3600)
+                .resourceChain(true);
     }
 }
